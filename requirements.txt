@@ -1,0 +1,8 @@
+# Day 1 runtime and testing; versions should be pinned after validated installation.
+streamlit>=1.30,<2
+requests>=2.31,<3
+python-dotenv>=1,<2
+pytest>=8,<10
+# Reserved P0 requirements for Day 2/3 matching and research (not yet used).
+scikit-learn>=1.4,<2
+pandas>=2.2,<3
