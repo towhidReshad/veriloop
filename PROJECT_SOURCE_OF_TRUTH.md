@@ -607,11 +607,11 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-20  
-**Overall status:** DAY 2 IMPLEMENTED LOCALLY — Day 1 online metadata confirmed by owner screenshots; Day 2 SQLite schema and 13 reference records passed local tests; cloud deployment pending confirmation  
+**Overall status:** DAY 3 IMPLEMENTED LOCALLY — Day 1 YouTube metadata and Day 2 13-reference evidence library demonstrated online; Day 3 guarded metadata claim extraction and local TF-IDF retrieval passed offline tests; hosted Day 3 workflow pending verification  
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Confirm Day 2 Streamlit Cloud preview shows 13 source-backed references; then build metadata claim extraction and TF-IDF evidence retrieval while guarding stance/context. A and C candidate live availability remains to be verified.
+**Next immediate milestone:** Confirm online Day 3 Verify News page retrieves candidate claims and source links for NASA eclipse video. A/C demonstration videos, exact-context verification, and human-review workflow are not yet validated.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -621,8 +621,8 @@ These are **planned commands** until actual code is written and tested. Do not c
 | R-03 | Select 3 fact-checkable YouTube demo cases | IN_PROGRESS | TBD | `data/demo_cases.json`: A AFP-documented mislabeled repost, B NASA eclipse, C NASA unresolved UAP; video URLs and source links recorded, live API accessibility and editorial approval pending |
 | D-01 | Initialize repository and dependencies | DONE | Team | Owner screenshots show GitHub `main` and working Streamlit Community Cloud homepage |
 | D-02 | YouTube metadata extractor works on real video | DONE | Team | Owner screenshot demonstrates live NASA video metadata `2MJY_ptQW1o`; offline parser and mock tests passed |
-| D-03 | SQLite schema and seed evidence library | IN_PROGRESS | Team | `veriloop/db.py`, `data/seed_evidence.json` (13 source-backed reference records), `scripts/seed_db.py`, `tests/test_db.py`; 54/54 tests pass locally. GitHub/hosted preview verification still pending |
-| D-04 | Claim matching and preliminary report | NOT_STARTED | TBD | Pass known, debunking, unknown cases |
+| D-03 | SQLite schema and seed evidence library | DONE | Team | Owner's 2026-11-20 Streamlit screenshot/PDF confirms 13 curated reference records loaded online; SQLite schema and seed tested offline |
+| D-04 | Claim matching and preliminary report | IN_PROGRESS | Team | `veriloop/claims.py` and `veriloop/matching.py`; tentative evidence match, event/year/location/stance safeguards and page UI tested offline (88/88); live deployment and real A/C demo validation pending |
 | D-05 | Channel history restricted to reviewed records | NOT_STARTED | TBD | Test history queries |
 | D-06 | Optional reviewer flow + correction draft | NOT_STARTED | TBD | Test permissions and status |
 | R-04 | Collect and label selected pilot sample | IN_PROGRESS | Team | Annotation guide and separate header-only `research/news_dataset.csv` created; **0 observations collected** |
@@ -700,6 +700,32 @@ Limitations: Streamlit Cloud preview requires owner/browser verification; cloud
   review, automatic verdict, participant outcome or publication is claimed.
 Next single priority: Verify online Day 2 evidence preview, then implement
   safeguarded metadata claim extraction and local evidence retrieval.
+```
+
+---
+
+### Day 3 implementation session log — 2026-11-20
+
+```text
+Date / time: 2026-11-20 (Asia/Seoul)
+Tool or AI used: ChatGPT, GitHub connector, local Python/pytest/scikit-learn
+Files changed: veriloop/claims.py, veriloop/matching.py,
+  pages/1_Verify_News.py, tests/test_claims.py, tests/test_matching.py,
+  README.md, PROJECT_SOURCE_OF_TRUTH.md
+Task IDs: F-03, F-04, F-05 and initial F-06 display; D-04, T-01
+Completed: Conservative English metadata claim candidates; no-claim
+  abstention; TF-IDF source retrieval with labeled similarity as relevance;
+  elementary location/year and stance checks; metadata-linked candidate UI.
+Tests run: 88/88 offline pytest passed; compileall completed.
+Demonstration: NASA April 2024 eclipse description -> EV-002 candidate
+  relevance match; movie metadata -> no factual claim; Karachi example
+  -> EV-001 possible match without an accusation; debunk/quoted content
+  -> no automatic endorsement or verdict; incompatible years -> no match.
+Known limitations: Heuristic English-only extraction; no speech/transcript or
+  frame analysis, no validated claim verdict, no approved reviews, no durable
+  Streamlit Cloud review storage. Website deployment requires live check.
+Next single priority: Validate the same NASA YouTube URL on the hosted app,
+  then test real contrasting misleading/uncertain video metadata.
 ```
 
 ---

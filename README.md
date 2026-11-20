@@ -29,3 +29,14 @@ The seed script and homepage require no YouTube API credentials; the live metada
 - External reference classifications are not verified decisions about submitted videos. All evidence.reviewed_by fields are NULL; zero reviews, assessments, claim matches, corrections or channel accusations are preloaded.
 - Source URLs and available publication dates are preserved; unknown source publication dates remain null. Event dates are not substituted for publication dates.
 - No channel credibility percentage, truth probability, automatic correction publishing or arbitrary video/audio verification is implemented.
+
+
+## Day 3 — metadata claim candidates and preliminary evidence retrieval
+
+The Verify News page now runs local deterministic candidate extraction on the video's title and first 7,000 characters of English description (up to five tentative sentences). It retrieves related claims from the existing 13-reference SQLite seed using TF-IDF with 1–2 gram vocabulary, and lists original evidence links, publication dates, textual similarity *for retrieval only*, and explicit context uncertainty. A heuristic context check can rule out clearly conflicting event years or regions; debunking and quoting cues do not imply endorsement. No exact event identity, fact-check verdict, reviewer approval or channel accusation is derived from similarity.
+
+Expected local acceptance: NASA eclipse video 2MJY_ptQW1o -> candidate claim from the published description and possible NASA EV-002 evidence match; entertainment/video labels -> no factual claim; unrelated claim -> INSUFFICIENT_EVIDENCE; misleading-context or debunking descriptions -> tentative reference matching only, never automatic misinformation verdict. No unsupported 85% misleading percentages are emitted.
+
+Run `python -m pytest -q`. At Day 3 implementation the suite passed 88/88 offline tests (Python environment with scikit-learn installed); the live hosted deployment must be checked separately. The app still needs a private YOUTUBE_API_KEY configured in Streamlit Cloud Secrets. Streamlit Community Cloud restarts may recreate the seeded evidence database. No pilot participant responses have been collected.
+
+Day 4+ frozen requirements—including approved-context reuse, reviewed channel history, optional human review, corrections with separate publishing approval and analytics—are **not yet implemented**.
