@@ -45,3 +45,12 @@ Day 4+ frozen requirements—including approved-context reuse, reviewed channel 
 ## Day 3 post-deployment quality update
 
 Owner's live NASA test confirmed related EV-002/EV-004 references and explicit insufficient-evidence cases. The test also exposed a false positive: a request to viewers to send questions was labeled a factual claim. The conservative extractor now excludes audience calls-to-action, with dedicated regression tests. This narrows one known error but does not establish general precision, video stance, or truth verdict. 60 offline tests were rerun in this patch session (Day 2 suite plus 6 new regressions); the broader Day 3 suite had passed 88 tests before this patch, not yet rerun here.
+
+
+## Day 4 — optional human review and approved-only history
+
+Verify News now offers **Request human review** for each candidate (pending state, not an accusation). A separate **Channel History** page lists only explicit human-approved, linked, context-aligned claim decisions and the source URL, timestamp and denominator of current review requests; no channel-wide trust/misinformation percentage is shown. A password-gated **Review Dashboard** lets a genuine reviewer mark a request APPROVED, REJECTED or NEEDS_MORE_EVIDENCE, with a mandatory rationale; approval requires an ASSERTS stance, selected directly linked ALIGNED evidence, and explicit context confirmation. An approved decision can later be revised, removing it from public history.
+
+**Security/setup:** Add `REVIEWER_PASSWORD = "YOUR_STRONG_RANDOM_16_PLUS_CHARACTER_SECRET"` in Streamlit Community Cloud **App Settings → Secrets**, alongside the existing `YOUTUBE_API_KEY`. Never commit either value; do not share the secret in screenshots. If unset, reviewer dashboard remains locked. This is a simple research pilot password gate, not production-grade accounts/authentication.
+
+**Persistence warning:** Free cloud SQLite storage is **ephemeral**. Review requests, human decisions and their audit trail may disappear when Streamlit restarts. Do **not** collect sensitive participant information or treat the demo as durable public corrections. A durable approval archive and separate correction/export approval are still pending P0 work. Only real human reviews may populate channel history; 13 seeded reference records do not qualify. 69 selected offline tests passed in Day 4 development; hosted testing remains pending.

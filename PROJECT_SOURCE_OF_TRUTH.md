@@ -606,12 +606,12 @@ These are **planned commands** until actual code is written and tested. Do not c
 
 ## 15. Live Project Status — Update This Section After Every Work Session
 
-**Status date:** 2026-11-20  
-**Overall status:** DAY 3 ONLINE VERIFIED (CANDIDATE RETRIEVAL) — owner screenshot confirms NASA eclipse metadata claim candidates and EV-002/EV-004 tentative source matches; unreviewed and no final video verdict. Day 3 false-positive audience-prompt regression fix committed separately; live recheck of that refinement pending  
+**Status date:** 2026-11-21  
+**Overall status:** DAY 3 ONLINE VERIFIED; DAY 4 REVIEW WORKFLOW IMPLEMENTED IN REPOSITORY, HOSTED VALIDATION PENDING — owner screenshot confirms audience-prompt false positive removed and EV-002/EV-004 tentative matches. Day 4 adds opt-in requests, password-gated reviewer decisions and evidence-only approved history; free cloud SQLite is ephemeral and not durable approved-review storage.  
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Confirm Day 3 follow-up avoids extracting NASA audience question prompts; then test real candidate A/C URLs and begin restricted reviewer/history functionality. A/C availability and exact-context human review remain unverified.
+**Next immediate milestone:** Confirm live Day 4 pages and pending-request workflow; set a strong private REVIEWER_PASSWORD in Streamlit Secrets before any access to restricted dashboard. Do not approve actual public findings until research protocol, reviewer authority, exact context and durable backups are resolved.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -623,8 +623,8 @@ These are **planned commands** until actual code is written and tested. Do not c
 | D-02 | YouTube metadata extractor works on real video | DONE | Team | Owner screenshot demonstrates live NASA video metadata `2MJY_ptQW1o`; offline parser and mock tests passed |
 | D-03 | SQLite schema and seed evidence library | DONE | Team | Owner's 2026-11-20 Streamlit screenshot/PDF confirms 13 curated reference records loaded online; SQLite schema and seed tested offline |
 | D-04 | Claim matching and preliminary report | IN_PROGRESS | Team | Owner screenshot confirms online NASA EV-002/EV-004 tentative source matches and insufficient-evidence handling; candidate 4 audience-prompt false positive identified and patched with regression tests. Exact-context verification, A/C demo and review remain pending |
-| D-05 | Channel history restricted to reviewed records | NOT_STARTED | TBD | Test history queries |
-| D-06 | Optional reviewer flow + correction draft | NOT_STARTED | TBD | Test permissions and status |
+| D-05 | Channel history restricted to reviewed records | IN_PROGRESS | Team | `veriloop/source_history.py`, `pages/2_Channel_History.py`; 69 selected offline tests passed including approved-only history; owner cloud test pending |
+| D-06 | Optional reviewer flow + correction draft | IN_PROGRESS | Team | Optional requests, password-gated reviewer workspace, explicit evidence-bound approval/reject/revision tested offline; separate correction draft/approval remains NOT IMPLEMENTED. Cloud review data ephemeral |
 | R-04 | Collect and label selected pilot sample | IN_PROGRESS | Team | Annotation guide and separate header-only `research/news_dataset.csv` created; **0 observations collected** |
 | R-05 | Human impact pilot or approved alternative | NOT_STARTED | TBD | Ethics/consent and data |
 | R-06 | Analyze results and finalize research report | NOT_STARTED | TBD | Reproducible statistics |
@@ -743,6 +743,32 @@ Tests: 60/60 local offline tests passed (Day 2 suite + new regression
 tests; previous Day 3 suite baseline was 88/88 before this change).
 Claim verification, approved reviews and online verification of this
 specific regression fix are NOT claimed.
+```
+
+---
+
+### Day 4 implementation session log — 2026-11-21
+
+```text
+Date / time: 2026-11-21 (Asia/Seoul)
+Tool or AI: ChatGPT, GitHub connector, offline Python 3.13.5/pytest
+Files changed: veriloop/review.py, veriloop/source_history.py,
+  pages/1_Verify_News.py, pages/2_Channel_History.py,
+  pages/3_Review_Dashboard.py, tests/test_review_workflow.py,
+  app.py, README.md, PROJECT_SOURCE_OF_TRUTH.md
+Implementation: Optional claim-specific review requests; pending queue;
+  reviewer-only password gate; explicit decisions with evidence, review notes,
+  and audit history; public history restricted to human-approved evidence-linked
+  claim decisions with a count, not a universal channel rating.
+Tests: 69 selected offline tests passed (Day 1/2 + new review unit tests),
+  compileall passed. Full regression suite and live Day 4 UI still need verification.
+Limits: Reviewer login is a pilot password gate, not production identity
+  management. Streamlit Community Cloud SQLite storage is ephemeral, so
+  submitted/approved decisions may disappear after restart and must not be
+  relied on as durable records. No actual reviewed claims were seeded.
+  Correction drafting/export, durable storage, and A/C live demos pending.
+Next immediate milestone: Verify hosted review request and locked reviewer
+  dashboard without entering actual approval; configure secret outside GitHub.
 ```
 
 ---

@@ -9,8 +9,9 @@ st.caption("Evidence-linked news verification · YouTube metadata pilot")
 st.write("Open **Verify News** from the sidebar to inspect a public video's metadata.")
 st.info(
     "Official YouTube metadata retrieval is available. The Day 2 curated evidence "
-    "library is prepared, but claim extraction, matching and preliminary verdicts "
-    "are not implemented yet."
+    "library is available. Verify News provides tentative claim/evidence matches; "
+    "review requests and a restricted reviewer workflow are available in the pilot. "
+    "No automatic or final video verdict is issued."
 )
 
 st.subheader("Curated reference evidence · Day 2")
