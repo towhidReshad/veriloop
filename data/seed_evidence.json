@@ -1,0 +1,139 @@
+{
+  "collection": "verification_library",
+  "source_check_date": "2026-11-20",
+  "purpose": "Curated claim-level references for local retrieval; never use to estimate global or sample prevalence.",
+  "review_boundary": "reference_verdict summarizes what a named external source supports/contradicts; NOT a VeriLoop-approved finding for any submitted video. All reviewed_by are null, and no reviews are seeded.",
+  "publication_date_policy": "published_date is the source page publication date only where explicitly established; unknown set null, event or last-updated dates explained in notes.",
+  "records": [
+    {
+      "id": "EV-001",
+      "claim_text": "The clip shows Karachi mayor Murtaza Wahab falling into Gujjar Nala during a 2024 boat inspection.",
+      "reference_verdict": "MISLEADING_CONTEXT",
+      "source_name": "AFP Fact Check",
+      "source_url": "https://factcheck.afp.com/doc.afp.com.34TR7Q3",
+      "published_date": "2024-05-30",
+      "reviewed_by": null,
+      "notes": "AFP traced the clip to a June 2016 capsize involving Panaji mayor Surendra Furtado in India. This reference concerns a specifically mislabeled repost, not the original footage or every channel discussing it."
+    },
+    {
+      "id": "EV-002",
+      "claim_text": "A total solar eclipse crossed Mexico, the United States and Canada on April 8, 2024.",
+      "reference_verdict": "SUPPORTED",
+      "source_name": "NASA",
+      "source_url": "https://science.nasa.gov/eclipses/future-eclipses/eclipse-2024/",
+      "published_date": null,
+      "reviewed_by": null,
+      "notes": "Event: April 8, 2024; North America. NASA describes the date and route. NASA page publication date is not established; event date is not a source publication date. Candidate B reference only."
+    },
+    {
+      "id": "EV-003",
+      "claim_text": "The nature or origin of specific unidentified anomalous phenomena has been scientifically established despite limited reliable observations.",
+      "reference_verdict": "INSUFFICIENT_EVIDENCE",
+      "source_name": "NASA UAP Independent Study",
+      "source_url": "https://science.nasa.gov/uap/faqs/",
+      "published_date": null,
+      "reviewed_by": null,
+      "notes": "NASA says limited high-quality observations prevent firm scientific conclusions about UAP nature. This is an unresolved evidential question, not proof of any specific origin; do not label a video asserting or debunking an alien claim by mere similarity. Related independent study report released September 14, 2023."
+    },
+    {
+      "id": "EV-004",
+      "claim_text": "Specialized solar eye protection is required during the partial phases of a total solar eclipse.",
+      "reference_verdict": "SUPPORTED",
+      "source_name": "NASA",
+      "source_url": "https://science.nasa.gov/eclipses/future-eclipses/eclipse-2024/safety/",
+      "published_date": null,
+      "reviewed_by": null,
+      "notes": "NASA explains safe viewing before/after totality, and the narrow totality exception. This is solar viewing guidance; do not use as evidence for unrelated astronomy headlines."
+    },
+    {
+      "id": "EV-005",
+      "claim_text": "Scientists can reliably predict the exact time, place and magnitude of a major earthquake in advance.",
+      "reference_verdict": "CONTRADICTED",
+      "source_name": "U.S. Geological Survey (USGS)",
+      "source_url": "https://www.usgs.gov/faqs/can-you-predict-earthquakes?cat=Advisories&id=101287&page=1&rc=1",
+      "published_date": null,
+      "reviewed_by": null,
+      "notes": "USGS says scientifically reliable exact prediction of date/time, location and magnitude is not currently possible. Forecast probabilities and early warning are different concepts. USGS FAQ shows updated September 29, 2025, not confirmed original publication date."
+    },
+    {
+      "id": "EV-006",
+      "claim_text": "NASA Ingenuity helicopter made the first powered, controlled flight on another planet on April 19, 2021.",
+      "reference_verdict": "SUPPORTED",
+      "source_name": "NASA",
+      "source_url": "https://www.nasa.gov/news-release/nasas-ingenuity-mars-helicopter-succeeds-in-historic-first-flight/",
+      "published_date": "2021-04-19",
+      "reviewed_by": null,
+      "notes": "NASA news release documents a powered controlled flight on Mars on April 19, 2021. Applies to Ingenuity first flight, not other Mars missions."
+    },
+    {
+      "id": "EV-007",
+      "claim_text": "A magnitude 9.1 earthquake struck near Tohoku, Japan, on March 11, 2011.",
+      "reference_verdict": "SUPPORTED",
+      "source_name": "U.S. Geological Survey (USGS)",
+      "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/usc0001xgp",
+      "published_date": null,
+      "reviewed_by": null,
+      "notes": "USGS event entry describes March 11, 2011 near Honshu and magnitude 9.1; publication date for the continually updated event detail page not established. Note JMA historically reports 9.0 using its convention; do not equate magnitude catalog versions blindly."
+    },
+    {
+      "id": "EV-008",
+      "claim_text": "The 2024 Atlantic hurricane season had 18 named storms.",
+      "reference_verdict": "SUPPORTED",
+      "source_name": "NOAA",
+      "source_url": "https://www.noaa.gov/news-release/atlantic-hurricane-season-races-to-finish-within-range-of-predicted-number-of-named-storms",
+      "published_date": null,
+      "reviewed_by": null,
+      "notes": "NOAA seasonal report says 18 named storms and 5 major hurricanes in 2024. Original webpage publication date not independently confirmed from accessible article text. This is a seasonal count, not evidence that any given storm made landfall."
+    },
+    {
+      "id": "EV-009",
+      "claim_text": "2024 was the warmest year on record in NASA global surface temperature analysis.",
+      "reference_verdict": "SUPPORTED",
+      "source_name": "NASA",
+      "source_url": "https://science.nasa.gov/earth/2024-is-the-warmest-year-on-record/",
+      "published_date": "2025-01-10",
+      "reviewed_by": null,
+      "notes": "NASA Earth Science report dated January 10, 2025; the finding is within NASA global surface temperature series, not necessarily every alternative dataset. 2024 remains record as reported in 2026 NASA context."
+    },
+    {
+      "id": "EV-010",
+      "claim_text": "Childhood vaccines cause autism.",
+      "reference_verdict": "CONTRADICTED",
+      "source_name": "World Health Organization (WHO)",
+      "source_url": "https://www.who.int/news/item/11-12-2025-statement-gacvs-vaccines-autism",
+      "published_date": "2025-12-11",
+      "reviewed_by": null,
+      "notes": "WHO Global Advisory Committee on Vaccine Safety states available high-quality evidence indicates vaccines do not cause autism. Represents source evidence, not a claim about any particular uploader."
+    },
+    {
+      "id": "EV-011",
+      "claim_text": "WHO estimated approximately 263 million malaria cases worldwide in 2023.",
+      "reference_verdict": "SUPPORTED",
+      "source_name": "World Health Organization (WHO)",
+      "source_url": "https://www.who.int/news/item/11-12-2024-reinvigorated-global-efforts-needed-to-curb-rising-malaria-threat",
+      "published_date": "2024-12-11",
+      "reviewed_by": null,
+      "notes": "2024 WHO release reports estimated 263 million malaria cases in 2023. Modelled estimate, not a precise census or a current-year figure."
+    },
+    {
+      "id": "EV-012",
+      "claim_text": "WHO and UNICEF reported 127,350 measles cases in the WHO European Region for 2024.",
+      "reference_verdict": "SUPPORTED",
+      "source_name": "WHO/UNICEF",
+      "source_url": "https://www.who.int/europe/news/item/13-03-2025-european-region-reports-highest-number-of-measles-cases-in-more-than-25-years---unicef--who-europe",
+      "published_date": "2025-03-13",
+      "reviewed_by": null,
+      "notes": "WHO/UNICEF reported 127350 European Region measles cases for calendar 2024; regional reporting figure is not worldwide incidence."
+    },
+    {
+      "id": "EV-013",
+      "claim_text": "COVID-19 mRNA vaccines alter recipients human DNA.",
+      "reference_verdict": "CONTRADICTED",
+      "source_name": "World Health Organization (WHO)",
+      "source_url": "https://www.who.int/news/item/17-05-2022-statement-for-healthcare-professionals-how-covid-19-vaccines-are-regulated-for-safety-and-effectiveness",
+      "published_date": "2022-05-17",
+      "reviewed_by": null,
+      "notes": "WHO answer explicitly says mRNA vaccines have not been shown to integrate into recipients genes. No general guarantee about all possible future biologic products or unapproved therapies is implied."
+    }
+  ]
+}

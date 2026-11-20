@@ -1,7 +1,7 @@
 {
   "collection": "prepared_demo_candidates_only_not_population_sample",
   "last_source_research_date": "2026-11-20",
-  "caution": "All examples are research candidates, not records approved by a VeriLoop human reviewer. Official YouTube live API availability remains untested. Case A must not be entered in reviewed channel history until a team reviewer independently checks the exact YouTube video/context and approves the specific claim.",
+  "caution": "Candidate A and C live YouTube API availability are not confirmed. Candidate B (NASA eclipse) metadata was demonstrated in an owner-supplied live VeriLoop screenshot on 2026-11-20. No claim has been VeriLoop human-reviewed or automatically verified. Candidate A must not enter source history without exact-context human approval.",
   "cases": [
     {
       "case_id": "A",
@@ -18,7 +18,7 @@
       "video_publication_date_note": "The AFP article documents the misleading May 2024 post, but exact YouTube snippet publish timestamp must be fetched from API.",
       "verdict_candidate_for_manual_review": "MISLEADING_CONTEXT",
       "source_check_status": "AFP_FACTCHECK_AND_ARCHIVE_LINK_CONFIRMED",
-      "live_youtube_api_status": "UNTESTED_KEY_MISSING",
+      "live_youtube_api_status": "NOT_LIVE_TESTED",
       "demo_acceptance_status": "PENDING_LIVE_FETCH_AND_EDITORIAL_REVIEW",
       "context_note": "Do not attribute this video's finding to the original India Today upload; the older authentic video and mislabeled repost are different YouTube items.",
       "has_veriloop_approved_review": false,
@@ -38,8 +38,8 @@
       "evidence_attribution": "NASA",
       "verdict_candidate_for_manual_review": "SUPPORTED",
       "source_check_status": "PUBLIC_YOUTUBE_INDEX_AND_OFFICIAL_SOURCE_FOUND",
-      "live_youtube_api_status": "UNTESTED_KEY_MISSING",
-      "demo_acceptance_status": "PENDING_LIVE_FETCH_AND_EDITORIAL_REVIEW",
+      "live_youtube_api_status": "OWNER_SCREENSHOT_LIVE_METADATA_CONFIRMED_2026-11-20",
+      "demo_acceptance_status": "PENDING_MATCHING_AND_EDITORIAL_REVIEW",
       "context_note": "A supported eclipse event claim does not certify every utterance of a long broadcast.",
       "has_veriloop_approved_review": false,
       "editorial_validation": "UNREVIEWED_RESEARCH_CANDIDATE"
@@ -59,7 +59,7 @@
       "evidence_attribution": "NASA UAP Independent Study",
       "verdict_candidate_for_manual_review": "INSUFFICIENT_EVIDENCE",
       "source_check_status": "PUBLIC_YOUTUBE_INDEX_AND_OFFICIAL_SOURCE_FOUND",
-      "live_youtube_api_status": "UNTESTED_KEY_MISSING",
+      "live_youtube_api_status": "NOT_LIVE_TESTED",
       "demo_acceptance_status": "PENDING_LIVE_FETCH_AND_EDITORIAL_REVIEW",
       "context_note": "The NASA video is an evidential-uncertainty reference, not an assertion of extraterrestrial origin. If a video contains no extractable factual claim about a specific UAP, the claim extractor must return no claim; do not invent one for a demo.",
       "has_veriloop_approved_review": false,

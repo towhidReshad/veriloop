@@ -21,7 +21,7 @@ def test_no_candidate_is_mislabeled_as_a_human_review():
     for c in CASES["cases"]:
         assert c["has_veriloop_approved_review"] is False
         assert c["editorial_validation"] == "UNREVIEWED_RESEARCH_CANDIDATE"
-        assert c["live_youtube_api_status"] == "UNTESTED_KEY_MISSING"
+        assert c["live_youtube_api_status"] in {"OWNER_SCREENSHOT_LIVE_METADATA_CONFIRMED_2026-11-20", "NOT_LIVE_TESTED"}
         assert c["demo_acceptance_status"].startswith("PENDING_")
 
 

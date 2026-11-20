@@ -1,0 +1,10 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+data/veriloop.db
+exports/*
+!exports/.gitkeep
+.streamlit/secrets.toml
+.DS_Store

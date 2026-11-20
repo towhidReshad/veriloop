@@ -298,7 +298,7 @@ User reads report               User requests review
 | Charting | Streamlit charts / pandas | Only for measured pilot data |
 | Testing | pytest | Mock external APIs for reproducibility |
 | Secrets | `.env` (never commit) | `.env.example` contains names only, no real keys |
-| Deployment | Local laptop | Internet access may still be needed for live API fetch; have cached demo fallback clearly labeled |
+| Deployment | Free Streamlit Community Cloud (owner-approved cloud-first demo); local fallback optional | Hosted at owner-reported `veriloop-research.streamlit.app`. Cloud SQLite persistence is not guaranteed; reconstruct curated references from versioned JSON. Do not treat ephemeral disk as durable reviewer/research storage. |
 
 **Verified API constraints (checked 2026-11-19):** YouTube `videos.list` can return snippet information, including title, description and channel information. The official `captions.download` method requires permission to edit the video, so unrestricted transcript extraction from arbitrary third-party videos must **not** be assumed. The Fact Check Tools API supports searching previously reviewed claims. Check the latest terms, quota and authentication requirements before implementing each connector.
 
@@ -607,11 +607,11 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-20  
-**Overall status:** DAY 1 IN_PROGRESS — URL/API client implemented and tested with mocks; live API and Streamlit runtime not yet verified  
+**Overall status:** DAY 2 IMPLEMENTED LOCALLY — Day 1 online metadata confirmed by owner screenshots; Day 2 SQLite schema and 13 reference records passed local tests; cloud deployment pending confirmation  
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
-**Latest demonstrated working build:** 38/38 Day 1 offline pytest tests passed on Python 3.13.5 (URL parsing, mocked API responses/errors); `compileall` passed. No live YouTube API result or Streamlit UI launch verified.  
-**Next immediate milestone:** Configure a legitimate YouTube API key and install Streamlit in an environment with package access; fetch one real public video and confirm all three candidate demo URLs before closing Day 1.
+**Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
+**Next immediate milestone:** Confirm Day 2 Streamlit Cloud preview shows 13 source-backed references; then build metadata claim extraction and TF-IDF evidence retrieval while guarding stance/context. A and C candidate live availability remains to be verified.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -619,16 +619,16 @@ These are **planned commands** until actual code is written and tested. Do not c
 | S-01 | Freeze VeriLoop MVP 1.0 feature list | DONE | Project owner | Section 4.5, feature IDs F-01–F-12 and RF-01–RF-04; scope agreed for planning, implementation remains unverified |
 | R-02 | Verify closest academic papers and finalize gap matrix | IN_PROGRESS | TBD | `research/literature_matrix.csv`: 5 bibliographically cross-checked starting references; closest-work synthesis/gap matrix not final |
 | R-03 | Select 3 fact-checkable YouTube demo cases | IN_PROGRESS | TBD | `data/demo_cases.json`: A AFP-documented mislabeled repost, B NASA eclipse, C NASA unresolved UAP; video URLs and source links recorded, live API accessibility and editorial approval pending |
-| D-01 | Initialize repository and dependencies | IN_PROGRESS | TBD | Repository files and `requirements.txt` created; Streamlit package not installed in this sandbox because package-index DNS failed; runtime launch not checked |
-| D-02 | YouTube metadata extractor works on real video | IN_PROGRESS | TBD | `veriloop/youtube.py` and `pages/1_Verify_News.py` implemented; 38/38 URL/API-mocked/demo-fixture tests pass; no provided `YOUTUBE_API_KEY`, hence no live API response yet |
-| D-03 | SQLite schema and seed evidence library | NOT_STARTED | TBD | Check real source provenance |
+| D-01 | Initialize repository and dependencies | DONE | Team | Owner screenshots show GitHub `main` and working Streamlit Community Cloud homepage |
+| D-02 | YouTube metadata extractor works on real video | DONE | Team | Owner screenshot demonstrates live NASA video metadata `2MJY_ptQW1o`; offline parser and mock tests passed |
+| D-03 | SQLite schema and seed evidence library | IN_PROGRESS | Team | `veriloop/db.py`, `data/seed_evidence.json` (13 source-backed reference records), `scripts/seed_db.py`, `tests/test_db.py`; 54/54 tests pass locally. GitHub/hosted preview verification still pending |
 | D-04 | Claim matching and preliminary report | NOT_STARTED | TBD | Pass known, debunking, unknown cases |
 | D-05 | Channel history restricted to reviewed records | NOT_STARTED | TBD | Test history queries |
 | D-06 | Optional reviewer flow + correction draft | NOT_STARTED | TBD | Test permissions and status |
-| R-04 | Collect and label selected pilot sample | NOT_STARTED | TBD | Record sampling rule |
+| R-04 | Collect and label selected pilot sample | IN_PROGRESS | Team | Annotation guide and separate header-only `research/news_dataset.csv` created; **0 observations collected** |
 | R-05 | Human impact pilot or approved alternative | NOT_STARTED | TBD | Ethics/consent and data |
 | R-06 | Analyze results and finalize research report | NOT_STARTED | TBD | Reproducible statistics |
-| T-01 | Automated test suite and professor demo | IN_PROGRESS | TBD | Day 1 `tests/test_youtube.py` + `tests/test_demo_cases.py`: 38 tests pass; full frozen MVP acceptance suite and complete A/B/C professor demo still pending |
+| T-01 | Automated test suite and professor demo | IN_PROGRESS | Team | 54/54 offline tests (Day 1 + Day 2); NASA live metadata B observed; A/C and verification demo unverified |
 
 **Allowed statuses:** `NOT_STARTED`, `IN_PROGRESS`, `BLOCKED`, `DONE`, `DEFERRED`.
 
@@ -677,7 +677,30 @@ Next single priority: Live-fetch official metadata for a documented public URL
   in a working Streamlit environment; verify candidate A/B/C availability.
 ```
 
-No official YouTube response, verified accusation, pilot participant response, or completed end-to-end verification flow is claimed here.
+Later in the day, owner screenshots demonstrated live YouTube metadata on Streamlit Cloud for NASA eclipse `2MJY_ptQW1o` and a separate entertainment video. This was not a locally made API request; no claim verification or editorial approval was made.
+
+---
+
+### Day 2 implementation session log — 2026-11-20
+
+```text
+Date / time: 2026-11-20 (Asia/Seoul)
+Tool or AI used: ChatGPT, GitHub connector, Python 3.13.5, pytest
+Files changed: veriloop/db.py, data/seed_evidence.json, scripts/seed_db.py,
+  tests/test_db.py, app.py, README.md, research/annotation_guide.md,
+  research/news_dataset.csv, data/demo_cases.json, tests/test_demo_cases.py,
+  .gitignore, .env.example, PROJECT_SOURCE_OF_TRUTH.md
+Task IDs: D-03, R-03, R-04, T-01, D-01/D-02 status from owner screenshots
+Completed: Canonical eight-table SQLite schema, 13 curated source-backed
+  unreviewed evidence records, idempotent seeding, read-only homepage preview,
+  initial observational research schema and annotation guide.
+Tests: 54/54 offline pytest passed; second SQLite seed inserted zero duplicates.
+Limitations: Streamlit Cloud preview requires owner/browser verification; cloud
+  SQLite data can be reset. No claim extraction, TF-IDF match, approved
+  review, automatic verdict, participant outcome or publication is claimed.
+Next single priority: Verify online Day 2 evidence preview, then implement
+  safeguarded metadata claim extraction and local evidence retrieval.
+```
 
 ---
 
@@ -703,6 +726,8 @@ No official YouTube response, verified accusation, pilot participant response, o
 | DEC-14 | Metadata thumbnail display is in P0; OCR and forensic image verification are not | Avoid promising image verification from metadata alone |
 | DEC-15 | Local evidence search is mandatory; Google Fact Check Tools lookup is optional | Keep minimum acceptance reproducible even without external fact-check search |
 
+| DEC-16 | Free Streamlit Community Cloud is the primary university demo deployment, with optional local fallback | Owner requires zero-cost hosting; cloud SQLite is ephemeral and must not be trusted for durable human reviews |
+
 ### Open questions (not permissions to invent defaults)
 
 1. Actual seven-day kickoff date and professor demo date.
@@ -710,7 +735,7 @@ No official YouTube response, verified accusation, pilot participant response, o
 3. Whether Google Fact Check Tools API and YouTube keys have been obtained.
 4. Which three real YouTube demo cases have verifiable, currently accessible source URLs.
 5. Whether institution-required consent/ethics approval permits an external participant pilot in the deadline.
-6. Whether review/publishing features should be demonstrated locally only or include exporting approved drafts.
+6. How to preserve reviewer decisions and approved draft exports durably for the free cloud demonstration (SQLite is ephemeral).
 7. Final literature selection and specific country/language comparisons feasible with actual data.
 
 **If an open question blocks implementation**, choose the safest limited fallback, label it as a fallback, and document the decision for owner approval. Do not silently expand project promises.

@@ -1,31 +1,31 @@
-# VeriLoop (Day 1 working slice)
+# VeriLoop — Day 2 evidence library build
 
-A **YouTube metadata-only** implementation within the frozen seven-day VeriLoop pilot. Its scope and live status are governed solely by `PROJECT_SOURCE_OF_TRUTH.md`. This build has **no fact-check verdict or evidence matching**.
+A **YouTube metadata + curated evidence library** research pilot. The authoritative frozen feature contract and latest verified status are in PROJECT_SOURCE_OF_TRUTH.md.
 
-## Local setup
+## Free online demo (Streamlit Community Cloud)
 
-Requires Python 3.11+ and a YouTube Data API v3 key. A key is not bundled. No paid AI service or hosting is required.
+Existing application: https://veriloop-research.streamlit.app (GitHub: towhidReshad/veriloop, branch main). Updates to the main branch normally trigger a redeployment. A domain, paid hosting, and local server are unnecessary. Set YOUTUBE_API_KEY only in the app's **private Streamlit Secrets**, never in GitHub.
 
-```bash
-python -m venv .venv
-# Linux/macOS: source .venv/bin/activate
-# Windows PowerShell: .venv\\Scripts\\Activate.ps1
-python -m pip install -r requirements.txt
-cp .env.example .env  # On Windows, copy the file manually
-# Set YOUTUBE_API_KEY in .env (never commit it).
-streamlit run app.py
-```
+The **Verify News** page retrieves public YouTube video metadata via the official YouTube Data API v3. The homepage also offers a read-only view of **13 curated external-source references** with original links and dates. **These are not matched to a submitted video, not human-approved VeriLoop findings, and not an observational research sample.** Claim extraction, stance/context validation, TF-IDF retrieval and guarded preliminary reports remain to be implemented.
 
-Open the **Verify News** sidebar page, paste a public YouTube watch, Shorts, mobile watch or youtu.be URL, and request metadata. Missing key, invalid URL, removed/private video and HTTP failures produce explicit messages rather than invented results. YouTube API access may require project/API enablement and appropriate quota.
+**Streamlit Community Cloud SQLite storage is ephemeral.** The app reconstructs the public curated library from versioned data/seed_evidence.json. Do not rely on this deployment for durable reviewer, correction or participant data.
 
-## Tests (offline)
+## Offline build / tests
 
-```bash
-python -m pytest -q
-```
+Requires Python 3.11+; from repository root:
 
-Tests use a fake session; they **do not prove live YouTube API access**. Day 1 live acceptance still requires a valid `YOUTUBE_API_KEY`, network, and a publicly available real video URL. Progress is documented in Section 15 of the source of truth.
+    python -m pip install -r requirements.txt
+    python scripts/seed_db.py
+    python scripts/seed_db.py
+    python -m pytest -q
 
-## Ethics and interpretation
+The seed is idempotent: the second run inserts zero new references. Optionally run Streamlit locally with: streamlit run app.py. Local hosting is *not* required for the university demonstration.
 
-Thumbnails are displayed but not forensically analyzed. No unsupported channel accusation, similarity-as-probability, or automatic correction publishing is implemented.
+The seed script and homepage require no YouTube API credentials; the live metadata page needs the restricted YouTube key stored securely. Google Fact Check Tools API lookup is optional and not part of this Day 2 build.
+
+## Research and review boundaries
+
+- data/seed_evidence.json is the **verification library**, not the 20–30-item observational sample. The latter is separately defined in research/news_dataset.csv and currently contains **zero** observations.
+- External reference classifications are not verified decisions about submitted videos. All evidence.reviewed_by fields are NULL; zero reviews, assessments, claim matches, corrections or channel accusations are preloaded.
+- Source URLs and available publication dates are preserved; unknown source publication dates remain null. Event dates are not substituted for publication dates.
+- No channel credibility percentage, truth probability, automatic correction publishing or arbitrary video/audio verification is implemented.
