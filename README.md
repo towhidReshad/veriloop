@@ -40,3 +40,8 @@ Expected local acceptance: NASA eclipse video 2MJY_ptQW1o -> candidate claim fro
 Run `python -m pytest -q`. At Day 3 implementation the suite passed 88/88 offline tests (Python environment with scikit-learn installed); the live hosted deployment must be checked separately. The app still needs a private YOUTUBE_API_KEY configured in Streamlit Cloud Secrets. Streamlit Community Cloud restarts may recreate the seeded evidence database. No pilot participant responses have been collected.
 
 Day 4+ frozen requirements—including approved-context reuse, reviewed channel history, optional human review, corrections with separate publishing approval and analytics—are **not yet implemented**.
+
+
+## Day 3 post-deployment quality update
+
+Owner's live NASA test confirmed related EV-002/EV-004 references and explicit insufficient-evidence cases. The test also exposed a false positive: a request to viewers to send questions was labeled a factual claim. The conservative extractor now excludes audience calls-to-action, with dedicated regression tests. This narrows one known error but does not establish general precision, video stance, or truth verdict. 60 offline tests were rerun in this patch session (Day 2 suite plus 6 new regressions); the broader Day 3 suite had passed 88 tests before this patch, not yet rerun here.

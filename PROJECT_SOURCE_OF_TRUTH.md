@@ -607,11 +607,11 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-20  
-**Overall status:** DAY 3 IMPLEMENTED LOCALLY — Day 1 YouTube metadata and Day 2 13-reference evidence library demonstrated online; Day 3 guarded metadata claim extraction and local TF-IDF retrieval passed offline tests; hosted Day 3 workflow pending verification  
+**Overall status:** DAY 3 ONLINE VERIFIED (CANDIDATE RETRIEVAL) — owner screenshot confirms NASA eclipse metadata claim candidates and EV-002/EV-004 tentative source matches; unreviewed and no final video verdict. Day 3 false-positive audience-prompt regression fix committed separately; live recheck of that refinement pending  
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Confirm online Day 3 Verify News page retrieves candidate claims and source links for NASA eclipse video. A/C demonstration videos, exact-context verification, and human-review workflow are not yet validated.
+**Next immediate milestone:** Confirm Day 3 follow-up avoids extracting NASA audience question prompts; then test real candidate A/C URLs and begin restricted reviewer/history functionality. A/C availability and exact-context human review remain unverified.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -622,7 +622,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 | D-01 | Initialize repository and dependencies | DONE | Team | Owner screenshots show GitHub `main` and working Streamlit Community Cloud homepage |
 | D-02 | YouTube metadata extractor works on real video | DONE | Team | Owner screenshot demonstrates live NASA video metadata `2MJY_ptQW1o`; offline parser and mock tests passed |
 | D-03 | SQLite schema and seed evidence library | DONE | Team | Owner's 2026-11-20 Streamlit screenshot/PDF confirms 13 curated reference records loaded online; SQLite schema and seed tested offline |
-| D-04 | Claim matching and preliminary report | IN_PROGRESS | Team | `veriloop/claims.py` and `veriloop/matching.py`; tentative evidence match, event/year/location/stance safeguards and page UI tested offline (88/88); live deployment and real A/C demo validation pending |
+| D-04 | Claim matching and preliminary report | IN_PROGRESS | Team | Owner screenshot confirms online NASA EV-002/EV-004 tentative source matches and insufficient-evidence handling; candidate 4 audience-prompt false positive identified and patched with regression tests. Exact-context verification, A/C demo and review remain pending |
 | D-05 | Channel history restricted to reviewed records | NOT_STARTED | TBD | Test history queries |
 | D-06 | Optional reviewer flow + correction draft | NOT_STARTED | TBD | Test permissions and status |
 | R-04 | Collect and label selected pilot sample | IN_PROGRESS | Team | Annotation guide and separate header-only `research/news_dataset.csv` created; **0 observations collected** |
@@ -726,6 +726,23 @@ Known limitations: Heuristic English-only extraction; no speech/transcript or
   Streamlit Cloud review storage. Website deployment requires live check.
 Next single priority: Validate the same NASA YouTube URL on the hosted app,
   then test real contrasting misleading/uncertain video metadata.
+```
+
+---
+
+### Day 3 post-deployment regression — 2026-11-20
+
+```text
+Input evidence: owner screenshot from hosted VeriLoop shows NASA eclipse
+candidate 1 -> EV-002 POSSIBLE_EVIDENCE_MATCH, candidate 5 -> EV-004;
+candidates 2/3 -> INSUFFICIENT_EVIDENCE. Metadata and links displayed.
+Issue: "Throughout the broadcast, send us your questions" was
+incorrectly extracted as candidate 4; it is an audience engagement request.
+Fix: narrow call-to-action filter in claims.py, plus six regression tests.
+Tests: 60/60 local offline tests passed (Day 2 suite + new regression
+tests; previous Day 3 suite baseline was 88/88 before this change).
+Claim verification, approved reviews and online verification of this
+specific regression fix are NOT claimed.
 ```
 
 ---

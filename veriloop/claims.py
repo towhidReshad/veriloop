@@ -34,6 +34,13 @@ _IGNORE = re.compile(
     re.IGNORECASE,
 )
 _PROMO = re.compile(r"\b(?:full movie|official trailer|hindi dubbed|subscribe|giveaway|lyrical video)\b", re.IGNORECASE)
+# Exclude audience-engagement imperatives even when prefixed by broadcast context.
+# A request to viewers is not an event-level factual assertion.
+_CALL_TO_ACTION = re.compile(
+    r"\b(?:send|submit|post|share|leave)\s+(?:(?:us|your)\s+)?(?:your\s+)?(?:questions|comments|feedback)\b"
+    r"|\b(?:let us know|ask us your questions)\b",
+    re.IGNORECASE,
+)
 _DEBUNK = re.compile(r"\b(?:fact[\s-]?check(?:ing)?|debunk(?:ed|ing)?|hoax|false claim|misleading claim|myth busted|disproven|not true)\b", re.IGNORECASE)
 _QUOTE = re.compile(r"\b(?:allegedly|according to|claims? that|reportedly|alleges? that|a video claims|quoted as|someone says)\b", re.IGNORECASE)
 _SENTENCES = re.compile(r"(?:\r?\n)+|(?<=[.!?])\s+(?=[A-Z0-9\"“(])")
@@ -74,7 +81,7 @@ def _plausible(sentence: str) -> bool:
         # Transparent English-only pilot: avoid converting non-English content
         # into an invented English claim.
         return False
-    if _IGNORE.search(sentence) or _PROMO.search(sentence):
+    if _IGNORE.search(sentence) or _PROMO.search(sentence) or _CALL_TO_ACTION.search(sentence):
         return False
     if sentence.rstrip().endswith("?"):
         return False
