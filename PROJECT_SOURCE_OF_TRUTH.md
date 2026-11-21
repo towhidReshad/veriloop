@@ -611,7 +611,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Verify full integrated review/independent editorial approval/export/encrypted restore regression in GitHub CI; only real owner-controlled hosted acceptance remains unverified. Continue to record live API positive evidence as pending until observed, without repetitive screenshots or public academic UI.
+**Next immediate milestone:** Verify immutable metadata review-request guard in CI and preserve existing historical review audits. After code-level verification, hosted reviewer acceptance and real external fact-check positive retrieval remain unverified; do not request repetitive screenshots.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -1176,6 +1176,33 @@ automatic durable storage or positive live Google fact-check response.
 CI result: GitHub Actions run 44912850764 (commit 1689f9b) PASSED
   Python compileall and 238/238 pytest cases. Hosted real approval and
   backup/restore remain pending.
+```
+
+---
+
+### F-07/F-09 metadata immutability for review requests — 2026-11-21
+
+```text
+Problem: Request idempotence previously used only YouTube video ID,
+  claim text and stance. A changed title/description/publication
+  timestamp could silently return an existing old review request.
+Fix: For a previously stored video ID, compare the retrieved original
+  title, description and platform publication timestamp against the
+  immutable submitted snapshot before returning a prior review.
+  Reject changed metadata with a clear message, preserving the old
+  review instead of misrepresenting it as a new context-specific check.
+  Existing review deduplication also requires metadata source_field to
+  match; identical repeated requests still return the existing ID.
+Scope: Frozen F-07/F-09 safeguards only. No schema changes, paid
+  tools, academic UI pages, or automatic verdicts.
+Limitation: Since the frozen video schema stores one row per YouTube
+  ID, changed metadata cannot yet enter a second independent
+  context-specific review. It is explicitly refused rather than
+  merged with historical approvals. Future versioned snapshots would
+  require an owner-approved schema change.
+Validation: Regression tests added for changed metadata title,
+  description, publish timestamp, source field and channel identity.
+  Full GitHub CI pending at time of coding.
 ```
 
 ---

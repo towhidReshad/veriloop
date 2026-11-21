@@ -55,14 +55,38 @@ def request_review(conn: sqlite3.Connection, video, assessment) -> tuple[int, bo
                     (youtube_id,channel_id,title,description,thumbnail_url,published_at,fetched_at)
                     VALUES (?,?,?,?,?,?,?)""", (video.video_id, channel_id, video.title[:500], video.description[:7000],
                     video.thumbnail_url, video.published_at, timestamp))
-        vrow = conn.execute("SELECT id,channel_id FROM videos WHERE youtube_id=?", (video.video_id,)).fetchone()
-        if vrow[1] != channel_id:
+        vrow = conn.execute("""SELECT id,channel_id,title,description,published_at
+                               FROM videos WHERE youtube_id=?""",
+                            (video.video_id,)).fetchone()
+        if vrow["channel_id"] != channel_id:
             raise ReviewPolicyError("Platform video/channel identifiers disagree")
-        existing = conn.execute("""SELECT r.id FROM reviews r JOIN claims c ON c.id=r.claim_id
-                                   WHERE c.video_id=? AND c.claim_text=? AND c.stance=? ORDER BY r.id DESC LIMIT 1""",
-                                (vrow[0], claim_text, assessment.candidate.stance)).fetchone()
-        if existing:
-            return existing[0], False
+        # Frozen F-07 provenance is tied to the video metadata at submission.
+        # Never reuse a review after publisher edits title, description or
+        # publish timestamp. The frozen single-row video schema cannot
+        # represent multiple independent snapshots for the same YouTube ID.
+        if (vrow["title"] != (video.title or "")[:500]
+                or vrow["description"] != (video.description or "")[:7000]
+                or vrow["published_at"] != video.published_at):
+            raise ReviewPolicyError(
+                "This video's published metadata has changed since an earlier review "
+                "request. The old review remains tied to its original snapshot; "
+                "a new context-specific review cannot be attached automatically."
+            )
+        existing = conn.execute("""SELECT r.id, c.claim_context
+                                   FROM reviews r JOIN claims c ON c.id=r.claim_id
+                                   WHERE c.video_id=? AND c.claim_text=? AND c.stance=?
+                                   ORDER BY r.id DESC""",
+                                (vrow["id"], claim_text, assessment.candidate.stance)).fetchall()
+        for previous in existing:
+            try:
+                old_context = json.loads(previous["claim_context"])
+            except (TypeError, ValueError):
+                continue
+            if (isinstance(old_context, dict)
+                    and old_context.get("metadata_field") == assessment.candidate.source_field
+                    and old_context.get("title") == (video.title or "")[:500]
+                    and old_context.get("published_at") == video.published_at):
+                return previous["id"], False
         context = json.dumps({"title": video.title[:500], "published_at": video.published_at,
                               "metadata_field": assessment.candidate.source_field}, ensure_ascii=False)
         claim_id = conn.execute("""INSERT INTO claims (video_id,claim_text,claim_context,stance,created_at)

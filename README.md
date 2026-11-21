@@ -184,3 +184,8 @@ A new deterministic end-to-end test covers review request, explicit human-approv
 
 
 **Verified integrated CI (2026-11-21):** [GitHub Actions run 44912850764](https://github.com/towhidReshad/veriloop/actions/runs/44912850764) passed Python compileall and **238/238 tests**. It confirms the entire simulated review/correction/export/encrypted-backup/restore/revocation pipeline with explicitly labeled fixture decisions; it does **not** establish that a real reviewer performed a hosted approval or that permanent storage now exists.
+
+
+## F-07/F-09: Changed-video metadata review safety (2026-11-21)
+
+Review requests are now scoped to the **original retrieved video metadata** (title, description and published timestamp) as well as exact claim text, stance and metadata field. Re-submitting an identical source context stays idempotent. If the publisher has changed the metadata for a video that already has a stored review request, the pilot refuses to silently reuse that old review. The eight-table frozen schema keeps one video record per YouTube ID, so a separate reviewed snapshot after publisher edits would require explicit versioned schema design; the current pilot transparently refuses the changed-context review rather than passing the original review off as new. Reviewed findings remain subject to the existing exact-context lookup and approval restrictions. Automated tests cover changed contexts; CI results must be checked separately.
