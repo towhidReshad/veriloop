@@ -611,7 +611,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Verify focused external fact-check retrieval regression in GitHub CI; actual authenticated positive Google-index result remains unproven. Continue real hosted reviewer/correction/backup acceptance and accurate documentation, without adding academic UI pages or repeatedly asking for screenshots.
+**Next immediate milestone:** Verify full integrated review/independent editorial approval/export/encrypted restore regression in GitHub CI; only real owner-controlled hosted acceptance remains unverified. Continue to record live API positive evidence as pending until observed, without repetitive screenshots or public academic UI.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -1150,6 +1150,30 @@ Regression: focused-query, context-preservation, publisher provenance,
   (commit 7afa6f4) PASSED Python compileall and 236/236 pytest tests.
   Real positive Google fact-check API response remains unverified.
 User-facing academic pages remain excluded.
+```
+
+---
+
+### Integrated F-07/F-09/F-10 workflow continuity test — 2026-11-21
+
+```text
+Owner asks to proceed with core software rather than repetitive screenshots.
+Goal: Verify the existing reviewed-claim → independent editorial
+correction → Markdown export → encrypted SQLite backup → empty-instance
+restore pipeline as one complete offline integration, without fake
+reviewer activity, network API keys or public academic pages.
+Changes: tests/test_integrated_review_recovery.py uses explicit fixture
+decisions. Tests that pending reviews cannot be corrected, self-approval
+cannot export, independent editorial approval is required, exported
+Markdown and human-reviewed provenance survive private backup/restore,
+destination user data cannot be overwritten and revoking a review
+invalidates both prior reviewed-context reuse and correction export.
+Reviewer UI session security: Lock workspace removes the encrypted
+archive and password fields prepared in Streamlit session state.
+Scope: All work falls under frozen F-07/F-09/F-10 review controls.
+Not claims: No real hosted human review, secure production identity,
+automatic durable storage or positive live Google fact-check response.
+CI result: Pending as code is staged.
 ```
 
 ---

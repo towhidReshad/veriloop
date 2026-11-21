@@ -50,6 +50,11 @@ if st.session_state.get("vl_review_authenticated") is not True:
 
 if st.button("Lock workspace", key="logout"):
     st.session_state["vl_review_authenticated"] = False
+    # Prepared decrypted-in-memory session material is cleared on logout.
+    # This does not delete files the owner already downloaded.
+    st.session_state.pop("vl_encrypted_archive", None)
+    st.session_state.pop("vl_backup_password", None)
+    st.session_state.pop("vl_restore_password", None)
     st.rerun()
 
 st.warning("Cloud SQLite is ephemeral. Do not use it as permanent approved-review storage; backup required. Do not approve unverifiable claims.")

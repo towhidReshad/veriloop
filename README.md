@@ -176,3 +176,8 @@ The existing one-query-per-claim Google Fact Check Tools lookup now trims a **sm
 
 
 **Verified CI:** [GitHub Actions run 44911474128](https://github.com/towhidReshad/veriloop/actions/runs/44911474128) passed **236/236 tests** and Python syntax checks on commit `7afa6f4`. This does not prove a positive response from the owner's live Google API key.
+
+
+## Integrated review → correction → private recovery regression (2026-11-21)
+
+A new deterministic end-to-end test covers review request, explicit human-approval **fixture**, previously-reviewed exact-context reuse, correction drafting, separate editor identity and approval, Markdown export, encrypted backup, restore into empty SQLite, no-overwrite protection, and revocation invalidating previously approved results. This is an automated pilot workflow test, **not a claim that a real reviewer performed these steps on Streamlit Cloud**. On reviewer logout the prepared encrypted archive and typed archive passwords are cleared from Streamlit session memory; downloaded files remain the owner's responsibility. Full GitHub CI verification is required.
