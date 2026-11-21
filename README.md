@@ -202,3 +202,6 @@ Review requests are now scoped to the **original retrieved video metadata** (tit
 ## Reviewer password rotation invalidates old sessions (2026-11-22)
 
 The restricted reviewer page now binds each unlocked session to the **currently configured** `REVIEWER_PASSWORD` using a random per-session salt and a password-derived verifier (never storing the raw password). Changing or removing the configured secret invalidates prior unlocked reviewer sessions when they next rerun their page. Explicitly locking the workspace also clears prepared encrypted archive bytes and typed archive password widgets from session state. New Streamlit AppTest cases simulate password rotation and lock/re-login without any real owner secrets. This is a limited shared-password pilot safeguard, not production authentication. CI results must be confirmed; we could not directly confirm public deployment availability from the current network environment.
+
+
+**Reviewer session safeguard CI:** [GitHub Actions run 44926466440](https://github.com/towhidReshad/veriloop/actions/runs/44926466440) passed **252/252 tests** and Python syntax checks (commit `e5abeac`). This verifies Streamlit script behavior with test-only passwords, not production authentication or real hosted browser access.

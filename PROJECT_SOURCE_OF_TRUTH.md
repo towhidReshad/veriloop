@@ -606,6 +606,9 @@ These are **planned commands** until actual code is written and tested. Do not c
 
 ## 15. Live Project Status — Update This Section After Every Work Session
 
+**2026-11-22 reviewer session rotation verified:** Commit `e5abeac`, GitHub Actions run `44926466440`, **252/252 pytest and Python compileall passed**. Streamlit AppTest confirms an active reviewer browser session is invalidated after the test-only configured password changes; test-only archive bytes are removed from session on rotation/logout. Direct hosted access from the current container was blocked by DNS/network resolution, so the deployment's current accessibility remains unknown. No owner credential was accessed, no live approved review was performed, and no genuine hosted recovery was tested.
+
+
 **2026-11-22 UI acceptance testing:** Streamlit `AppTest` exercises actual public/reviewer page scripts with isolated SQLite and mocked video metadata: homepage with no academic navigation, invalid public URL controlled error, metadata report without overall truth label, locked reviewer workspace, rejected incorrect reviewer password, and successful test-only reviewer login into empty queue. Initial new test run 44918048846 failed 4 test assertions due to incorrectly reading Streamlit alert elements and mismatch with existing safety wording; fixed test API/property and copied exact user-facing logic in commit db49b10. Subsequent run 44918153806 passed 249/249. Expanded login-positive coverage passed **250/250 pytest + compileall** in GitHub Actions run 44918254742 on commit `a4a517e`. These are local script/UI tests (not an actual browser connected to Streamlit Cloud); no owner secrets are embedded and no real human decision or live Google Fact Check result was observed.
 
 
@@ -1261,8 +1264,9 @@ Testing: Streamlit AppTest fixtures check login, password rotation,
   public report logic are unchanged.
 Limitations: Shared pilot password is not production-grade identity
   management. Streamlit instances and user data are ephemeral. GitHub
-  test-run verdict pending when work was staged; no hosted human
-  approvals, positive Google API responses, or live restore claimed.
+  GitHub Actions run 44926466440 (commit e5abeac) passed
+  Python compileall and all 252/252 pytest tests. No hosted human
+  approvals, positive Google API responses or live restore claimed.
 ```
 
 ---
