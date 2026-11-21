@@ -108,3 +108,10 @@ New regression coverage includes a mocked Google Fact Check Tools **positive** c
 
 
 **Verified CI result:** [GitHub Actions run 44900704832](https://github.com/towhidReshad/veriloop/actions/runs/44900704832) passed Python `compileall` and **173/173 pytest cases** on commit `61814ca`. Hosted interface and real positive Google API results have not been verified by that test run.
+
+
+## Frozen F-07: exact-context reviewed reuse (2026-11-21)
+
+The public Verify News page can now display a **previously human-reviewed claim-level finding** only for the **same YouTube video ID, same channel ID, identical title/description/publication timestamp, exact extracted claim text and source field, unchanged ASSERTS stance**, AND an approved review with valid audit provenance and a linked `ALIGNED` source. The original local match remains tentative; the previous review is clearly labeled as a *historical human decision*, never a new automatic decision or a verdict about the whole video. Changing metadata, video, claim wording, stance or the review to a nonapproved status suppresses reuse. This conservatively implements the safe subset of F-07, **not cross-video semantic reuse**. Review data in free Streamlit Cloud SQLite is ephemeral.
+
+No real reviewer approval or hosted exact-context reuse has yet been demonstrated. New automated tests and GitHub Actions must pass before claiming the code verified.

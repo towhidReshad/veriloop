@@ -607,11 +607,11 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-21  
-**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOTS CONFIRM BBC NO-MATCH AND Seeker WHO `CONTRADICTED`/negation warnings. Title-aware claim prioritization and mocked external fact-check positive-response path passed GitHub Actions 173/173 tests plus Python compileall on commit `61814ca` (run 44900704832). Hosted ranking recheck and real authenticated Google fact-check positive response are NOT yet observed. DAY 4 review request/login verified; human-approved correction export and durable storage remain pending.  
+**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOT CONFIRMS Seeker title-aware prioritization puts vaccines/autism statements FIRST and SECOND (five candidates, two WHO topical leads); Google live fact-check positive result remains unverified. Previous claim-prioritization build passed GitHub Actions 173/173 tests. F-07 SAME-VIDEO EXACT-CONTEXT REVIEWED REUSE added to code with tests; CI and hosted acceptance still pending. DAY 4 review request/login verified; correction export and durable review storage still pending.  
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Verify new title/topic-aware claim selection and full CI, then seek at least one real indexed Fact Check API positive response (mocked positive integration is NOT live validation). Resume frozen P0 reviewed reuse and correction-export tasks.
+**Next immediate milestone:** Verify F-07 exact-context reuse tests/CI, then perform explicit approved NASA video review and refresh SAME link to demonstrate historical reuse. Verify changed metadata, changed video/stance and rejected review never reuse. Real Google Fact Check positive indexing and frozen F-10 correction approval/export remain unverified.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -943,6 +943,37 @@ Limitations: Title relevance may miss tangential but important claims;
   No speech/video/audio checking or promise of internet-wide matches.
 Next: Check CI; owner verify Seeker candidate ordering on live Streamlit.
   Request an independent indexed positive test before claiming live success.
+```
+
+---
+
+### Owner verified title ranking; strict reviewed finding reuse — 2026-11-21
+
+```text
+Owner screenshot: Seeker previously unseen public YouTube video rechecked
+  after topic-aware prioritization. Statement 1 and statement 2 concern
+  vaccines/autism; five metadata candidates total, two WHO topical leads,
+  three without source matches. Live title-prioritization accepted.
+Decision: Implement frozen P0 F-07 in a very strict same-video subset.
+  Never transfer approved findings to an arbitrary different upload based
+  on TF-IDF/topic overlap or source publisher classification.
+Implementation: Read-only find_reviewed_exact_context(conn, video, assessment)
+  looks for APPROVED review with audit-confirmed context and identical
+  YouTube video ID, uploader channel ID, stored metadata title, description,
+  published timestamp, exact claim text, metadata field and ASSERTS stance.
+  Requires recorded ALIGNED evidence and review audit matching evidence,
+  verdict and timestamp. Returns original source URL, evidence/review IDs,
+  review date and human-review verdict without exposing private reviewer
+  note/identity or changing any stored review.
+UI: Separately labels historical exact-context human reviewed claim.
+  Original TF-IDF/local assessment remains a preliminary retrieval,
+  with no new approval and no channel-wide verdict.
+Tests: Created tests/test_review_reuse.py for same context, changed
+  video/channel/metadata/date/claim/stance and revoked review status,
+  audit integrity, and read-only behavior.
+Limitations: No cross-video reuse; changed metadata requires fresh
+  review even if factual meaning stays similar. SQLite is ephemeral.
+  New code CI/hosted results not yet verified. F-10 and F-11 remain open.
 ```
 
 ---

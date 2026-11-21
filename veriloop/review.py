@@ -156,3 +156,73 @@ def decide_review(conn: sqlite3.Connection, review_id: int, status: str, *,
         conn.execute("""UPDATE reviews SET review_status=?, reviewed_verdict=?, reviewer_note=?,
                        reviewed_at=? WHERE id=?""", (status, verdict if status == "APPROVED" else None,
                        json.dumps(audit, ensure_ascii=False), reviewed_at, review_id))
+
+
+def find_reviewed_exact_context(conn: sqlite3.Connection, video, assessment) -> dict | None:
+    """Read-only F-07 reuse for the SAME video, unchanged metadata and exact claim.
+
+    Intentionally never transfer an approved finding to another video/channel,
+    a changed description/title/date, or a quotation/debunk. This safe pilot
+    subset is narrower than general cross-video semantic matching.
+    """
+    candidate = assessment.candidate
+    if (getattr(candidate, "stance", None) != "ASSERTS"
+            or getattr(candidate, "source_field", None) not in {"title", "description"}
+            or not isinstance(getattr(candidate, "text", None), str)
+            or not VID.fullmatch(getattr(video, "video_id", "") or "")):
+        return None
+    rows = conn.execute("""
+        SELECT r.id AS review_id, r.review_status, r.reviewed_verdict,
+               r.reviewed_at, r.reviewer_note, c.claim_text, c.claim_context,
+               c.stance, v.title, v.description, v.published_at,
+               ch.youtube_channel_id, e.id AS evidence_id, e.source_name,
+               e.source_url, e.published_date, m.context_status
+        FROM reviews r
+        JOIN claims c ON c.id=r.claim_id
+        JOIN videos v ON v.id=c.video_id
+        JOIN channels ch ON ch.id=v.channel_id
+        JOIN claim_matches m ON m.claim_id=c.id
+        JOIN evidence e ON e.id=m.evidence_id
+        WHERE v.youtube_id=? AND c.claim_text=? AND c.stance='ASSERTS'
+          AND r.review_status='APPROVED' AND r.reviewed_verdict IS NOT NULL
+          AND r.reviewed_at IS NOT NULL AND m.context_status='ALIGNED'
+          AND e.source_url LIKE 'https://%'
+        ORDER BY r.reviewed_at DESC, r.id DESC
+    """, (video.video_id, candidate.text)).fetchall()
+    for row in rows:
+        if (row["title"] != (video.title or "")[:500]
+                or row["description"] != (video.description or "")[:7000]
+                or row["published_at"] != video.published_at
+                or row["youtube_channel_id"] != video.channel_id
+                or row["context_status"] != "ALIGNED"):
+            continue
+        try:
+            context = json.loads(row["claim_context"])
+            audit = json.loads(row["reviewer_note"])
+        except (ValueError, TypeError):
+            continue
+        if (not isinstance(context, dict) or not isinstance(audit, dict)
+                or context.get("title") != row["title"]
+                or context.get("published_at") != video.published_at
+                or context.get("metadata_field") != candidate.source_field
+                or audit.get("status") != "APPROVED"
+                or audit.get("verdict") != row["reviewed_verdict"]
+                or audit.get("evidence_id") != row["evidence_id"]
+                or audit.get("confirmed_context") is not True
+                or audit.get("timestamp") != row["reviewed_at"]
+                or not isinstance(audit.get("reviewer_id"), str)
+                or not audit["reviewer_id"].strip()):
+            continue
+        # The result contains public source provenance but excludes private
+        # reviewer notes, names, and authentication details.
+        return {
+            "review_id": row["review_id"],
+            "reviewed_verdict": row["reviewed_verdict"],
+            "reviewed_at": row["reviewed_at"],
+            "evidence_id": row["evidence_id"],
+            "source_name": row["source_name"],
+            "source_url": row["source_url"],
+            "source_published_date": row["published_date"],
+            "scope": "same_video_unchanged_metadata_and_claim",
+        }
+    return None
