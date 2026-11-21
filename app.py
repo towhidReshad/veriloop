@@ -61,6 +61,7 @@ with a:
     st.page_link("pages/2_Channel_History.py", label="📚  Reviewed claim history")
 with b:
     st.page_link("pages/3_Review_Dashboard.py", label="🔒  Reviewer workspace")
+st.page_link("pages/5_Professor_Demo.py", label="🎓  Professor demo · documented case guide")
 st.info(
     "**Important:** We find relevant material, not automatic true/false verdicts. "
     "A similarity score is not the probability that a claim is false."

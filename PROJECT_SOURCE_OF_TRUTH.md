@@ -607,11 +607,11 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-21  
-**Overall status:** Live owner screenshots demonstrate BBC/Seeker metadata verification, topic-aware ranking and WHO negation/source-classification safeguards. Manual encrypted reviewer archive/recovery (F-09/F-10 resilience safeguard) and Node24 CI workflow passed GitHub Actions 204/204 pytest + compileall on commit `6f513ee` (run 44903799198); actual hosted restoration remains unverified. Existing F-07 code passed 187/187 offline CI cases (run 44901360529), but real human-approved reuse has not been demonstrated. F-10 independent correction approval/manual export and F-11 observational dashboard implemented; first combined build passed GitHub Actions 197/197 tests (run 44901926635). Independent-drafter/editor guard passed GitHub Actions 198/198 tests and compileall on commit `32de5dc` (run 44902043884). A final Streamlit link-button compatibility fix and static regression are staged; its CI remains pending, and hosted UI is not yet verified. The observational sample has zero rows, and no survey/participant or prevalence results may be inferred. Google API real positive match, permanent review storage, complete A/B/C demonstration remain unverified.
+**Overall status:** Live owner screenshots demonstrate BBC/Seeker metadata verification, topic-aware ranking and WHO negation/source-classification safeguards. Manual encrypted reviewer archive/recovery (F-09/F-10 resilience safeguard) and Node24 CI workflow passed GitHub Actions 204/204 pytest + compileall on commit `6f513ee` (run 44903799198); actual hosted restoration remains unverified. Existing F-07 code passed 187/187 offline CI cases (run 44901360529), but real human-approved reuse has not been demonstrated. F-10 independent correction approval/manual export and F-11 observational dashboard implemented; first combined build passed GitHub Actions 197/197 tests (run 44901926635). Independent-drafter/editor guard passed GitHub Actions 198/198 tests and compileall on commit `32de5dc` (run 44902043884). A final Streamlit link-button compatibility fix and static regression are staged; its CI remains pending, and hosted UI is not yet verified. The observational sample has zero rows, and no survey/participant or prevalence results may be inferred. Google API real positive match, permanent review storage, complete A/B/C demonstration remain unverified. F-12 source-linked read-only demo guide, RF-04 unconducted protocol and literature gap-planning matrix are newly implemented; their CI and live demonstration are pending.
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** One integrated hosted acceptance session for reviewer approval → correction editorial approval → private archive download and empty-instance recovery, then real source-grounded A/B/C professor demonstrations. Keep unverified live Google positive match and uncollected observational data explicitly pending; no repetitive screenshot requests.
+**Next immediate milestone:** Complete one integrated hosted acceptance of actual A/B/C URLs and the restricted human-review, correction and private archive recovery workflow; document actual source accessibility and results. Read-only A/B/C prepared research guide and conditional study protocol are implemented, but not substitutes for tested video metadata, review or participant collection.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -1048,6 +1048,34 @@ Validation: GitHub Actions run 44903799198 (commit 6f513ee) PASSED
   Hosted manual restore remains unverified.
 Next: Confirm CI, do one integrated final acceptance demo and record
   real outcomes; do not fabricate any survey/sample observations.
+```
+
+---
+
+### F-12 source-grounded demo and RF-04 research protocol — 2026-11-21
+
+```text
+Motivation: Make the university demonstration reproducible without
+  falsifying YouTube API success, any human review, or participant results.
+Change: veriloop/demo.py validates three distinct real source-linked
+  prepared case records A/B/C, requiring HTTPS sources and explicit
+  unreviewed/PENDING status. Public pages/5_Professor_Demo.py presents
+  these examples explicitly as a read-only *research source guide*,
+  not cached video metadata or a VeriLoop-reviewed video verdict.
+  app.py links the guide. The live Verify News workflow is unchanged.
+Research deliverables: Added research/USER_PILOT_PROTOCOL.md with a
+  conditional consent template, three proposed experimental conditions,
+  participant questionnaire and analysis plan; makes no claim of ethical
+  approval or recruited participants. Added LITERATURE_GAP_MATRIX.md,
+  explicitly a planning synthesis of existing five starter references,
+  not a verified comprehensive systematic review.
+Tests: Tests/test_professor_demo.py ensures three cases A/B/C, no
+  pre-approved review, traceable links, and rejection of fake accepted
+  status. Commit CI has not yet been observed for this change.
+Unresolved: Actual accessibility for A/C on official YouTube Data API,
+  exact-human-reviewed A/B result, hosted backup restore, genuine
+  observational sample, institutionally permitted participant pilot
+  and real positive Google Fact Check result remain unverified.
 ```
 
 ---

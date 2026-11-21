@@ -49,3 +49,10 @@
 | Zero-data observational dashboard honest | Automated tests only; hosted check pending | — |
 
 No new human-review approval, publication, or field-research result is implied by this checklist.
+
+
+## New no-fabrication presentation route
+
+Open `/Professor_Demo` in the Streamlit multipage app or select **Professor demo · documented case guide** from the homepage. It shows A/B/C referenced publication links and video candidates without asserting successful YouTube API retrieval for A/C, any approved review, or any software verdict. This remains usable for discussing source research even when a YouTube video is removed or private, but it is NOT a substitute for the required live A/B/C acceptance demonstrations.
+
+Participant research is documented as a proposed, **unconducted** exercise in `research/USER_PILOT_PROTOCOL.md`; literature gap-planning notes are in `research/LITERATURE_GAP_MATRIX.md`.

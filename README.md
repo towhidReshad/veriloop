@@ -145,3 +145,10 @@ The regression workflow now uses Node24-compatible `actions/checkout@v6` and `ac
 
 
 **Verified workflow:** GitHub Actions [run 44903799198](https://github.com/towhidReshad/veriloop/actions/runs/44903799198) passed Python 3.11 `compileall` and **204/204 tests** on commit `6f513ee`. The Node24-compatible checkout/setup-python actions completed successfully, with no Node.js 20 deprecation warning in this run's logs. This is code-level verification: the hosted private backup/restore and real reviewer editorial workflow still need integrated human acceptance.
+
+
+## F-12 Professor demo guide and conditional research protocol (2026-11-21)
+
+The homepage links **Professor demo · documented case guide** (`pages/5_Professor_Demo.py`). It displays exactly three source-linked cases from `data/demo_cases.json` and transparently states where actual YouTube video availability or independent claim review is **not** demonstrated. It is **not** a simulated metadata endpoint, a cached app verdict, or a prepared human-approved accusation. Use the real Verify News form for live results; if a video is inaccessible, the source guide stays clearly labeled as a research example.
+
+A study questionnaire and conditional consent/analysis protocol are in `research/USER_PILOT_PROTOCOL.md`, with a five-paper planning matrix in `research/LITERATURE_GAP_MATRIX.md`. No institutional approval, survey participants, experimental effects, country comparisons, or population prevalence are assumed. Verify literature claims in full text before submission. The observational sample remains empty.
