@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def _text(elements) -> str:
     """Aggregate displayed messages without depending on Streamlit internals."""
-    return " ".join(str(item.message) for item in elements)
+    return " ".join(str(item.value) for item in elements)
 
 
 def _fixture_video() -> VideoMetadata:
@@ -91,9 +91,10 @@ def test_mocked_video_shows_preliminary_results_without_verdict(isolated_cloud):
     )
     assert "NASA eclipse video" in displayed
     assert "A total solar eclipse crossed" in displayed
-    assert "not automatic true/false verdicts" in displayed or (
-        "not a verdict about the entire video" in displayed
-    )
+    # The page must explicitly deny a whole-video verdict, even when
+    # the offline fixture has a related local source.
+    assert "whole video" in displayed
+    assert "human review" in displayed
 
 
 def test_reviewer_page_stays_locked_without_configured_password(isolated_cloud):
