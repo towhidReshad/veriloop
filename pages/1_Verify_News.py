@@ -4,7 +4,7 @@ from __future__ import annotations
 import streamlit as st
 
 from veriloop.config import get_youtube_api_key, get_factcheck_api_key
-from veriloop.factcheck import run_live_fallback
+from veriloop.factcheck import run_live_fallback, focused_search_query
 from veriloop.db import connect_db, init_db, list_evidence, seed_evidence
 from veriloop.matching import assess_metadata
 from veriloop.presentation import friendly_explanation, friendly_status, summarize, has_conflicting_wording
@@ -240,6 +240,8 @@ if result:
                     st.caption("Similarity is not a probability of misinformation. Source verdicts are not transferred to this video.")
                 if live:
                     st.write("**Live fact-check lookup status:**", live.status)
+                    st.write("**Search wording sent to fact-check index:**", focused_search_query(assessment.candidate.text))
+                    st.caption("The original statement remains unchanged for source context comparison.")
                     for check in live.articles:
                         st.write("**Publisher and its original rating:**", check.publisher, "·", check.publisher_rating or "Not supplied")
                         st.write("**Text retrieval relevance (not truth probability):**", f"{check.relevance:.2f}")

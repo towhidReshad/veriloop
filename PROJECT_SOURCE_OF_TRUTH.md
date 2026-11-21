@@ -611,7 +611,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Confirm extended F-01 supported-video URL compatibility in GitHub CI and inspect hosted behavior with arbitrary *publicly accessible* YouTube links. Continue genuine end-to-end reviewer/correction acceptance without introducing academic UI pages.
+**Next immediate milestone:** Verify focused external fact-check retrieval regression in GitHub CI; actual authenticated positive Google-index result remains unproven. Continue real hosted reviewer/correction/backup acceptance and accurate documentation, without adding academic UI pages or repeatedly asking for screenshots.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -1124,6 +1124,30 @@ CI: GitHub Actions run 44907528142 (commit d1a7b14) PASSED
   222/222 pytest tests and Python compileall. Live YouTube availability
   remains dependent on the official API; no professor-selected video
   was falsely claimed as verified.
+```
+
+---
+
+### Existing optional live fact-check lookup query refinement — 2026-11-21
+
+```text
+Owner instruction: Continue frozen general-user VeriLoop improvement and
+  improve external source retrieval without paid third-party services.
+Change in existing F-04/F-05 optional Google Fact Check Tools fallback:
+  focused_search_query removes only a narrow set of introductory
+  attribution/reporting phrases before one official claims:search request.
+  Explicit negation, claim proposition, date, location and original
+  extracted metadata statement are preserved; full original statement
+  continues to be used for similarity/context comparison.
+  This does not add web-wide search, transcript access or new API quota
+  calls. It does not guarantee a relevant published fact-check exists.
+Privacy/safety: Reject private/local IPv4/IPv6 links returned in
+  claimReview, and retain source provenance/no video verdict.
+Product UX: Optional evidence details show the factual search wording
+  used, so an ordinary user can tell what was looked up.
+Regression: focused-query, context-preservation, publisher provenance,
+  private-link rejection tests added. CI run pending as of code change.
+User-facing academic pages remain excluded.
 ```
 
 ---

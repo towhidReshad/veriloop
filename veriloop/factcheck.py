@@ -6,6 +6,7 @@ or channel-history accusations. Never log or display API keys or raw API errors.
 from __future__ import annotations
 
 from dataclasses import dataclass
+import ipaddress
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import urlsplit
 import re
@@ -20,6 +21,40 @@ API_ENDPOINT = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
 MAX_SEARCHES_PER_VIDEO = 5
 MAX_RESULTS_PER_SEARCH = 5
 MIN_RELEVANCE = 0.18  # text retrieval heuristic, not a probability
+
+# Public claim-search queries work better when narration about the claim is
+# removed. Never drop the factual proposition, explicit negation, year or place.
+_ATTRIBUTION_PREFIX = re.compile(
+    r"^(?:(?:according to|as reported by)\s+[^,]{3,55},\s*|"
+    r"(?:scientific evidence suggests|research suggests|studies show|"
+    r"experts say|researchers say|the video claims|the narrator says)\s+that\s+)",
+    re.IGNORECASE,
+)
+_META_PREFIX = re.compile(
+    r"^(?:in this video|in this report|in today's episode|the report says)\s*,?\s*",
+    re.IGNORECASE,
+)
+
+
+def focused_search_query(claim_text: str) -> str:
+    """Produce a conservative searchable proposition from an original claim.
+
+    Preserve critical factual modifiers and polarity. The comparison stage
+    *always* receives the original user-video metadata statement.
+    """
+    original = " ".join(claim_text.split()) if isinstance(claim_text, str) else ""
+    result = original
+    for _ in range(2):
+        before = result
+        result = _META_PREFIX.sub("", result)
+        result = _ATTRIBUTION_PREFIX.sub("", result)
+        if result == before:
+            break
+    result = result.strip(" \t.,:;")
+    if len(result) < 12 or len(result.split()) < 3:
+        result = original
+    return result[:220]
+
 
 
 @dataclass(frozen=True)
@@ -49,10 +84,16 @@ def _safe_article_url(url: object) -> bool:
         parts = urlsplit(url)
     except ValueError:
         return False
-    return (parts.scheme == "https" and bool(parts.hostname)
-            and "." in parts.hostname and not parts.username and not parts.password
-            and parts.hostname not in ("localhost", "127.0.0.1")
-            and not parts.hostname.endswith(".local"))
+    if parts.scheme != "https" or not parts.hostname or parts.username or parts.password:
+        return False
+    host = parts.hostname.rstrip(".").lower()
+    if host in {"localhost"} or host.endswith((".localhost", ".local")) or "." not in host:
+        return False
+    try:
+        address = ipaddress.ip_address(host)
+        return address.is_global
+    except ValueError:
+        return True
 
 
 def _clean_text(value: object, max_length: int = 300) -> str:
@@ -77,7 +118,7 @@ def lookup_factchecks(claim_text: str, api_key: str | None, *, http_get=None) ->
     """
     if not isinstance(api_key, str) or not api_key.strip():
         return LiveLookup("UNAVAILABLE", note="The optional live fact-check service is not configured.")
-    query = _clean_text(claim_text, 220)
+    query = focused_search_query(claim_text)
     if len(query) < 12:
         return LiveLookup("NO_RESULTS", note="Not enough claim text for live fact-check search.")
     getter = http_get or requests.get
