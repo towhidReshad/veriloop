@@ -606,12 +606,15 @@ These are **planned commands** until actual code is written and tested. Do not c
 
 ## 15. Live Project Status — Update This Section After Every Work Session
 
+**2026-11-22 UI acceptance testing:** Streamlit `AppTest` exercises actual public/reviewer page scripts with isolated SQLite and mocked video metadata: homepage with no academic navigation, invalid public URL controlled error, metadata report without overall truth label, locked reviewer workspace, rejected incorrect reviewer password, and successful test-only reviewer login into empty queue. Initial new test run 44918048846 failed 4 test assertions due to incorrectly reading Streamlit alert elements and mismatch with existing safety wording; fixed test API/property and copied exact user-facing logic in commit db49b10. Subsequent run 44918153806 passed 249/249. Expanded login-positive coverage passed **250/250 pytest + compileall** in GitHub Actions run 44918254742 on commit `a4a517e`. These are local script/UI tests (not an actual browser connected to Streamlit Cloud); no owner secrets are embedded and no real human decision or live Google Fact Check result was observed.
+
+
 **Status date:** 2026-11-21  
 **Overall status:** Live owner screenshots demonstrate BBC/Seeker metadata verification, topic-aware ranking and WHO negation/source-classification safeguards. Manual encrypted reviewer archive/recovery (F-09/F-10 resilience safeguard) and Node24 CI workflow passed GitHub Actions 204/204 pytest + compileall on commit `6f513ee` (run 44903799198); actual hosted restoration remains unverified. Existing F-07 code passed 187/187 offline CI cases (run 44901360529), but real human-approved reuse has not been demonstrated. F-10 independent correction approval/manual export and F-11 observational dashboard implemented; first combined build passed GitHub Actions 197/197 tests (run 44901926635). Independent-drafter/editor guard passed GitHub Actions 198/198 tests and compileall on commit `32de5dc` (run 44902043884). A final Streamlit link-button compatibility fix and static regression are staged; its CI remains pending, and hosted UI is not yet verified. The observational sample has zero rows, and no survey/participant or prevalence results may be inferred. Google API real positive match, permanent review storage, complete A/B/C demonstration remain unverified. F-12 source-linked read-only demo guide, RF-04 unconducted protocol and literature gap-planning matrix passed GitHub Actions 208/208 tests on commit `c127f97` (run 44904417714). Live hosted UI and A/C video availability remain unverified.
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Verify immutable metadata review-request guard in CI and preserve existing historical review audits. After code-level verification, hosted reviewer acceptance and real external fact-check positive retrieval remain unverified; do not request repetitive screenshots.
+**Next immediate milestone:** Obtain genuine hosted end-to-end acceptance of review decision → separate editorial approval → encrypted owner backup/empty-instance restore, without repeated screenshots; Streamlit page interaction tests now pass offline. Do not claim live Google positive retrieval or collected participant data until demonstrated.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -1205,6 +1208,33 @@ Validation: Regression tests added for changed metadata title,
   GitHub Actions run 44914590673 (commit 945a628) completed
   successfully: 244/244 pytest tests and Python compileall passed.
   No hosted changed-metadata interaction has been observed.
+```
+
+---
+
+### Frozen scope UI-level acceptance suite — 2026-11-22
+
+```text
+Goal: Increase product readiness evidence using Streamlit AppTest
+  (real page scripts and widgets), not more speculative features.
+Scope: F-01/F-02/F-06 public input/report and F-09 reviewer
+  authentication only; no academic/public research UI additions.
+Test isolation: Temporary SQLite under pytest tmp_path, no live
+  YouTube/Google API keys, no real review approvals.
+Tests: Homepage renders without professor/research navigation;
+  invalid URLs show errors; fixture video renders preliminary
+  source result without a whole-video verdict; reviewer no-secret
+  workspace locked; wrong password denied; valid test-only password
+  unlocks empty review queue.
+CI: Initial run 44918048846 failed four NEW test assertions
+  (Streamlit alert property and copy mismatch), while prior tests
+  passed. Fixed assertions and re-ran, 249/249 tests passed in
+  44918153806. Extra authorized-login test added and final
+  run 44918254742 PASSED 250/250 pytest and compileall (commit
+  a4a517e). Public app code and frozen feature list unchanged.
+Remaining: Hosted browser interaction and independently executed
+  editorial/correction/backup acceptance, plus genuine live
+  external Google Fact Check positive retrieval.
 ```
 
 ---

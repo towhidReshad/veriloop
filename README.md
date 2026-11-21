@@ -192,3 +192,8 @@ Review requests are now scoped to the **original retrieved video metadata** (tit
 
 
 **F-07/F-09 verification:** [GitHub Actions run 44914590673](https://github.com/towhidReshad/veriloop/actions/runs/44914590673) completed successfully with **244/244 tests** and Python compileall. Hosted live metadata-change acceptance remains unverified.
+
+
+## Streamlit UI acceptance suite (2026-11-22)
+
+`tests/test_streamlit_ui_acceptance.py` now drives real Streamlit script widgets using `streamlit.testing.v1.AppTest`. Its six offline checks cover: homepage product-only navigation, invalid URL failure message, mocked successful video metadata/preliminary evidence, reviewer page locked without an owner secret, rejected wrong reviewer password, and authorized access to an empty queue with **test-only credentials**. No credentials are saved in source or real external APIs called. The initial suite found test-code assertion mistakes; corrections and an additional positive-login test led to [GitHub Actions run 44918254742](https://github.com/towhidReshad/veriloop/actions/runs/44918254742) passing **250/250 tests**, plus `compileall` (commit `a4a517e`). This is **not a real cloud-browser end-to-end test** and does not prove permanent cloud review persistence or live publisher API results.
