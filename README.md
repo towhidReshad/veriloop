@@ -93,3 +93,8 @@ Metadata candidate matching now checks **explicit full calendar dates** (in mont
 If local reference wording conflicts or event/context is still unconfirmed, the optional Fact Check Tools lookup can still run within the existing five-query-per-video budget. A mixed local/live display names sources separately, avoids falsely saying no local reference exists, and counts unique **statements with sources**, not truth verdicts. A mocked provider-positive regression case checks original article URL/publisher/rating provenance but does not establish a real, indexed positive API response. New source-level tests and a GitHub Actions `compileall` + `pytest` workflow were added; check the actual CI run before claiming the full suite passes.
 
 **Still required for final frozen MVP:** F-07 reviewed exact-context reuse, F-10 correction draft plus independent export approval, F-11 measured pilot dashboard, full A/B/C professor test evidence and durable reviewed-record storage. These are not marked completed by this patch.
+
+
+### Automated full-suite verification
+
+GitHub Actions [run 44899946003](https://github.com/towhidReshad/veriloop/actions/runs/44899946003) completed successfully on Python 3.11: **165/165 pytest passed** plus `compileall`. An earlier run surfaced four old presentation test-fixture crashes because test objects had no `matches` field; the helper now handles missing optional matches safely. A successful mocked API test is not a confirmed real Fact Check Tools result. The free-hosted new UI still requires direct validation.

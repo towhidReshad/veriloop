@@ -607,7 +607,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-21  
-**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOTS CONFIRM BBC NO-MATCH, Seeker local WHO matches and the deployed WHO `CONTRADICTED`/negation warnings. Local/live retrieval context safeguards and CI regression workflow updated in GitHub; live verification and CI outcomes for this latest change remain pending. DAY 4 REVIEW REQUEST/LOGIN VERIFIED; human decision/export and durable storage not yet verified.  
+**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOTS CONFIRM BBC NO-MATCH AND Seeker WHO `CONTRADICTED`/negation warnings. NEW MATCHING/CONTEXT SAFEGUARDS PASSED GITHUB ACTIONS 165/165 TESTS AND SYNTAX CHECKS (commit `916b33a`). HOSTED DEPLOYMENT OF THE NEW CONTEXT CHECKS AND A REAL LIVE FACT-CHECK POSITIVE RESPONSE STILL REQUIRE CONFIRMATION. DAY 4 REVIEW REQUEST/LOGIN VERIFIED; human decision/export and durable storage not yet verified.  
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
@@ -622,13 +622,13 @@ These are **planned commands** until actual code is written and tested. Do not c
 | D-01 | Initialize repository and dependencies | DONE | Team | Owner screenshots show GitHub `main` and working Streamlit Community Cloud homepage |
 | D-02 | YouTube metadata extractor works on real video | DONE | Team | Owner screenshot demonstrates live NASA video metadata `2MJY_ptQW1o`; offline parser and mock tests passed |
 | D-03 | SQLite schema and seed evidence library | DONE | Team | Owner's 2026-11-20 Streamlit screenshot/PDF confirms 13 curated reference records loaded online; SQLite schema and seed tested offline |
-| D-04 | Claim matching and preliminary report | IN_PROGRESS | Team | NASA, BBC and Seeker owner screenshots confirm metadata matching/no-match and explicit WHO `CONTRADICTED` source classification; new exact calendar date/place uncertainty and fallback safeguards added with regression/CI workflow, awaiting CI/live validation. Full semantic entailment and positive live indexed-match not demonstrated |
+| D-04 | Claim matching and preliminary report | IN_PROGRESS | Team | NASA/BBC/Seeker owner screenshots confirm local matching and no-match/WHO classification. Full calendar date, location ambiguity, quote handling and limited live fallback now passed 165/165 GitHub CI tests (2026-11-21). Hosted latest-code check, semantic entailment and actual positive external API result remain unverified |
 | D-05 | Channel history restricted to reviewed records | IN_PROGRESS | Team | Page verified online for a channel with zero submitted claims; approved-only positive path tested offline, not yet online |
 | D-06 | Optional reviewer flow + correction draft | IN_PROGRESS | Team | Owner screenshots confirm review request #1 pending and successful private reviewer login showing linked EV-002. Human decision/save not yet verified online. Correction draft + separate approval NOT IMPLEMENTED; cloud data ephemeral |
 | R-04 | Collect and label selected pilot sample | IN_PROGRESS | Team | Annotation guide and separate header-only `research/news_dataset.csv` created; **0 observations collected** |
 | R-05 | Human impact pilot or approved alternative | NOT_STARTED | TBD | Ethics/consent and data |
 | R-06 | Analyze results and finalize research report | NOT_STARTED | TBD | Reproducible statistics |
-| T-01 | Automated test suite and professor demo | IN_PROGRESS | Team | Existing offline tests and owner screenshot evidence for NASA/BBC/Seeker; GitHub Actions full regression workflow added for new commits. Latest CI result and A/C full review not yet verified |
+| T-01 | Automated test suite and professor demo | IN_PROGRESS | Team | GitHub Actions Python 3.11: 165/165 pytest passed and compileall passed on commit `916b33a` (run 44899946003). A/C exact reviewed verdict cases and actual Google live positive match remain unverified |
 
 **Allowed statuses:** `NOT_STARTED`, `IN_PROGRESS`, `BLOCKED`, `DONE`, `DEFERRED`.
 
@@ -900,9 +900,12 @@ Changed: veriloop/matching.py (different full calendar dates cannot align;
 Unchanged: YouTube API, secret handling, SQLite review table and
   approval policy, externally sourced claim ratings, English-only
   title/description constraint, max-five lookups/video, zero-cost hosting.
-Tests: Targeted tests written; awaiting actual GitHub Actions outcome.
-  No new live Fact Check Tools positive result observed. The mocked
-  positive-response case is not proof that Google indexes that claim.
+Tests: First GitHub Actions run (44899847974) failed 4 prior
+  presentation fixture tests (161 passed). The missing optional matches
+  attribute was guarded in veriloop/presentation.py; second run
+  (44899946003, commit 916b33a) PASSED 165/165 pytest cases and Python
+  compileall on Python 3.11. No real live Fact Check Tools positive
+  result observed; mocked positive tests do not prove API indexing.
 Limitations: Heuristic context checking is NOT general semantic entailment;
   no arbitrary-video transcript/footage checking. Indexed fact-check
   coverage is incomplete. No new publisher or claims were invented.
