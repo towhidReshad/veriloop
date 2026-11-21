@@ -607,11 +607,11 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-21  
-**Overall status:** Live owner screenshots demonstrate BBC/Seeker metadata verification, topic-aware ranking and WHO negation/source-classification safeguards. A new manual encrypted reviewer archive/recovery and Node24 CI-workflow update are staged; live restore and final CI are not yet verified. Existing F-07 code passed 187/187 offline CI cases (run 44901360529), but real human-approved reuse has not been demonstrated. F-10 independent correction approval/manual export and F-11 observational dashboard implemented; first combined build passed GitHub Actions 197/197 tests (run 44901926635). Independent-drafter/editor guard passed GitHub Actions 198/198 tests and compileall on commit `32de5dc` (run 44902043884). A final Streamlit link-button compatibility fix and static regression are staged; its CI remains pending, and hosted UI is not yet verified. The observational sample has zero rows, and no survey/participant or prevalence results may be inferred. Google API real positive match, permanent review storage, complete A/B/C demonstration remain unverified.
+**Overall status:** Live owner screenshots demonstrate BBC/Seeker metadata verification, topic-aware ranking and WHO negation/source-classification safeguards. Manual encrypted reviewer archive/recovery (F-09/F-10 resilience safeguard) and Node24 CI workflow passed GitHub Actions 204/204 pytest + compileall on commit `6f513ee` (run 44903799198); actual hosted restoration remains unverified. Existing F-07 code passed 187/187 offline CI cases (run 44901360529), but real human-approved reuse has not been demonstrated. F-10 independent correction approval/manual export and F-11 observational dashboard implemented; first combined build passed GitHub Actions 197/197 tests (run 44901926635). Independent-drafter/editor guard passed GitHub Actions 198/198 tests and compileall on commit `32de5dc` (run 44902043884). A final Streamlit link-button compatibility fix and static regression are staged; its CI remains pending, and hosted UI is not yet verified. The observational sample has zero rows, and no survey/participant or prevalence results may be inferred. Google API real positive match, permanent review storage, complete A/B/C demonstration remain unverified.
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Validate private owner-only encrypted backup/empty-database restore with full CI, then perform one integrated professor A/B/C and reviewer/correction demonstration using real evidence. Capture genuine observational sample only when collected; confirm no supported arbitrary-video live fact-check positive retrieval yet. Do not request repetitive user screenshots.
+**Next immediate milestone:** One integrated hosted acceptance session for reviewer approval → correction editorial approval → private archive download and empty-instance recovery, then real source-grounded A/B/C professor demonstrations. Keep unverified live Google positive match and uncollected observational data explicitly pending; no repetitive screenshot requests.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -1042,8 +1042,10 @@ Boundaries: Owner must download/archive externally and keep password
   universal identity/authentication or automatic social-media posting.
   Existing user submissions cannot be silently overwritten on restore.
   Strict eight-table validation; source-history remains approved-only.
-Validation: New CI run pending as of coding; do not mark DONE until
-  automated tests pass. Hosted manual workflow unverified.
+Validation: GitHub Actions run 44903799198 (commit 6f513ee) PASSED
+  204/204 pytest tests and compileall on Python 3.11. Both Node24
+  Actions completed; no Node.js 20 deprecation was reported in its logs.
+  Hosted manual restore remains unverified.
 Next: Confirm CI, do one integrated final acceptance demo and record
   real outcomes; do not fabricate any survey/sample observations.
 ```
