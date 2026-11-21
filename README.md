@@ -133,3 +133,12 @@ Code added and regression tests written; full CI and hosted verification are pen
 
 
 **Consolidated F-10/F-11 verification:** GitHub Actions [run 44902043884](https://github.com/towhidReshad/veriloop/actions/runs/44902043884) passed 198/198 tests and compileall. Final UI compatibility patch is included in the next commit and must pass CI separately. Hosted usage and manual reviewer decisions have not been verified by these tests.
+
+
+## Manual encrypted owner backups (2026-11-21)
+
+The **restricted Review Dashboard** includes an encrypted `.vlbackup` download and a recovery form. You must first configure `REVIEWER_PASSWORD` privately in Streamlit Cloud Secrets; this is the existing reviewer-only pilot gate. Enter a **different 16+ character archive passphrase**; the research SQLite database is snapshotted and encrypted using AES-256-GCM, salt and password-derived key before download. Keep the downloaded file **off GitHub and outside the public app**, and keep the archive passphrase somewhere safe and separate. Neither the password nor the original unencrypted database is uploaded to GitHub by this feature.
+
+For recovery, upload your own original `.vlbackup` to the reviewer page and provide its archive passphrase. Restore is **refused if any user-generated channel, video, claim, match, assessment, review or correction already exists**, preventing silent overwrite. The encrypted archive is limited to the project's small (8 MB) pilot database. A wrong password, modified ciphertext, incompatible schema, broken SQLite integrity or foreign keys causes rejection. This is **manual recovery only**, not automatic backups or fully durable cloud storage. A lost backup or passphrase cannot be recovered by the app. Only trusted owner archives should be restored; this is not a secure multi-user import service.
+
+The regression workflow now uses Node24-compatible `actions/checkout@v6` and `actions/setup-python@v6`. Confirm the actual GitHub Actions run before claiming no warning.

@@ -8,6 +8,9 @@ import os
 import streamlit as st
 
 from veriloop.db import connect_db, init_db, seed_evidence
+from veriloop.archive import (
+    ArchiveError, create_encrypted_backup, restore_encrypted_backup,
+)
 from veriloop.review import ReviewPolicyError, decide_review, linked_evidence, list_review_queue
 from veriloop.corrections import (
     CorrectionPolicyError, default_draft, create_or_edit_draft,
@@ -50,6 +53,75 @@ if st.button("Lock workspace", key="logout"):
     st.rerun()
 
 st.warning("Cloud SQLite is ephemeral. Do not use it as permanent approved-review storage; backup required. Do not approve unverifiable claims.")
+
+with st.expander("Private encrypted backup / recovery · owner only"):
+    st.info(
+        "Free Streamlit Cloud does not preserve SQLite reliably across restarts. "
+        "Download a password-encrypted archive after important review decisions; "
+        "store it and its passphrase separately and privately. "
+        "This does not provide automatic cloud backups."
+    )
+    with st.form("vl_make_encrypted_backup"):
+        archive_passphrase = st.text_input(
+            "New private archive passphrase (16+ characters)", type="password",
+            key="vl_backup_password",
+        )
+        make_archive = st.form_submit_button("Prepare encrypted backup")
+    if make_archive:
+        try:
+            with connect_db() as backup_conn:
+                init_db(backup_conn)
+                seed_evidence(backup_conn)
+                encrypted = create_encrypted_backup(backup_conn, archive_passphrase)
+            st.session_state["vl_encrypted_archive"] = encrypted
+            st.success("Encrypted snapshot prepared. Download it and store your passphrase privately.")
+        except (ArchiveError, OSError) as exc:
+            st.error(f"Backup was not created: {exc}")
+    archive_bytes = st.session_state.get("vl_encrypted_archive")
+    if isinstance(archive_bytes, bytes):
+        st.download_button(
+            "Download encrypted .vlbackup file",
+            archive_bytes,
+            file_name="veriloop-private-review.vlbackup",
+            mime="application/octet-stream",
+            key="vl_download_private_archive",
+        )
+        if st.button("Clear prepared archive from this browser session"):
+            st.session_state.pop("vl_encrypted_archive", None)
+            st.rerun()
+    st.divider()
+    st.caption(
+        "Restore is permitted only if this instance contains no user-created "
+        "videos, review requests, or corrections. Existing data is never overwritten."
+    )
+    with st.form("vl_restore_private_archive"):
+        private_file = st.file_uploader("Encrypted VeriLoop backup", type=["vlbackup"])
+        restore_password = st.text_input(
+            "Archive passphrase", type="password", key="vl_restore_password"
+        )
+        confirm_restore = st.checkbox(
+            "I own this backup and understand it restores only into an empty research database"
+        )
+        restore_action = st.form_submit_button("Validate and restore private archive")
+    if restore_action:
+        if not confirm_restore or private_file is None:
+            st.warning("Select an encrypted backup and confirm ownership before restoring.")
+        elif private_file.size > 8 * 1024 * 1024 + 256:
+            st.error("The encrypted backup exceeds the maximum permitted file size.")
+        else:
+            try:
+                with connect_db() as restore_conn:
+                    init_db(restore_conn)
+                    seed_evidence(restore_conn)
+                    restore_encrypted_backup(
+                        restore_conn, private_file.getvalue(), restore_password
+                    )
+                st.session_state.pop("vl_encrypted_archive", None)
+                st.success("Backup integrity validated and research records restored.")
+                st.rerun()
+            except (ArchiveError, OSError) as exc:
+                st.error(f"Restore refused: {exc}")
+
 try:
     with connect_db() as conn:
         init_db(conn)

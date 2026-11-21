@@ -6,3 +6,6 @@ pytest>=8,<10
 # Reserved P0 requirements for Day 2/3 matching and research (not yet used).
 scikit-learn>=1.4,<2
 pandas>=2.2,<3
+
+# Authenticated encrypted owner backups of temporary research SQLite data
+cryptography>=44,<48

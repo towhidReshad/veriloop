@@ -607,11 +607,11 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-21  
-**Overall status:** Live owner screenshots demonstrate BBC/Seeker metadata verification, topic-aware ranking and WHO negation/source-classification safeguards. Existing F-07 code passed 187/187 offline CI cases (run 44901360529), but real human-approved reuse has not been demonstrated. F-10 independent correction approval/manual export and F-11 observational dashboard implemented; first combined build passed GitHub Actions 197/197 tests (run 44901926635). Independent-drafter/editor guard passed GitHub Actions 198/198 tests and compileall on commit `32de5dc` (run 44902043884). A final Streamlit link-button compatibility fix and static regression are staged; its CI remains pending, and hosted UI is not yet verified. The observational sample has zero rows, and no survey/participant or prevalence results may be inferred. Google API real positive match, permanent review storage, complete A/B/C demonstration remain unverified.
+**Overall status:** Live owner screenshots demonstrate BBC/Seeker metadata verification, topic-aware ranking and WHO negation/source-classification safeguards. A new manual encrypted reviewer archive/recovery and Node24 CI-workflow update are staged; live restore and final CI are not yet verified. Existing F-07 code passed 187/187 offline CI cases (run 44901360529), but real human-approved reuse has not been demonstrated. F-10 independent correction approval/manual export and F-11 observational dashboard implemented; first combined build passed GitHub Actions 197/197 tests (run 44901926635). Independent-drafter/editor guard passed GitHub Actions 198/198 tests and compileall on commit `32de5dc` (run 44902043884). A final Streamlit link-button compatibility fix and static regression are staged; its CI remains pending, and hosted UI is not yet verified. The observational sample has zero rows, and no survey/participant or prevalence results may be inferred. Google API real positive match, permanent review storage, complete A/B/C demonstration remain unverified.
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Run full GitHub Actions CI on combined F-10/F-11 build; resolve regression failures before any claim of success, then validate hosted correction/editorial and dashboard flows without exposing private passwords. Complete legitimate A/B/C pilot and external API positive retrieval separately; avoid repetitive owner screenshot requests.
+**Next immediate milestone:** Validate private owner-only encrypted backup/empty-database restore with full CI, then perform one integrated professor A/B/C and reviewer/correction demonstration using real evidence. Capture genuine observational sample only when collected; confirm no supported arbitrary-video live fact-check positive retrieval yet. Do not request repetitive user screenshots.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -1019,6 +1019,33 @@ different from the correction draft author (case-insensitive comparison).
 Same-person approval is rejected before any export. This is a pilot
 accountability guard rather than production identity verification.
 The independent-editor rule passed 198/198 tests on CI run 44902043884. A Streamlit link-button compatibility correction is included for the final release.
+```
+
+---
+
+### Secure backup and free-cloud recovery maintenance — 2026-11-21
+
+```text
+Owner authorization: GitHub connector granted write access only to
+  towhidReshad/veriloop. Previous combined commit e447743 is the base.
+Why: Streamlit Community Cloud SQLite is ephemeral; reviewer decisions,
+  edits and correction records can disappear on restarts.
+Changes: veriloop/archive.py (in-memory AES-256-GCM encrypted SQLite
+  snapshot with salted PBKDF2-derived archive passphrase; 8MB cap);
+  reviewer-only dashboard archive download and empty-user-database
+  restore; tests/test_archive.py (roundtrip, wrong password, corruption,
+  overwrite refusal); cryptography dependency; Python 3.11 CI updated
+  from Node20-using checkout@v4/setup-python@v5 to Node24 versions
+  checkout@v6/setup-python@v6. Research/demo-readiness documentation.
+Boundaries: Owner must download/archive externally and keep password
+  separately. There is no continuous backup, external durable database,
+  universal identity/authentication or automatic social-media posting.
+  Existing user submissions cannot be silently overwritten on restore.
+  Strict eight-table validation; source-history remains approved-only.
+Validation: New CI run pending as of coding; do not mark DONE until
+  automated tests pass. Hosted manual workflow unverified.
+Next: Confirm CI, do one integrated final acceptance demo and record
+  real outcomes; do not fabricate any survey/sample observations.
 ```
 
 ---
