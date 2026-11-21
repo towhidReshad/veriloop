@@ -1173,7 +1173,9 @@ archive and password fields prepared in Streamlit session state.
 Scope: All work falls under frozen F-07/F-09/F-10 review controls.
 Not claims: No real hosted human review, secure production identity,
 automatic durable storage or positive live Google fact-check response.
-CI result: Pending as code is staged.
+CI result: GitHub Actions run 44912850764 (commit 1689f9b) PASSED
+  Python compileall and 238/238 pytest cases. Hosted real approval and
+  backup/restore remain pending.
 ```
 
 ---
