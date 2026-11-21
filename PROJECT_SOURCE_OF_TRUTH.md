@@ -607,7 +607,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-21  
-**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOTS CONFIRM BBC NO-MATCH AND Seeker WHO `CONTRADICTED`/negation warnings. Current metadata claim ranking now prioritizes checkable, title-related candidates within 5-statement cap; GitHub CI and hosted ranking validation pending. 165/165 tests passed on the previous context-safeguard build, NOT yet on this new change. Google live positive lookup remains unverified with a real key. DAY 4 review request/login verified, export and durable storage still pending.  
+**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOTS CONFIRM BBC NO-MATCH AND Seeker WHO `CONTRADICTED`/negation warnings. Title-aware claim prioritization and mocked external fact-check positive-response path passed GitHub Actions 173/173 tests plus Python compileall on commit `61814ca` (run 44900704832). Hosted ranking recheck and real authenticated Google fact-check positive response are NOT yet observed. DAY 4 review request/login verified; human-approved correction export and durable storage remain pending.  
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
@@ -935,7 +935,9 @@ Tests: tests/test_claim_ranking.py (late topical claim, question, exact
   wording, limit/determinism) and tests/test_live_pipeline.py (mocked
   successful Google claims:search with publisher URL/date/rating and empty
   index). Positive API response mocked—real indexed claim NOT verified.
-CI: Await GitHub Actions full pytest + compileall confirmation after commit.
+CI: GitHub Actions run 44900704832 passed Python 3.11
+  compileall and 173/173 pytest tests on commit 61814ca.
+  Mocked positive response DOES NOT establish live API indexing.
 Limitations: Title relevance may miss tangential but important claims;
   title and descriptions can be misleading; up to 5 are selected.
   No speech/video/audio checking or promise of internet-wide matches.
