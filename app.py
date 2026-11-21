@@ -31,7 +31,7 @@ for col, (num, heading, description) in zip(cols, steps):
             unsafe_allow_html=True,
         )
 
-st.markdown('''<div class="vl-section-label">Our research sources</div>''', unsafe_allow_html=True)
+st.markdown('''<div class="vl-section-label">Explore evidence sources</div>''', unsafe_allow_html=True)
 try:
     with connect_db() as conn:
         init_db(conn)
@@ -45,7 +45,7 @@ else:
         "These are external publications, not verified judgments about any submitted video. "
         "The collection is selected for demonstration and does not estimate misinformation prevalence."
     )
-    with st.expander("Explore the full reference library · Research view"):
+    with st.expander("Explore original reference publications"):
         for record in rows:
             st.write("**" + record["id"] + " · " + record["claim_text"] + "**")
             st.write("Source:", record["source_name"])
@@ -61,7 +61,6 @@ with a:
     st.page_link("pages/2_Channel_History.py", label="📚  Reviewed claim history")
 with b:
     st.page_link("pages/3_Review_Dashboard.py", label="🔒  Reviewer workspace")
-st.page_link("pages/5_Professor_Demo.py", label="🎓  Professor demo · documented case guide")
 st.info(
     "**Important:** We find relevant material, not automatic true/false verdicts. "
     "A similarity score is not the probability that a claim is false."

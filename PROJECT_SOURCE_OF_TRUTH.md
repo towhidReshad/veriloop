@@ -611,7 +611,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Complete one integrated hosted acceptance of actual A/B/C URLs and the restricted human-review, correction and private archive recovery workflow; document actual source accessibility and results. Read-only A/B/C prepared research guide and conditional study protocol are implemented, but not substitutes for tested video metadata, review or participant collection.
+**Next immediate milestone:** Validate public software UX separately from academic documentation, then complete integrated hosted human-review/correction/backup acceptance and actual A/B/C live tests. Academic-only professor guide removed from app, while the study dashboard is available separately for the researcher. Never substitute demo links for live results.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -1077,6 +1077,30 @@ Unresolved: Actual accessibility for A/C on official YouTube Data API,
   exact-human-reviewed A/B result, hosted backup restore, genuine
   observational sample, institutionally permitted participant pilot
   and real positive Google Fact Check result remain unverified.
+```
+
+---
+
+### Public product vs academic work boundary — 2026-11-21
+
+```text
+Owner correction: General VeriLoop users must NEVER see a professor-demo
+  page, a study protocol, or an academic research dashboard.
+Public app: Only normal video verification, reviewed channel history,
+  and restricted reviewer/correction workflows stay under Streamlit
+  auto-discovered pages/. Homepage professor navigation removed.
+Academic-only: pages/5_Professor_Demo.py removed; prepared A/B/C
+  citations remain in data/demo_cases.json, research/DEMO_READINESS.md
+  and validation tests. pages/4_Research_Dashboard.py moved to
+  research/research_dashboard_app.py, which is runnable as a separate
+  owner-only process; never part of public app's pages/ directory.
+Research methodology, literature, pilot protocol and source-of-truth
+  documentation remain in repository files, NOT public app pages.
+F-11 remains a research deliverable but not a user-facing feature.
+Privacy warning: an independently launched local research dashboard
+  must not be shared on the public deployed VeriLoop URL.
+Automated regression tests protect the separation. CI pending for
+  this change until the relevant GitHub workflow succeeds.
 ```
 
 ---

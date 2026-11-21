@@ -1,4 +1,4 @@
-"""F-11: transparent descriptive analysis of the separate observation sample."""
+"""Research-only F-11 dashboard. Run manually, never exposed by public app."""
 from pathlib import Path
 import pandas as pd
 import streamlit as st

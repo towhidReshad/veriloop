@@ -155,3 +155,8 @@ A study questionnaire and conditional consent/analysis protocol are in `research
 
 
 **CI verification:** [GitHub Actions run 44904417714](https://github.com/towhidReshad/veriloop/actions/runs/44904417714) passed **208/208 pytest tests** plus Python compileall on commit `c127f97`. This validates prepared-case safety and code, not live A/C metadata availability or any human research finding.
+
+
+## Public software vs academic deliverables (2026-11-21 correction)
+
+The public Streamlit app is a **general-user product**. It must not expose professor-demo guides, participant-study documentation, an academic literature matrix, or an observational-sample dashboard in its automatically discovered navigation. The previously added public `pages/5_Professor_Demo.py` has been deleted; its valid A/B/C case source files remain for **offline academic preparation**. The F-11 descriptive dashboard has been moved out of the public `pages/` directory to `research/research_dashboard_app.py`. Researchers can run it **separately**, e.g. `streamlit run research/research_dashboard_app.py` from a local project checkout, without integrating it into the publicly deployed app. Do not deploy or expose this research dashboard publicly. All original documentation stays in `research/` and `PROJECT_SOURCE_OF_TRUTH.md`; its existence in a public GitHub repository does not make it an in-app feature.
