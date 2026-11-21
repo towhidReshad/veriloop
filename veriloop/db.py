@@ -131,6 +131,19 @@ def init_db(connection: sqlite3.Connection) -> None:
     """Create the 8 canonical logical tables; safe to call repeatedly."""
     connection.executescript(SCHEMA_SQL)
 
+    # Additive migration only: preserve the frozen eight-table logical model.
+    # Existing free-cloud databases lack the new editorial audit columns.
+    extras = {
+        "drafted_by": "TEXT",
+        "editorial_reviewer": "TEXT",
+        "editorial_note": "TEXT",
+        "last_updated_at": "TEXT",
+    }
+    existing = {row["name"] for row in connection.execute("PRAGMA table_info(corrections)")}
+    for column, sql_type in extras.items():
+        if column not in existing:
+            connection.execute(f"ALTER TABLE corrections ADD COLUMN {column} {sql_type}")
+
 
 def validate_evidence_record(record: object) -> dict:
     if not isinstance(record, dict) or set(record) != SEED_FIELDS:

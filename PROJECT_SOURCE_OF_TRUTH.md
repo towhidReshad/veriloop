@@ -607,11 +607,11 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-21  
-**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOT CONFIRMS Seeker title-aware prioritization puts vaccines/autism statements FIRST and SECOND (five candidates, two WHO topical leads); Google live fact-check positive result remains unverified. Previous claim-prioritization build passed GitHub Actions 173/173 tests. F-07 SAME-VIDEO EXACT-CONTEXT REVIEWED REUSE passed GitHub Actions 187/187 pytest plus compileall on commit `a9a1a92` (run 44901360529); real hosted approved-review reuse still pending. DAY 4 review request/login verified; correction export and durable review storage still pending.  
+**Overall status:** Live owner screenshots demonstrate BBC/Seeker metadata verification, topic-aware ranking and WHO negation/source-classification safeguards. Existing F-07 code passed 187/187 offline CI cases (run 44901360529), but real human-approved reuse has not been demonstrated. F-10 independent correction approval/manual export and F-11 observation-sample dashboard now implemented in repository code and regression tests; CI/hosted verification pending. The observational sample has zero rows, and no survey/participant or prevalence results may be inferred. Google API real positive match, permanent review storage, complete A/B/C demonstration remain unverified.
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Verify F-07 exact-context reuse tests/CI, then perform explicit approved NASA video review and refresh SAME link to demonstrate historical reuse. Verify changed metadata, changed video/stance and rejected review never reuse. Real Google Fact Check positive indexing and frozen F-10 correction approval/export remain unverified.
+**Next immediate milestone:** Run full GitHub Actions CI on combined F-10/F-11 build; resolve regression failures before any claim of success, then validate hosted correction/editorial and dashboard flows without exposing private passwords. Complete legitimate A/B/C pilot and external API positive retrieval separately; avoid repetitive owner screenshot requests.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -976,6 +976,34 @@ Limitations: No cross-video reuse; changed metadata requires fresh
   New code passed GitHub Actions run 44901360529 (Python 3.11,
   187/187 pytest plus compileall). Hosted approved-review test remains
   unverified. F-10 and F-11 remain open.
+```
+
+---
+
+### Complete remaining correction and analytics flows in one implementation pass — 2026-11-21
+
+```text
+User request: Stop fragmented patch/test requests and complete meaningful
+  frozen MVP work in consolidated changes.
+Implementation scope: F-10 + F-11 with existing F-09 reviewer workflow.
+F-10: veriloop/corrections.py creates editable claim-specific draft only
+  after an active audited human APPROVED review and aligned original source.
+  Draft submission is separate from explicit editorial decision; rejected
+  drafts cannot export; approved Markdown is generated locally for manual
+  download (never posted to platforms). Export may be recorded as EXPORTED.
+  Reviewer revocation blocks export. The source review status is distinct
+  from correction editorial status. A small additive schema migration retains
+  the canonical eight tables while recording editor IDs/timestamps/notes.
+  Existing public reviewer password gate is preserved; not production auth.
+F-11: Separate research/news_dataset.csv (currently header only) is parsed
+  and grouped into observed counts by claim verdict, event, category,
+  documented country and publication date; zero observations is displayed
+  rather than fabricated percentages/claims. New research_report.md is a
+  clearly labeled technical status document, not invented pilot findings.
+Tests: new F-10/F-11 regression files; GitHub Actions result pending.
+No claim of durable cloud storage, automatic editorial posting, real
+  positive Google API match, representative misinformation prevalence,
+  or actual human-edited/approved correction is made.
 ```
 
 ---

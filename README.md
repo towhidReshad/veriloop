@@ -118,3 +118,12 @@ No real reviewer approval or hosted exact-context reuse has yet been demonstrate
 
 
 **Automated verification:** [GitHub Actions run 44901360529](https://github.com/towhidReshad/veriloop/actions/runs/44901360529) passed Python syntax checks and **187/187 pytest tests** on commit `a9a1a92`. This verifies the strict F-07 reuse rules at code level; a real hosted approved-review demonstration has not yet occurred.
+
+
+## F-10 Corrections and F-11 research counts (2026-11-21)
+
+Corrections are no longer just a SQLite placeholder. An audited, linked human-approved exact claim can produce an editable draft in the restricted Review Dashboard. Draft submission, **separate editorial approve/reject action**, and Markdown download are distinct stages. Export requires current approved review plus editorial approval; no social-media posting is performed. Free cloud SQLite is ephemeral; do not use it to permanently archive public accusations. New columns use an additive eight-table database migration.
+
+The Research Dashboard shows counts from the separately annotated `research/news_dataset.csv`. At present that CSV has **zero** observation rows. It displays honest zero counts rather than made-up study outcomes or prevalence. The technical report draft explicitly states pilot study limitations.
+
+Code added and regression tests written; full CI and hosted verification are pending.
