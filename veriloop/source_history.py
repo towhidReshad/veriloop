@@ -40,9 +40,18 @@ def get_reviewed_history(conn: sqlite3.Connection, youtube_channel_id: str) -> d
             data = json.loads(r[3])
         except (TypeError, ValueError):
             continue
+        # Public history must satisfy the same provenance requirements as
+        # exact-context reviewed reuse. Legacy or corrupted audit records are
+        # withheld rather than silently promoted to public accusations.
         if (not isinstance(data, dict) or data.get('status') != 'APPROVED'
             or data.get('verdict') != r[1] or data.get('evidence_id') != r[10]
-            or data.get('confirmed_context') is not True):
+            or data.get('confirmed_context') is not True
+            or data.get('timestamp') != r[2]
+            or not isinstance(data.get('reviewer_id'), str)
+            or not data['reviewer_id'].strip()
+            or not isinstance(data.get('rationale'), str)
+            or len(data['rationale'].strip()) < 25
+            or not isinstance(r[11], str) or not r[11].startswith('https://')):
             continue
         seen.add(r[0])
         result.append({

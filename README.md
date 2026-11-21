@@ -205,3 +205,8 @@ The restricted reviewer page now binds each unlocked session to the **currently 
 
 
 **Reviewer session safeguard CI:** [GitHub Actions run 44926466440](https://github.com/towhidReshad/veriloop/actions/runs/44926466440) passed **252/252 tests** and Python syntax checks (commit `e5abeac`). This verifies Streamlit script behavior with test-only passwords, not production authentication or real hosted browser access.
+
+
+## F-08 audited channel-history provenance hardening (2026-11-22)
+
+Public previously-reviewed channel history now checks the saved claim decision audit more fully before listing it: recorded reviewer identity, substantive rationale, matching decision timestamp, approved claim verdict, linked evidence ID, confirmed stance/context, and an HTTPS source. Incomplete or altered audit records are withheld, rather than automatically promoted to public reputation claims. All examples used in regression tests are synthetic; no real person or video was newly reviewed. GitHub CI should be checked for verification.

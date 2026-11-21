@@ -606,6 +606,9 @@ These are **planned commands** until actual code is written and tested. Do not c
 
 ## 15. Live Project Status — Update This Section After Every Work Session
 
+**2026-11-22 F-08 hardening staged:** Public reviewed channel history now requires full reviewer identity, rationale length, matching decision timestamp, approved status, linked original HTTPS source and confirmed context. Targeted adversarial regression tests cover forged/missing audit fields and non-HTTPS provenance. CI result pending; no hosted UI or real human decision is newly verified.
+
+
 **2026-11-22 reviewer session rotation verified:** Commit `e5abeac`, GitHub Actions run `44926466440`, **252/252 pytest and Python compileall passed**. Streamlit AppTest confirms an active reviewer browser session is invalidated after the test-only configured password changes; test-only archive bytes are removed from session on rotation/logout. Direct hosted access from the current container was blocked by DNS/network resolution, so the deployment's current accessibility remains unknown. No owner credential was accessed, no live approved review was performed, and no genuine hosted recovery was tested.
 
 
@@ -617,7 +620,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Verify reviewer password-rotation/session-revocation regression in CI. A real hosted Streamlit access check and owner-controlled review/correction/backup acceptance remain pending; external connectivity to Streamlit was unavailable in the current tool environment. Never infer hosted availability from offline CI alone.
+**Next immediate milestone:** Verify public approved-history audit guards in CI. Actual hosted owner-controlled reviewer/correction/backup acceptance, genuine positive Google fact-check retrieval and durable storage remain unverified. No academic UI is permitted.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -1267,6 +1270,27 @@ Limitations: Shared pilot password is not production-grade identity
   GitHub Actions run 44926466440 (commit e5abeac) passed
   Python compileall and all 252/252 pytest tests. No hosted human
   approvals, positive Google API responses or live restore claimed.
+```
+
+---
+
+### F-08 public channel-history audit provenance hardening — 2026-11-22
+
+```text
+Problem: The public approved-only channel history accepted records
+  with matching audit verdict/evidence/status but did not enforce
+  reviewer identity, saved timestamp, detailed rationale or HTTPS URL.
+Change: Reject publication of a channel-history record unless review
+  audit reviewer_id is present, >=25-character rationale is present,
+  audit timestamp exactly matches reviewed_at, evidence provenance
+  matches, context is confirmed, and the cited link is HTTPS.
+Safety: Old invalid/partial audit records are withheld from public
+  channel history, NOT automatically modified or converted into
+  accusations. No real human verdict is created.
+Tests: One valid fixture, eight audit tampering cases, and non-HTTPS
+  source regression. Existing frozen F-08, F-07 and F-09 remain.
+Scope: No new user-facing pages, database schema, APIs or costs.
+Validation: GitHub CI pending as code is staged.
 ```
 
 ---
