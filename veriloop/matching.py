@@ -6,6 +6,7 @@ Reference verdicts describe source claims, not verdicts about a submitted video.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date
 import re
 from typing import Mapping, Sequence
 
@@ -47,6 +48,40 @@ class ClaimAssessment:
     explanation: str
 
 
+
+_MONTHS = {"jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6,
+           "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12}
+_MONTH_NAME = r"(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)"
+_MONTH_FIRST = re.compile(rf"\b({_MONTH_NAME})\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?\s*,?\s*((?:19|20)\d{{2}})\b", re.I)
+_DAY_FIRST = re.compile(rf"\b(\d{{1,2}})(?:st|nd|rd|th)?\s+({_MONTH_NAME})\.?\s*,?\s*((?:19|20)\d{{2}})\b", re.I)
+_ISO_DATE = re.compile(r"\b((?:19|20)\d{2})-(\d{1,2})-(\d{1,2})\b")
+
+def _event_dates(text: str) -> set[date]:
+    """Read explicit full dates in claim text, never source publication dates."""
+    found: set[date] = set()
+    for month, day, year in _MONTH_FIRST.findall(text):
+        try:
+            found.add(date(int(year), _MONTHS[month[:3].lower()], int(day)))
+        except ValueError:
+            continue
+    for day, month, year in _DAY_FIRST.findall(text):
+        try:
+            found.add(date(int(year), _MONTHS[month[:3].lower()], int(day)))
+        except ValueError:
+            continue
+    for year, month, day in _ISO_DATE.findall(text):
+        try:
+            found.add(date(int(year), int(month), int(day)))
+        except ValueError:
+            continue
+    return found
+
+
+def _explicit_places(text: str) -> set[str]:
+    lower = text.lower()
+    return {name for name in _REGION_TERMS if re.search(r"(?<!\w)" + re.escape(name) + r"(?!\w)", lower)}
+
+
 def _place_groups(text: str) -> set[str]:
     lowered = text.lower()
     found: set[str] = set()
@@ -75,12 +110,22 @@ def compare_context(candidate: str, reference: str) -> tuple[str, str]:
         return "UNCONFIRMED", "Multiple year cues appear; exact event-year context needs manual checking."
     if len(a_year) == 1 and len(b_year) == 1 and a_year.isdisjoint(b_year):
         return "INCOMPATIBLE", f"Different stated event years ({', '.join(sorted(a_year))} vs {', '.join(sorted(b_year))})."
+    a_dates, b_dates = _event_dates(candidate), _event_dates(reference)
+    if len(a_dates) > 1 or len(b_dates) > 1:
+        return "UNCONFIRMED", "Multiple event dates appear; a reviewer must identify the actual event."
+    if a_dates and b_dates and a_dates.isdisjoint(b_dates):
+        return "INCOMPATIBLE", "Different explicit event dates; no automatic match is assumed."
     a_region, b_region = _place_groups(candidate), _place_groups(reference)
     if len(a_region) > 1 or len(b_region) > 1:
         return "UNCONFIRMED", "Multiple locations/regions appear; event context needs manual checking."
     if len(a_region) == 1 and len(b_region) == 1 and a_region.isdisjoint(b_region):
         return "INCOMPATIBLE", "Different explicit event locations/regions; no match is assumed."
     notes: list[str] = []
+    if a_dates and b_dates and a_dates.intersection(b_dates):
+        notes.append("Full event date overlaps")
+    a_places, b_places = _explicit_places(candidate), _explicit_places(reference)
+    if a_places and b_places and a_places.isdisjoint(b_places) and a_region and b_region:
+        return "UNCONFIRMED", "Broad region overlaps, but specific places differ; independent context review required."
     if a_year and b_year and a_year.intersection(b_year):
         notes.append("Year cue overlaps")
     if a_region and b_region and a_region.intersection(b_region):

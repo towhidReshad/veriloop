@@ -161,9 +161,14 @@ def run_live_fallback(assessments: list, api_key: str | None, *, lookup=lookup_f
     for index, assessment in enumerate(assessments):
         # A same-topic local reference with opposite negation is NOT enough
         # to suppress live search. Treat it as a topical lead, not proof.
-        if assessment.matches and not any(
-            isinstance(getattr(match, "reference_claim", None), str)
-            and has_polarity_conflict(assessment.candidate.text, match.reference_claim)
+        # If every local match is context-uncertain, or wording conflicts,
+        # still look for outside fact-checks. A shared topic is not a verified event.
+        if assessment.matches and any(
+            getattr(match, "context_status", "ALIGNED") == "ALIGNED"
+            and not (
+                isinstance(getattr(match, "reference_claim", None), str)
+                and has_polarity_conflict(assessment.candidate.text, match.reference_claim)
+            )
             for match in assessment.matches
         ):
             continue

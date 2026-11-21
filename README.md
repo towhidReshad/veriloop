@@ -84,3 +84,12 @@ Owner screenshot confirms an unseen BBC World Service interview fetched successf
 Owner supplied a live Seeker video screenshot with two WHO-topic local matches. EV-010 stores the **checked reference proposition** `Childhood vaccines cause autism.` and the **WHO reference classification** `CONTRADICTED`; this does not mean that the video's opposite wording has been contradicted. The UI now shows the reference's own classification alongside its checked proposition, and explicitly flags a simple negation mismatch as a **related topic, not confirmed support**. When such a mismatch exists the optional external fact-check search also runs instead of treating the local topic match as a sufficient comparison. This is a conservative lexical warning, not reliable semantic entailment or a verified verdict. Human review remains necessary.
 
 Targeted regression tests added for vaccine/autism wording, no automatic verdict, and external-search fall-through. New hosted UI not yet confirmed and full project test suite not rerun as part of this patch.
+
+
+## Conservative evidence improvements (2026-11-21)
+
+Metadata candidate matching now checks **explicit full calendar dates** (in month-first, day-first and ISO formats), not only four-digit years. Contradicting dates are not matched; vague broad-region overlap with differing explicit countries remains `UNCONFIRMED`. Quoted statements are marked as tentative quotations, and a small set of generic discussion/opinion phrases is filtered before retrieval. The existing TF-IDF baseline remains unchanged and does **not** establish semantic equivalence or truth.
+
+If local reference wording conflicts or event/context is still unconfirmed, the optional Fact Check Tools lookup can still run within the existing five-query-per-video budget. A mixed local/live display names sources separately, avoids falsely saying no local reference exists, and counts unique **statements with sources**, not truth verdicts. A mocked provider-positive regression case checks original article URL/publisher/rating provenance but does not establish a real, indexed positive API response. New source-level tests and a GitHub Actions `compileall` + `pytest` workflow were added; check the actual CI run before claiming the full suite passes.
+
+**Still required for final frozen MVP:** F-07 reviewed exact-context reuse, F-10 correction draft plus independent export approval, F-11 measured pilot dashboard, full A/B/C professor test evidence and durable reviewed-record storage. These are not marked completed by this patch.

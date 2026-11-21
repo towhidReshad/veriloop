@@ -69,8 +69,8 @@ def infer_stance(sentence: str, *, title: str = "") -> tuple[str, str]:
     sample = (title + " " + sentence).strip()
     if _DEBUNK.search(sample):
         return "DEBUNKS", "Fact-check/debunk cue detected in metadata; not proof of video narration."
-    if _QUOTE.search(sentence):
-        return "QUOTES", "Attribution/quotation cue detected; no endorsement assumed."
+    if _QUOTE.search(sentence) or sentence.lstrip().startswith(('"', '“', '‘')):
+        return "QUOTES", "Quotation/attribution cue in metadata; no uploader endorsement assumed."
     if "?" in sentence:
         return "UNCLEAR", "Question is not treated as an asserted factual proposition."
     return "ASSERTS", "Declarative metadata sentence; uploader's actual video stance is unverified."
@@ -88,6 +88,10 @@ def _plausible(sentence: str) -> bool:
         # into an invented English claim.
         return False
     if _IGNORE.search(sentence) or _PROMO.search(sentence) or _CALL_TO_ACTION.search(sentence):
+        return False
+    # Commentary about feelings, interest or generic opportunities alone does
+    # not establish a specific verifiable event.
+    if re.search(r"\b(?:interesting to learn about|opportunities for human society are enormous)\b", sentence, re.I):
         return False
     if sentence.rstrip().endswith("?") or _LEADING_QUESTION.search(sentence):
         return False

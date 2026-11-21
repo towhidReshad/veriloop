@@ -607,11 +607,11 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-21  
-**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOTS CONFIRM BBC UNSEEN VIDEO QUESTION-TITLE FIX AND LIVE FACT-CHECK NO-MATCH, AND A SECOND SEEEKER VIDEO WITH TWO TOPICAL WHO REFERENCE MATCHES. SAFETY FIX STAGED FOR EXPLICIT SOURCE CLASSIFICATION AND NEGATION CONFLICT; live recheck pending. DAY 4 REVIEW REQUEST/LOGIN VERIFIED; HUMAN APPROVAL AND DURABLE STORAGE NOT YET VERIFIED.  
+**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOTS CONFIRM BBC NO-MATCH, Seeker local WHO matches and the deployed WHO `CONTRADICTED`/negation warnings. Local/live retrieval context safeguards and CI regression workflow updated in GitHub; live verification and CI outcomes for this latest change remain pending. DAY 4 REVIEW REQUEST/LOGIN VERIFIED; human decision/export and durable storage not yet verified.  
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Recheck Seeker vaccines/autism video after negation and source-classification UI fix; separately test a live fact-check positive retrieval. Continue original P0 reviewer/correction workflow and persistent storage safeguards.
+**Next immediate milestone:** Check CI tests and new hosted evidence UI, then demonstrate at least one real API positive match (if the publisher claim is indexed). Resume frozen P0 F-07 exact-context reviewed reuse and F-10 separate correction approval/export; no guaranteed internet-wide coverage.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -622,13 +622,13 @@ These are **planned commands** until actual code is written and tested. Do not c
 | D-01 | Initialize repository and dependencies | DONE | Team | Owner screenshots show GitHub `main` and working Streamlit Community Cloud homepage |
 | D-02 | YouTube metadata extractor works on real video | DONE | Team | Owner screenshot demonstrates live NASA video metadata `2MJY_ptQW1o`; offline parser and mock tests passed |
 | D-03 | SQLite schema and seed evidence library | DONE | Team | Owner's 2026-11-20 Streamlit screenshot/PDF confirms 13 curated reference records loaded online; SQLite schema and seed tested offline |
-| D-04 | Claim matching and preliminary report | IN_PROGRESS | Team | Owner screenshot confirms online NASA EV-002/EV-004 tentative source matches and insufficient-evidence handling; candidate 4 audience-prompt false positive identified and patched with regression tests. Exact-context verification, A/C demo and review remain pending |
+| D-04 | Claim matching and preliminary report | IN_PROGRESS | Team | NASA, BBC and Seeker owner screenshots confirm metadata matching/no-match and explicit WHO `CONTRADICTED` source classification; new exact calendar date/place uncertainty and fallback safeguards added with regression/CI workflow, awaiting CI/live validation. Full semantic entailment and positive live indexed-match not demonstrated |
 | D-05 | Channel history restricted to reviewed records | IN_PROGRESS | Team | Page verified online for a channel with zero submitted claims; approved-only positive path tested offline, not yet online |
 | D-06 | Optional reviewer flow + correction draft | IN_PROGRESS | Team | Owner screenshots confirm review request #1 pending and successful private reviewer login showing linked EV-002. Human decision/save not yet verified online. Correction draft + separate approval NOT IMPLEMENTED; cloud data ephemeral |
 | R-04 | Collect and label selected pilot sample | IN_PROGRESS | Team | Annotation guide and separate header-only `research/news_dataset.csv` created; **0 observations collected** |
 | R-05 | Human impact pilot or approved alternative | NOT_STARTED | TBD | Ethics/consent and data |
 | R-06 | Analyze results and finalize research report | NOT_STARTED | TBD | Reproducible statistics |
-| T-01 | Automated test suite and professor demo | IN_PROGRESS | Team | 54/54 offline tests (Day 1 + Day 2); NASA live metadata B observed; A/C and verification demo unverified |
+| T-01 | Automated test suite and professor demo | IN_PROGRESS | Team | Existing offline tests and owner screenshot evidence for NASA/BBC/Seeker; GitHub Actions full regression workflow added for new commits. Latest CI result and A/C full review not yet verified |
 
 **Allowed statuses:** `NOT_STARTED`, `IN_PROGRESS`, `BLOCKED`, `DONE`, `DEFERRED`.
 
@@ -879,6 +879,35 @@ Boundaries: No automatic video/channel verdict, no transfer of WHO
   no claim of positive live fact-check retrieval.
 Validation: Owner's screenshot confirms old topical retrieval behaviour;
   the new patch awaits hosted screenshot and full offline regression.
+```
+
+---
+
+### Context, search fallback and general-user accuracy refinement — 2026-11-21
+
+```text
+Scope: Frozen F-03/04/05/06/12 maintenance improvements only.
+Inputs: owner's working NASA, BBC, and Seeker live screenshots;
+  especially confusing WHO vaccine/autism opposite-wording example.
+Changed: veriloop/matching.py (different full calendar dates cannot align;
+  differing explicit places within one broad region require review);
+  veriloop/claims.py (quoted statement stance and generic opinion
+  filtering); veriloop/factcheck.py (UNCERTAIN local context still permits
+  optional fact-check lookup); pages/1_Verify_News.py (clear unique
+  statement counts and provenance); tests/test_retrieval_safety.py;
+  .github/workflows/tests.yml (compileall and pytest on push);
+  README.md and source-of-truth log.
+Unchanged: YouTube API, secret handling, SQLite review table and
+  approval policy, externally sourced claim ratings, English-only
+  title/description constraint, max-five lookups/video, zero-cost hosting.
+Tests: Targeted tests written; awaiting actual GitHub Actions outcome.
+  No new live Fact Check Tools positive result observed. The mocked
+  positive-response case is not proof that Google indexes that claim.
+Limitations: Heuristic context checking is NOT general semantic entailment;
+  no arbitrary-video transcript/footage checking. Indexed fact-check
+  coverage is incomplete. No new publisher or claims were invented.
+Next: Verify CI results and one real indexed claim after hosted refresh,
+  then continue frozen missing P0 features.
 ```
 
 ---

@@ -85,19 +85,22 @@ if result:
 
     st.markdown('''<div class="vl-section-label">02 / Preliminary findings</div>''', unsafe_allow_html=True)
     summary = summarize(analyses)
-    live_found = sum(1 for x in online.values() if x.status == "FOUND")
-    fully_unmatched = sum(1 for i, a in enumerate(analyses)
-                          if not a.matches and online.get(i) and online[i].status == "NO_RESULTS")
-    a, b, c = st.columns(3)
-    a.metric("Statements found", summary.candidates)
-    b.metric("Related references", summary.related + live_found)
-    c.metric("No source match", fully_unmatched)
-    st.info(
-        "We compare statements with 13 curated references and, where no local match exists, "
-        "search Google's indexed fact-check publications. Counts mean **related sources**, "
-        "not true/false findings or accuracy scores."
+    statements_with_sources = sum(
+        1 for i, item in enumerate(analyses)
+        if item.matches or (online.get(i) and online[i].status == "FOUND")
     )
-    if summary.candidates and fully_unmatched == summary.candidates:
+    without_sources = summary.candidates - statements_with_sources
+    a, b, c = st.columns(3)
+    a.metric("Statements examined", summary.candidates)
+    b.metric("With related sources", statements_with_sources)
+    c.metric("Without source match", without_sources)
+    st.info(
+        "VeriLoop searches a small curated reference library first, then attempts "
+        "Google's index of published fact-checks for claims without a sufficiently "
+        "context-aligned local match. Counts measure **retrieval coverage only**; "
+        "not verified truth, accuracy or a judgment about the video."
+    )
+    if summary.candidates and without_sources == summary.candidates:
         st.info(
             "**Your video was processed successfully.** No sufficiently related published "
             "fact-check was identified for these candidate statements. Discussions, "
@@ -127,13 +130,16 @@ if result:
             if live and live.status == "FOUND":
                 st.markdown("**Related published fact-checks found**")
                 st.write(
-                    "No matching record was found in our local library, but Google's Fact Check "
-                    "index returned potentially related articles. Check the exact statement, "
+                    "Google's Fact Check index returned potentially related articles, "
+                    "in addition to any local topic references shown below. Check the exact statement, "
                     "date and context; we have **not** verified this video."
                 )
             elif live and live.status in ("ERROR", "UNAVAILABLE"):
-                st.markdown("**Evidence check incomplete**")
-                st.write("Local reference matching was inconclusive and the live lookup could not finish.")
+                st.markdown("**Evidence search partly unavailable**")
+                st.write(
+                    "A live lookup could not finish. Any local reference listed below "
+                    "is only a topical retrieval lead, not a validated verdict."
+                )
             else:
                 st.markdown(
                     "**Related topic, not confirmed support**"
@@ -170,7 +176,11 @@ if result:
                         st.caption(check.article_title)
                     st.link_button("Read published fact-check", check.article_url)
                     st.caption("Fact-check reviewed: " + (check.review_date or "Date not supplied"))
-                    st.caption("Text relevance and limited event checks only; publisher's rating is not a verdict about this video.")
+                    st.caption(
+                        "This is an indexed **third-party fact-check** of a published claim. "
+                        "It may be about a different context or a quoted claim; its rating "
+                        "is **not** VeriLoop's verdict about the submitted video."
+                    )
             elif live and live.status == "NO_RESULTS":
                 st.caption("Live search checked Google's fact-check index; no sufficiently related article was identified. This does **not** establish the claim is false.")
             elif live and live.status in ("ERROR", "UNAVAILABLE"):
