@@ -137,3 +137,48 @@ def test_valid_reviewer_password_unlocks_empty_queue(isolated_cloud, monkeypatch
     assert at.session_state["vl_review_authenticated"] is True
     assert "No requests have been submitted yet" in _text(at.info)
     assert any(button.label == "Lock workspace" for button in at.button)
+
+
+def test_changing_reviewer_password_revokes_existing_session(
+    isolated_cloud, monkeypatch
+):
+    """Rotation must revoke old sessions, not just change future logins."""
+    original = "Test-only reviewer passphrase 2026"
+    rotated = "A different test-only reviewer password 2027"
+    monkeypatch.setenv("REVIEWER_PASSWORD", original)
+    at = AppTest.from_file(
+        str(ROOT / "pages" / "3_Review_Dashboard.py"), default_timeout=20
+    ).run()
+    at.text_input[0].set_value(original)
+    at.button[0].click().run()
+    assert at.session_state["vl_review_authenticated"] is True
+    at.session_state["vl_encrypted_archive"] = b"test-only-private-archive"
+    monkeypatch.setenv("REVIEWER_PASSWORD", rotated)
+    at.run()
+    assert not at.exception
+    assert "vl_review_authenticated" not in at.session_state
+    assert "vl_encrypted_archive" not in at.session_state
+    assert "configured password changed" in _text(at.warning)
+    assert not at.selectbox
+    at.text_input[0].set_value(rotated)
+    at.button[0].click().run()
+    assert at.session_state["vl_review_authenticated"] is True
+
+
+def test_lock_workspace_drops_private_session_material(
+    isolated_cloud, monkeypatch
+):
+    monkeypatch.setenv("REVIEWER_PASSWORD", "Test-only reviewer passphrase 2026")
+    at = AppTest.from_file(
+        str(ROOT / "pages" / "3_Review_Dashboard.py"), default_timeout=20
+    ).run()
+    at.text_input[0].set_value("Test-only reviewer passphrase 2026")
+    at.button[0].click().run()
+    assert at.session_state["vl_review_authenticated"] is True
+    at.session_state["vl_encrypted_archive"] = b"private-test-bytes"
+    next(b for b in at.button if b.label == "Lock workspace").click().run()
+    assert not at.exception
+    for key in ("vl_review_authenticated", "vl_review_auth_salt",
+                "vl_review_auth_check", "vl_encrypted_archive"):
+        assert key not in at.session_state
+    assert not at.selectbox

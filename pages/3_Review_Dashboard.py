@@ -2,8 +2,10 @@
 
 For research demonstration, not a production authentication service.
 """
+import hashlib
 import hmac
 import os
+import secrets
 
 import streamlit as st
 
@@ -27,9 +29,37 @@ try:
 except Exception:
     password = os.getenv("REVIEWER_PASSWORD", "")
 
+def _forget_reviewer_session():
+    """Drop all reviewer-only session data when access expires or is locked."""
+    for key in ("vl_review_authenticated", "vl_review_auth_salt",
+                "vl_review_auth_check", "vl_encrypted_archive",
+                "vl_backup_password", "vl_restore_password"):
+        st.session_state.pop(key, None)
+
+
+def _current_password_matches_session(current_password: str) -> bool:
+    salt = st.session_state.get("vl_review_auth_salt")
+    expected = st.session_state.get("vl_review_auth_check")
+    if not (isinstance(salt, bytes) and len(salt) == 16
+            and isinstance(expected, bytes) and len(expected) == 32):
+        return False
+    computed = hashlib.pbkdf2_hmac(
+        "sha256", current_password.encode("utf-8"), salt, 120_000
+    )
+    return hmac.compare_digest(expected, computed)
+
+
 if not isinstance(password, str) or len(password) < 16:
+    _forget_reviewer_session()
     st.warning("Reviewer dashboard is locked. Owner must privately configure REVIEWER_PASSWORD (16+ characters) in Streamlit Cloud Secrets. Never add it to GitHub.")
     st.stop()
+
+# A previously unlocked tab MUST NOT survive a password change or removal.
+# The password itself is never put into Streamlit session state.
+if (st.session_state.get("vl_review_authenticated") is True
+        and not _current_password_matches_session(password)):
+    _forget_reviewer_session()
+    st.warning("Reviewer access has expired because the configured password changed. Please sign in again.")
 
 if st.session_state.get("vl_review_authenticated") is not True:
     with st.form("reviewer_login"):
@@ -40,6 +70,11 @@ if st.session_state.get("vl_review_authenticated") is not True:
         if count >= 5:
             st.error("Too many attempts this session. Close this session and contact the project owner.")
         elif hmac.compare_digest(attempt, password):
+            salt = secrets.token_bytes(16)
+            st.session_state["vl_review_auth_salt"] = salt
+            st.session_state["vl_review_auth_check"] = hashlib.pbkdf2_hmac(
+                "sha256", password.encode("utf-8"), salt, 120_000
+            )
             st.session_state["vl_review_authenticated"] = True
             st.session_state["vl_failed_logins"] = 0
             st.rerun()
@@ -49,12 +84,7 @@ if st.session_state.get("vl_review_authenticated") is not True:
     st.stop()
 
 if st.button("Lock workspace", key="logout"):
-    st.session_state["vl_review_authenticated"] = False
-    # Prepared decrypted-in-memory session material is cleared on logout.
-    # This does not delete files the owner already downloaded.
-    st.session_state.pop("vl_encrypted_archive", None)
-    st.session_state.pop("vl_backup_password", None)
-    st.session_state.pop("vl_restore_password", None)
+    _forget_reviewer_session()
     st.rerun()
 
 st.warning("Cloud SQLite is ephemeral. Do not use it as permanent approved-review storage; backup required. Do not approve unverifiable claims.")

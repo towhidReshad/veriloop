@@ -119,5 +119,6 @@ def test_review_logout_clears_prepared_archive_in_public_page_code():
         Path(__file__).resolve().parents[1]
         / "pages" / "3_Review_Dashboard.py"
     ).read_text(encoding="utf-8")
-    assert 'st.session_state.pop("vl_encrypted_archive", None)' in page
+    assert '"vl_encrypted_archive"' in page
+    assert '_forget_reviewer_session()' in page
     assert 'if st.button("Lock workspace"' in page

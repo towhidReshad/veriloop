@@ -614,7 +614,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Obtain genuine hosted end-to-end acceptance of review decision → separate editorial approval → encrypted owner backup/empty-instance restore, without repeated screenshots; Streamlit page interaction tests now pass offline. Do not claim live Google positive retrieval or collected participant data until demonstrated.
+**Next immediate milestone:** Verify reviewer password-rotation/session-revocation regression in CI. A real hosted Streamlit access check and owner-controlled review/correction/backup acceptance remain pending; external connectivity to Streamlit was unavailable in the current tool environment. Never infer hosted availability from offline CI alone.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -1235,6 +1235,34 @@ CI: Initial run 44918048846 failed four NEW test assertions
 Remaining: Hosted browser interaction and independently executed
   editorial/correction/backup acceptance, plus genuine live
   external Google Fact Check positive retrieval.
+```
+
+---
+
+### Existing F-09 reviewer password rotation and hosted availability check — 2026-11-22
+
+```text
+Owner direction: Progress toward real deployed acceptance, not new features.
+Hosting check: Current tool environment could not resolve the Streamlit
+  domain, so app availability is not claimed either way. Earlier
+  GitHub CI was successful but is not a live browser confirmation.
+Security finding: The reviewer page previously trusted the boolean
+  st.session_state.vl_review_authenticated even when the configured
+  REVIEWER_PASSWORD changed or was removed.
+Fix: Establish a random per-session salt and a PBKDF2-HMAC-SHA256
+  credential verifier only after successful login; never store the raw
+  reviewer password in session state. On every page rerun, invalidate
+  that session if the configured password differs. On lock or missing
+  secret, clear authentication artifacts and any prepared encrypted
+  archive/passphrase field.
+Testing: Streamlit AppTest fixtures check login, password rotation,
+  session revocation, re-login, and lock clearing the private archive.
+  Existing user app, research separation, correction approvals and
+  public report logic are unchanged.
+Limitations: Shared pilot password is not production-grade identity
+  management. Streamlit instances and user data are ephemeral. GitHub
+  test-run verdict pending when work was staged; no hosted human
+  approvals, positive Google API responses, or live restore claimed.
 ```
 
 ---
