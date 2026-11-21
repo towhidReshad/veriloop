@@ -607,11 +607,11 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-21  
-**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOTS CONFIRM BBC NO-MATCH AND Seeker WHO `CONTRADICTED`/negation warnings. NEW MATCHING/CONTEXT SAFEGUARDS PASSED GITHUB ACTIONS 165/165 TESTS AND SYNTAX CHECKS (commit `916b33a`). HOSTED DEPLOYMENT OF THE NEW CONTEXT CHECKS AND A REAL LIVE FACT-CHECK POSITIVE RESPONSE STILL REQUIRE CONFIRMATION. DAY 4 REVIEW REQUEST/LOGIN VERIFIED; human decision/export and durable storage not yet verified.  
+**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOTS CONFIRM BBC NO-MATCH AND Seeker WHO `CONTRADICTED`/negation warnings. Current metadata claim ranking now prioritizes checkable, title-related candidates within 5-statement cap; GitHub CI and hosted ranking validation pending. 165/165 tests passed on the previous context-safeguard build, NOT yet on this new change. Google live positive lookup remains unverified with a real key. DAY 4 review request/login verified, export and durable storage still pending.  
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Check CI tests and new hosted evidence UI, then demonstrate at least one real API positive match (if the publisher claim is indexed). Resume frozen P0 F-07 exact-context reviewed reuse and F-10 separate correction approval/export; no guaranteed internet-wide coverage.
+**Next immediate milestone:** Verify new title/topic-aware claim selection and full CI, then seek at least one real indexed Fact Check API positive response (mocked positive integration is NOT live validation). Resume frozen P0 reviewed reuse and correction-export tasks.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -911,6 +911,36 @@ Limitations: Heuristic context checking is NOT general semantic entailment;
   coverage is incomplete. No new publisher or claims were invented.
 Next: Verify CI results and one real indexed claim after hosted refresh,
   then continue frozen missing P0 features.
+```
+
+---
+
+### Title-aware candidate selection and external positive-pipeline regression — 2026-11-21
+
+```text
+Owner request: Prioritize the video's key checkable claims rather than
+  letting five generic early description sentences consume the quota;
+  improve live fact-check pipeline proof without paid services.
+Scope: Existing F-03/F-04/F-05/F-12 within frozen MVP; no transcript,
+  automatic verdict, new source category, or irreversible reviewer action.
+Code: veriloop/claims.py considers at most 48 bounded metadata segments,
+  deduplicates eligible statements, ranks by overlap with informative
+  YouTube title tokens, a few explicit specificity cues and title field.
+  Returns up to 5 in deterministic order, preserving original wording.
+  Relevance ranking is not empirical factual accuracy or semantic entailment.
+  Existing claim metadata stance handling and local context guards retained.
+UI: Evidence page explains title-topic prioritization and that counts are
+  source-coverage counts, not truth scores.
+Tests: tests/test_claim_ranking.py (late topical claim, question, exact
+  wording, limit/determinism) and tests/test_live_pipeline.py (mocked
+  successful Google claims:search with publisher URL/date/rating and empty
+  index). Positive API response mocked—real indexed claim NOT verified.
+CI: Await GitHub Actions full pytest + compileall confirmation after commit.
+Limitations: Title relevance may miss tangential but important claims;
+  title and descriptions can be misleading; up to 5 are selected.
+  No speech/video/audio checking or promise of internet-wide matches.
+Next: Check CI; owner verify Seeker candidate ordering on live Streamlit.
+  Request an independent indexed positive test before claiming live success.
 ```
 
 ---

@@ -95,10 +95,11 @@ if result:
     b.metric("With related sources", statements_with_sources)
     c.metric("Without source match", without_sources)
     st.info(
-        "VeriLoop searches a small curated reference library first, then attempts "
-        "Google's index of published fact-checks for claims without a sufficiently "
-        "context-aligned local match. Counts measure **retrieval coverage only**; "
-        "not verified truth, accuracy or a judgment about the video."
+        "VeriLoop checks up to five metadata statements chosen for topic relevance "
+        "to this video's title and checkable details, not their likelihood of being true. "
+        "It searches a small curated reference library first, then Google's index "
+        "of published fact-checks when local context is uncertain or unmatched. "
+        "These counts measure **retrieval coverage only**, not accuracy or video truth."
     )
     if summary.candidates and without_sources == summary.candidates:
         st.info(

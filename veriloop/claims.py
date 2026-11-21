@@ -103,11 +103,52 @@ def _plausible(sentence: str) -> bool:
     return True
 
 
-def extract_claims(title: str, description: str, *, max_claims: int = MAX_CLAIMS) -> list[CandidateClaim]:
-    """Return at most 5 tentative metadata sentences in deterministic order.
 
-    Heuristics select declarative English statements; no statement is invented
-    or 'verified'. A no-claim result is supported and must not be called false.
+# Lightweight deterministic *relevance ranking*; not a semantic model or
+# probability of truth. This does not invent/alter candidate wording.
+_TOPIC_STOPWORDS = frozenset("""
+a an the and but or of on in at to by for from with without this that these
+those their its as is are was were has have had be been will would can could
+does did do it what which who where when how why about think thinks thinking
+news video watch official latest live report explains explained full episode
+""".split())
+_TOPIC_WORDS = re.compile(r"[a-z0-9]{3,}", re.I)
+_SPECIFICITY_CUES = re.compile(
+    r"\b(?:caus(?:e|es|ed|ing)?|prevent(?:s|ed)?|increase(?:s|d)?|"
+    r"decrease(?:s|d)?|because|study|research|risk|vaccin(?:e|es|ation)|"
+    r"autism|confirmed|reported|according to)\b", re.I
+)
+_QUANTITY = re.compile(r"\b(?:19|20)\d{2}\b|\b\d+(?:\.\d+)?\s*%", re.I)
+
+
+def _topic_tokens(text: str) -> set[str]:
+    return {word for word in _TOPIC_WORDS.findall(text.casefold())
+            if word not in _TOPIC_STOPWORDS}
+
+
+def _claim_rank(candidate: CandidateClaim, title_tokens: set[str]) -> tuple[int, int]:
+    """Auditable heuristics for choosing metadata statements under the 5-claim cap.
+
+    Topic words from a title are cues to *what the video discusses*. They do
+    not imply a statement is true, asserted by the narrator, or even checked.
+    """
+    words = _topic_tokens(candidate.text)
+    overlap = len(words & title_tokens)
+    specificity = (
+        int(bool(_QUANTITY.search(candidate.text))) * 2
+        + int(bool(_SPECIFICITY_CUES.search(candidate.text)))
+        + int(bool(re.search(r"\b(?:[A-Z]{2,}|[A-Z][a-z]+\s+[A-Z][a-z]+)\b", candidate.text)))
+    )
+    return (overlap * 5 + specificity + (3 if candidate.source_field == "title" else 0),
+            overlap)
+
+
+def extract_claims(title: str, description: str, *, max_claims: int = MAX_CLAIMS) -> list[CandidateClaim]:
+    """Return up to five eligible sentences ordered by relevance to the title.
+
+    Candidate text remains verbatim metadata. The priority score is solely a
+    retrieval-selection heuristic; it neither verifies nor endorses claims.
+    All bounded metadata segments are considered before the top-five cutoff.
     """
     if not 0 < max_claims <= MAX_CLAIMS:
         raise ValueError("max_claims must be between 1 and 5")
@@ -116,7 +157,7 @@ def extract_claims(title: str, description: str, *, max_claims: int = MAX_CLAIMS
     parts = [(raw_title, "title")]
     parts.extend((s, "description") for s in _SENTENCES.split(raw_description)[:MAX_SEGMENTS])
     seen: set[str] = set()
-    result: list[CandidateClaim] = []
+    eligible: list[CandidateClaim] = []
     for text, source_field in parts:
         sentence = _clean(text)
         # Keep an exact substring of a live-event introduction instead of
@@ -131,7 +172,9 @@ def extract_claims(title: str, description: str, *, max_claims: int = MAX_CLAIMS
             continue
         seen.add(key)
         stance, note = infer_stance(sentence, title=raw_title)
-        result.append(CandidateClaim(sentence, source_field, stance, note))
-        if len(result) == max_claims:
-            break
-    return result
+        eligible.append(CandidateClaim(sentence, source_field, stance, note))
+
+    # Python sort is stable: ties keep the source's original order.
+    title_tokens = _topic_tokens(raw_title)
+    ranked = sorted(eligible, key=lambda c: _claim_rank(c, title_tokens), reverse=True)
+    return ranked[:max_claims]

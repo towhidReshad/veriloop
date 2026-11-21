@@ -98,3 +98,10 @@ If local reference wording conflicts or event/context is still unconfirmed, the 
 ### Automated full-suite verification
 
 GitHub Actions [run 44899946003](https://github.com/towhidReshad/veriloop/actions/runs/44899946003) completed successfully on Python 3.11: **165/165 pytest passed** plus `compileall`. An earlier run surfaced four old presentation test-fixture crashes because test objects had no `matches` field; the helper now handles missing optional matches safely. A successful mocked API test is not a confirmed real Fact Check Tools result. The free-hosted new UI still requires direct validation.
+
+
+## Title-aware claim selection (2026-11-21)
+
+Instead of stopping at the first five eligible metadata sentences, VeriLoop now examines up to 48 bounded title/description segments, selects checkable English statements, and ranks those statements by overlap with informative **video-title topic words** and a limited set of explicit factual details. It keeps a deterministic five-statement cap and preserves exact original wording. The relevance ranking is **not** a truth probability, semantic-entailment model, or an endorsement of the video's claims. This improves coverage of important claims buried later in long descriptions but cannot guarantee the five most fact-checkable claims.
+
+New regression coverage includes a mocked Google Fact Check Tools **positive** claims:search response containing original publisher URL, date and rating; the app's local preliminary status remains unapproved. A mock is not a real authenticated API call. Actual positive retrieval from Google's current index and Google API quota remain to be verified in the hosted app. GitHub Actions CI status must be checked after deployment.
