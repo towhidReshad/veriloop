@@ -32,7 +32,8 @@ def has_conflicting_wording(assessment) -> bool:
 
     return any(
         has_polarity_conflict(assessment.candidate.text, match.reference_claim)
-        for match in assessment.matches
+        for match in getattr(assessment, "matches", ())
+        if isinstance(getattr(match, "reference_claim", None), str)
     )
 
 
