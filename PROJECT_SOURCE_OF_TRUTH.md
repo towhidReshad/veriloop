@@ -1146,7 +1146,9 @@ Privacy/safety: Reject private/local IPv4/IPv6 links returned in
 Product UX: Optional evidence details show the factual search wording
   used, so an ordinary user can tell what was looked up.
 Regression: focused-query, context-preservation, publisher provenance,
-  private-link rejection tests added. CI run pending as of code change.
+  private-link rejection tests added. GitHub Actions run 44911474128
+  (commit 7afa6f4) PASSED Python compileall and 236/236 pytest tests.
+  Real positive Google fact-check API response remains unverified.
 User-facing academic pages remain excluded.
 ```
 

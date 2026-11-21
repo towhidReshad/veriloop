@@ -173,3 +173,6 @@ Public Verify News accepts validated YouTube watch (`youtube.com/watch?v=`), Sho
 ## Optional live fact-check search wording refinement (2026-11-21)
 
 The existing one-query-per-claim Google Fact Check Tools lookup now trims a **small, documented list of report-introduction phrases** such as “Scientific evidence suggests that” before searching for the claim. It preserves negation, the claim's underlying factual proposition, date and location. The submitted video statement remains unchanged for the subsequent source relevance and context checks. A query refinement can improve retrieval opportunities but cannot make Google's index internet-wide or guarantee a matching article. Each eligible claim still uses at most one provider query; the five-query-per-video cap stays intact. Unsafe private/local IP fact-check article URLs are now excluded. The public report's optional source-search details show the actual wording used. Automated tests cover these safety constraints; GitHub CI needs to confirm final status.
+
+
+**Verified CI:** [GitHub Actions run 44911474128](https://github.com/towhidReshad/veriloop/actions/runs/44911474128) passed **236/236 tests** and Python syntax checks on commit `7afa6f4`. This does not prove a positive response from the owner's live Google API key.
