@@ -611,7 +611,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Validate public software UX separately from academic documentation, then complete integrated hosted human-review/correction/backup acceptance and actual A/B/C live tests. Academic-only professor guide removed from app, while the study dashboard is available separately for the researcher. Never substitute demo links for live results.
+**Next immediate milestone:** Confirm extended F-01 supported-video URL compatibility in GitHub CI and inspect hosted behavior with arbitrary *publicly accessible* YouTube links. Continue genuine end-to-end reviewer/correction acceptance without introducing academic UI pages.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -1101,6 +1101,26 @@ Privacy warning: an independently launched local research dashboard
   must not be shared on the public deployed VeriLoop URL.
 Automated regression tests protect the separation. CI pending for
   this change until the relevant GitHub workflow succeeds.
+```
+
+---
+
+### F-01 supported public YouTube URL compatibility — 2026-11-21
+
+```text
+Owner direction: Continue core VeriLoop software; no new academic UI.
+Bug: Videos with valid /live/{id}, /embed/{id}, /v/{id} and
+  youtube-nocookie.com/embed/{id} links were rejected before
+  calling the already-working YouTube Data API.
+Change: Strict host/path allow-list extended to those exact video
+  URL forms and music.youtube.com/watch?v= URLs. Video IDs must
+  still pass the same eleven-character validator.
+Safety: Reject arbitrary hosts, playlists, invalid IDs and nested
+  paths; no third-party video or transcript processing.
+Surface: Public video input help updated; normal evidence result
+  flow remains unchanged. This is F-01 maintenance, not new scope.
+Tests: Deterministic allowed/disallowed input tests added.
+CI: Pending verification at time of implementation.
 ```
 
 ---

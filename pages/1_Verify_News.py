@@ -27,7 +27,7 @@ hero(
 with st.form("metadata_lookup"):
     url = st.text_input(
         "YouTube video link", placeholder="https://www.youtube.com/watch?v=...",
-        help="Use a public YouTube video. We do not inspect its narration, frames or audio.",
+        help="Supports YouTube watch, Shorts, live, youtu.be and embed links for publicly accessible videos. We do not inspect narration, frames or audio.",
     )
     submitted = st.form_submit_button("Find related evidence", type="primary", use_container_width=True)
 st.caption("No account required for a preliminary check · Results are not automatic true/false verdicts")

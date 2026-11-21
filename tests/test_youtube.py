@@ -21,6 +21,13 @@ ID = "2MJY_ptQW1o"
     f"https://youtube.com/shorts/{ID}",
     f"https://www.youtube.com/shorts/{ID}?feature=share",
     f"https://youtu.be/{ID}?si=abc123",
+    f"https://youtube.com/live/{ID}?feature=share",
+    f"https://www.youtube.com/embed/{ID}?start=20",
+    f"https://youtube.com/v/{ID}",
+    f"https://www.youtube-nocookie.com/embed/{ID}",
+    f"https://music.youtube.com/watch?v={ID}",
+    f"https://youtube.com/live/{ID}/",
+
     f"youtu.be/{ID}",
     f"www.youtube.com/watch?v={ID}",
 ])
@@ -36,6 +43,13 @@ def test_supported_urls(url):
     "https://www.youtube.com/watch?v=2MJY_ptQW1oextra",
     "https://youtu.be/2MJY_ptQW1o/extra",
     "https://youtube.com/shorts/2MJY_ptQW1o/other",
+    "https://youtube.com/live/2MJY_ptQW1o/another",
+    "https://youtube.com/embed/2MJY_ptQW1o/another",
+    "https://youtube-nocookie.com/watch?v=2MJY_ptQW1o",
+    "https://attacker.youtube-nocookie.com/embed/2MJY_ptQW1o",
+    "https://youtube.com/live/2MJY_ptQW1oextra",
+    "https://youtube.com/playlist?list=2MJY_ptQW1o",
+
     "https://youtube.com/@someone",
     "javascript:alert(1)",
     "ftp://youtube.com/watch?v=2MJY_ptQW1o",

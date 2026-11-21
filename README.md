@@ -160,3 +160,8 @@ A study questionnaire and conditional consent/analysis protocol are in `research
 ## Public software vs academic deliverables (2026-11-21 correction)
 
 The public Streamlit app is a **general-user product**. It must not expose professor-demo guides, participant-study documentation, an academic literature matrix, or an observational-sample dashboard in its automatically discovered navigation. The previously added public `pages/5_Professor_Demo.py` has been deleted; its valid A/B/C case source files remain for **offline academic preparation**. The F-11 descriptive dashboard has been moved out of the public `pages/` directory to `research/research_dashboard_app.py`. Researchers can run it **separately**, e.g. `streamlit run research/research_dashboard_app.py` from a local project checkout, without integrating it into the publicly deployed app. Do not deploy or expose this research dashboard publicly. All original documentation stays in `research/` and `PROJECT_SOURCE_OF_TRUTH.md`; its existence in a public GitHub repository does not make it an in-app feature.
+
+
+## F-01 URL compatibility maintenance (2026-11-21)
+
+Public Verify News accepts validated YouTube watch (`youtube.com/watch?v=`), Shorts (`/shorts/ID`), live (`/live/ID`), embed (`/embed/ID` and `youtube-nocookie.com/embed/ID`), legacy `/v/ID`, `music.youtube.com/watch?v=`, and short `youtu.be/ID` links. All extract an exact 11-character video identifier and use the **same official YouTube Data API**. Allowing a URL structure does not guarantee a video is public, contains factual claims, or has matching published fact-checks. Arbitrary hosts, channel/playlist pages, nested paths, and malformed IDs are rejected.

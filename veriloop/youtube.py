@@ -14,8 +14,9 @@ import requests
 
 
 _VIDEO_ID = re.compile(r"^[A-Za-z0-9_-]{11}$")
-_WATCH_HOSTS = {"youtube.com", "www.youtube.com", "m.youtube.com"}
+_WATCH_HOSTS = {"youtube.com", "www.youtube.com", "m.youtube.com", "music.youtube.com"}
 _SHORT_HOSTS = {"youtu.be", "www.youtu.be"}
+_EMBED_HOSTS = {"youtube-nocookie.com", "www.youtube-nocookie.com"}
 _YOUTUBE_API_URL = "https://www.googleapis.com/youtube/v3/videos"
 
 
@@ -52,7 +53,7 @@ class VideoMetadata:
 
 
 def extract_video_id(url: str) -> str:
-    """Parse supported watch, mobile, Shorts and youtu.be URLs safely.
+    """Parse supported watch, mobile, Shorts, live and embedded video URLs safely.
 
     A video ID is a platform identifier, not proof that a video exists or is public.
     """
@@ -84,10 +85,13 @@ def extract_video_id(url: str) -> str:
         if len(videos) != 1:
             raise InvalidYouTubeURL("A YouTube watch link must contain one video ID.")
         video_id = videos[0]
-    elif hostname in _WATCH_HOSTS and path.startswith("shorts/"):
+    elif (
+        (hostname in _WATCH_HOSTS and path.startswith(("shorts/", "live/", "embed/", "v/")))
+        or (hostname in _EMBED_HOSTS and path.startswith("embed/"))
+    ):
         sections = path.split("/")
-        if len(sections) != 2:
-            raise InvalidYouTubeURL("Invalid YouTube Shorts path.")
+        if len(sections) != 2 or sections[0] not in {"shorts", "live", "embed", "v"}:
+            raise InvalidYouTubeURL("Unsupported YouTube video path.")
         video_id = sections[1]
     elif hostname in _SHORT_HOSTS and path:
         sections = path.split("/")
@@ -96,7 +100,7 @@ def extract_video_id(url: str) -> str:
         video_id = sections[0]
     else:
         raise InvalidYouTubeURL(
-            "Use a youtube.com/watch, youtube.com/shorts, or youtu.be video link."
+            "Use a YouTube watch, Shorts, live, embed, or youtu.be video link."
         )
 
     if not _VIDEO_ID.fullmatch(video_id):
