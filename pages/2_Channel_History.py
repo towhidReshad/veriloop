@@ -1,15 +1,27 @@
-"""Public channel *reviewed-claims-only* history, no universal trust score."""
+"""Public approved-only history, explained in ordinary language."""
 import streamlit as st
 
 from veriloop.db import connect_db, init_db, seed_evidence
 from veriloop.source_history import get_reviewed_history
+from veriloop.ui import apply_theme, hero
 
-st.set_page_config(page_title="Channel History | VeriLoop", page_icon="📚")
-st.title("Channel reviewed-claim history")
-st.caption("Only approved, evidence-linked human decisions appear here. No channel credibility percentage.")
+st.set_page_config(page_title="Reviewed claim history | VeriLoop", page_icon="📚", layout="centered")
+apply_theme()
+hero(
+    "VeriLoop · Reviewed claims",
+    "See what a human reviewer actually checked.",
+    "Only claim-specific decisions approved by a reviewer, with published evidence, "
+    "can appear here. An empty history is not a rating of a channel.",
+)
+
+stored = st.session_state.get("vl_current_result")
+known_channel = stored[0].channel_id if stored else ""
 with st.form("channel_history_query"):
-    channel_id = st.text_input("Exact YouTube channel ID", placeholder="UC...")
-    show = st.form_submit_button("Show approved claim history")
+    channel_id = st.text_input(
+        "YouTube channel ID", value=known_channel or "", placeholder="UC...",
+        help="If you already checked a video, its channel ID may be filled in automatically.",
+    )
+    show = st.form_submit_button("View reviewed claims", type="primary")
 
 if show:
     try:
@@ -20,28 +32,36 @@ if show:
     except ValueError as exc:
         st.warning(str(exc))
     except Exception:
-        st.error("Technical database error. No channel assessment was produced.")
+        st.error("We couldn't load the review history. This is a technical error, not a channel verdict.")
     else:
         if not history["channel_name"]:
-            st.info("No submitted records for that exact channel ID in this local pilot database.")
+            st.info("No review requests for this channel were found in our current pilot database. This does not tell us whether the channel is reliable.")
         else:
             st.subheader(history["channel_name"])
-            st.write("**Approved, evidence-linked claim records:**", history["approved_count"])
-            st.caption(f"Total review requests currently recorded for this channel: {history['review_requests']} (including pending/rejected). Counts are not prevalence or an accuracy score.")
+            st.metric("Approved claim reviews", history["approved_count"])
+            st.caption(
+                f"{history['review_requests']} total requests stored for this channel, including pending or rejected ones. "
+                "This is not a credibility score or a count of all channel uploads."
+            )
             if not history["records"]:
-                st.info("No human-approved claims are available here. This does not indicate the channel is reliable or unreliable.")
+                st.info("No human-approved claim findings are available yet. We don't label this channel true or false.")
             for item in history["records"]:
-                st.markdown("---")
-                st.write("**Specific reviewed claim:**", item["claim_text"])
-                st.write("**Reviewer-approved finding:**", item["reviewed_verdict"])
-                st.caption("Reviewed at: " + item["reviewed_at"])
-                st.caption("Video published: " + (item["video_published_at"] or "not available"))
-                st.write("Video:", item["video_title"])
-                st.link_button("View original video", f"https://www.youtube.com/watch?v={item['youtube_id']}")
-                st.write("Linked evidence:", item["reference_claim"])
-                st.write("Source:", item["source_name"])
-                st.link_button("Read original evidence", item["source_url"])
-                st.caption("Source published: " + (item["source_published_date"] or "not confirmed"))
+                with st.container(border=True):
+                    st.write("**Claim reviewed:**", item["claim_text"])
+                    st.write("**Human-reviewed claim outcome:**", item["reviewed_verdict"])
+                    st.caption("Reviewed on: " + item["reviewed_at"])
+                    st.write("Original video:", item["video_title"])
+                    st.link_button("Open YouTube video", f"https://www.youtube.com/watch?v={item['youtube_id']}")
+                    st.write("**Published reference:**", item["reference_claim"])
+                    st.write("Source:", item["source_name"])
+                    st.link_button("Read source", item["source_url"])
+                    with st.expander("Technical provenance and dates"):
+                        st.write("Evidence ID:", item["evidence_id"])
+                        st.write("Video published:", item["video_published_at"] or "Not available")
+                        st.write("Source published:", item["source_published_date"] or "Not confirmed")
 
-st.warning("A channel may have other videos or claims that have not been reviewed. This is NOT a channel-wide verdict.")
-st.caption("Free Streamlit Community Cloud can reset SQLite data when the app restarts. Research decisions require independent durable backups before real use.")
+st.warning(
+    "History covers only the small number of explicitly reviewed claims stored in this pilot. "
+    "It is **not** a verdict on the channel or its other videos."
+)
+st.caption("Free cloud SQLite storage can reset when the app restarts; permanent research decisions require an independent archive.")

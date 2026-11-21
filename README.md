@@ -54,3 +54,10 @@ Verify News now offers **Request human review** for each candidate (pending stat
 **Security/setup:** Add `REVIEWER_PASSWORD = "YOUR_STRONG_RANDOM_16_PLUS_CHARACTER_SECRET"` in Streamlit Community Cloud **App Settings → Secrets**, alongside the existing `YOUTUBE_API_KEY`. Never commit either value; do not share the secret in screenshots. If unset, reviewer dashboard remains locked. This is a simple research pilot password gate, not production-grade accounts/authentication.
 
 **Persistence warning:** Free cloud SQLite storage is **ephemeral**. Review requests, human decisions and their audit trail may disappear when Streamlit restarts. Do **not** collect sensitive participant information or treat the demo as durable public corrections. A durable approval archive and separate correction/export approval are still pending P0 work. Only real human reviews may populate channel history; 13 seeded reference records do not qualify. 69 selected offline tests passed in Day 4 development; hosted testing remains pending.
+
+
+## Public-first UI refinement (2026-11-21)
+
+The existing verification backend is unchanged. The homepage now provides a **one-link starting point** and a three-step explanation. Verify News shows the video summary, a count of detected **candidate statements** and how many have tentative reference matches, and clear per-statement source links. Unmatched statements are explicitly **not** labeled false. `Research details` expanders retain exact preliminary states, metadata stance, context matching and TF-IDF similarity **as a retrieval metric, not a probability or truth score**. Optional human-review requests and approved-only Channel History remain intact. The reviewer dashboard's restricted security workflow is not changed.
+
+66 selected offline tests passed after this presentation update (Day 1/2 + presentation invariants). Python compile checks passed. Hosted UI must still be checked manually. These counts are not a claim of full end-to-end validity or misinformation-detection accuracy.

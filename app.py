@@ -1,54 +1,71 @@
-"""VeriLoop Streamlit homepage; read-only Day 2 reference library preview."""
+"""VeriLoop welcoming homepage with research details kept accessible."""
 import streamlit as st
 
 from veriloop.db import connect_db, init_db, list_evidence, seed_evidence
+from veriloop.ui import apply_theme, hero
 
-st.set_page_config(page_title="VeriLoop", page_icon="🔎", layout="centered")
-st.title("VeriLoop")
-st.caption("Evidence-linked news verification · YouTube metadata pilot")
-st.write("Open **Verify News** from the sidebar to inspect a public video's metadata.")
-st.info(
-    "Official YouTube metadata retrieval is available. The Day 2 curated evidence "
-    "library is available. Verify News provides tentative claim/evidence matches; "
-    "review requests and a restricted reviewer workflow are available in the pilot. "
-    "No automatic or final video verdict is issued."
+st.set_page_config(page_title="VeriLoop · Evidence before verdicts", page_icon="🔎", layout="centered")
+apply_theme()
+hero(
+    "VeriLoop · Evidence before verdicts",
+    "News moves fast. Evidence matters.",
+    "Explore the published claims in a YouTube news video and see where related "
+    "source material is available. Easy to use, transparent about uncertainty.",
 )
 
-st.subheader("Curated reference evidence · Day 2")
+st.markdown('''<div class="vl-section-label">Start here</div>''', unsafe_allow_html=True)
+st.page_link("pages/1_Verify_News.py", label="🔎  Check a YouTube news video", use_container_width=True)
+st.caption("One link to start · No user account needed for preliminary results")
+
+cols = st.columns(3, gap="medium")
+steps = [
+    ("01", "Paste a video link", "Use a public YouTube URL. We read the title and description."),
+    ("02", "Explore related sources", "See claim-specific evidence links without invented truth ratings."),
+    ("03", "Ask for human review", "Optionally send one claim to a restricted reviewer."),
+]
+for col, (num, heading, description) in zip(cols, steps):
+    with col:
+        st.markdown(
+            f'<div class="vl-step"><div class="vl-number">{num}</div>'
+            f'<b>{heading}</b><small>{description}</small></div>',
+            unsafe_allow_html=True,
+        )
+
+st.markdown('''<div class="vl-section-label">Our research sources</div>''', unsafe_allow_html=True)
 try:
-    # Streamlit Community Cloud disk is ephemeral. Re-seed missing public
-    # references from checked-in JSON. Never seed private reviews/accusations.
-    with connect_db() as connection:
-        init_db(connection)
-        seed_evidence(connection)
-        rows = list_evidence(connection)
-except (OSError, ValueError, RuntimeError) as exc:
-    st.warning(f"Evidence database unavailable: {exc}")
+    with connect_db() as conn:
+        init_db(conn)
+        seed_evidence(conn)
+        rows = list_evidence(conn)
 except Exception:
-    # A DB failure is an operational error, not insufficient truth evidence.
-    st.error("Evidence database could not be opened. Check app logs.")
+    st.error("The curated evidence library is unavailable right now. No assessment was made.")
 else:
-    st.write(f"**{len(rows)} curated source-backed references loaded.**")
+    st.write(f"**{len(rows)} curated reference records** in our small, traceable research library")
     st.caption(
-        "These are external-source claim references only—not verified findings "
-        "about submitted videos, not VeriLoop reviewer approvals, and not an "
-        "observational prevalence sample."
+        "These are external publications, not verified judgments about any submitted video. "
+        "The collection is selected for demonstration and does not estimate misinformation prevalence."
     )
-    with st.expander("Browse evidence sources (not matched to your video)"):
+    with st.expander("Explore the full reference library · Research view"):
         for record in rows:
-            st.markdown(f"**{record['id']} · {record['claim_text']}**")
-            st.write("External reference classification:", record['reference_verdict'])
-            st.write("Source:", record['source_name'])
-            st.link_button("Open original source", record['source_url'])
-            st.caption("Published: " + (record['published_date'] or "not confirmed") + " · VeriLoop human review: none")
-            st.caption(record['notes'])
+            st.write("**" + record["id"] + " · " + record["claim_text"] + "**")
+            st.write("Source:", record["source_name"])
+            st.link_button("Read original publication", record["source_url"])
+            st.caption("Published: " + (record["published_date"] or "Date not confirmed"))
+            st.caption("External classification: " + record["reference_verdict"])
+            st.caption("Human review by VeriLoop: none")
             st.divider()
-st.warning(
-    "No automated result should be interpreted as a final determination. "
-    "An evidence match alone cannot prove a video asserts a claim."
+
+st.markdown('''<div class="vl-section-label">Explore more</div>''', unsafe_allow_html=True)
+a, b = st.columns(2)
+with a:
+    st.page_link("pages/2_Channel_History.py", label="📚  Reviewed claim history")
+with b:
+    st.page_link("pages/3_Review_Dashboard.py", label="🔒  Reviewer workspace")
+st.info(
+    "**Important:** We find relevant material, not automatic true/false verdicts. "
+    "A similarity score is not the probability that a claim is false."
 )
-st.caption(
-    "On free Streamlit Cloud, SQLite files may be reset on app restart. "
-    "This read-only research library is reconstructed from versioned seed JSON; "
-    "no persistent reviewer decisions are promised."
+st.markdown(
+    '''<p class="vl-footer">VeriLoop is a university research prototype. Only YouTube's public metadata is checked; narration, video frames and audio are not verified. Human review and persistent research records are limited on free cloud hosting.</p>''',
+    unsafe_allow_html=True,
 )
