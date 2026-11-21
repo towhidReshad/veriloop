@@ -210,3 +210,6 @@ The restricted reviewer page now binds each unlocked session to the **currently 
 ## F-08 audited channel-history provenance hardening (2026-11-22)
 
 Public previously-reviewed channel history now checks the saved claim decision audit more fully before listing it: recorded reviewer identity, substantive rationale, matching decision timestamp, approved claim verdict, linked evidence ID, confirmed stance/context, and an HTTPS source. Incomplete or altered audit records are withheld, rather than automatically promoted to public reputation claims. All examples used in regression tests are synthetic; no real person or video was newly reviewed. GitHub CI should be checked for verification.
+
+
+**Verified channel-history regression:** [GitHub Actions run 44932958938](https://github.com/towhidReshad/veriloop/actions/runs/44932958938) passed **262/262 tests** and Python syntax checks (commit `b2439d9`). All audit-tampering fixtures are synthetic; no actual human review was performed.

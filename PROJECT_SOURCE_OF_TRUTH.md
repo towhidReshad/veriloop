@@ -606,6 +606,9 @@ These are **planned commands** until actual code is written and tested. Do not c
 
 ## 15. Live Project Status — Update This Section After Every Work Session
 
+**2026-11-22 public channel audit verification:** Existing F-08 approved-only history gate hardened to enforce saved reviewer identity, substantial rationale, timestamp agreement and cited HTTPS evidence provenance. GitHub Actions run `44932958938` (commit `b2439d9`) passed **262/262 tests** + Python compileall. No actual hosted human review or correction publication has been performed in this session.
+
+
 **2026-11-22 F-08 hardening staged:** Public reviewed channel history now requires full reviewer identity, rationale length, matching decision timestamp, approved status, linked original HTTPS source and confirmed context. Targeted adversarial regression tests cover forged/missing audit fields and non-HTTPS provenance. CI result pending; no hosted UI or real human decision is newly verified.
 
 
@@ -1290,7 +1293,9 @@ Safety: Old invalid/partial audit records are withheld from public
 Tests: One valid fixture, eight audit tampering cases, and non-HTTPS
   source regression. Existing frozen F-08, F-07 and F-09 remain.
 Scope: No new user-facing pages, database schema, APIs or costs.
-Validation: GitHub CI pending as code is staged.
+Validation: GitHub Actions run 44932958938 (commit b2439d9) PASSED
+  262/262 pytest cases and Python compileall. Hosted real reviewer
+  record was not created or observed.
 ```
 
 ---
