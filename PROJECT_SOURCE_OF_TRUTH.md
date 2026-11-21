@@ -607,11 +607,11 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-21  
-**Overall status:** DAY 3 ONLINE VERIFIED; DAY 4 REQUEST AND REVIEWER ACCESS VERIFIED ONLINE; UI SIMPLIFICATION IMPLEMENTED IN REPOSITORY, HOSTED VALIDATION PENDING — owner screenshots confirm NASA source matches, review request #1 PENDING, password-gated reviewer access and pending queue; approved review decision and durable audit storage remain untested. User-facing presentation refined without adding new verification features.  
+**Overall status:** DAY 3 AND NEW PUBLIC UI VERIFIED ONLINE IN OWNER SCREENSHOTS; DAY 4 REQUEST AND REVIEWER ACCESS VERIFIED ONLINE; OPTIONAL LIVE FACT-CHECK FALLBACK IMPLEMENTED WITH MOCKED TESTS, HOSTED API CALL NOT YET VERIFIED. Existing local 13-reference matching and approved-only review boundary preserved. Human approval and durable review storage not yet verified.  
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Verify the refreshed public homepage/Verify News experience online. Continue testing review decision as NEEDS_MORE_EVIDENCE before any evidence-bound approval; persist durable review records before real research use.
+**Next immediate milestone:** Test a previously unseen public English-metadata YouTube video on Streamlit; confirm local evidence fallback displays a live fact-check article OR explicit no-results/API error. Confirm quota/key restrictions privately; then resume frozen P0 corrections, review and professor A/B/C demonstrations.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -798,6 +798,42 @@ Next: Check public mobile/desktop flow on hosted Streamlit after deployment.
 
 ---
 
+### Optional Google Fact Check Tools fallback — 2026-11-21
+
+```text
+Session: 2026-11-21 (Asia/Seoul); tool: ChatGPT, GitHub connector,
+  Python 3.13.5, pytest, official Fact Check Tools API documentation.
+Owner requirement: Professor can submit previously unseen supported public
+  YouTube video URLs; stored 13-reference library alone has low coverage.
+Decision: Implement OPTIONAL external claims:search fallback early, retaining
+  the F-01–F-12 frozen MVP contract and all P0 obligations. No unrelated P0
+  feature replaced. This is explicitly approved demo-priority sequencing,
+  NOT an assertion that all internet claims are fact-checkable.
+Changed: veriloop/factcheck.py, veriloop/config.py,
+  pages/1_Verify_News.py, tests/test_factcheck.py, README.md,
+  PROJECT_SOURCE_OF_TRUTH.md.
+Behavior: For each candidate without a local TF-IDF match, query indexed
+  English fact-check claims via official API, at most 5 queries per video,
+  5 returned claim items per query, 7-second timeout and max 3 workers.
+  Return source URLs, publisher names, available review dates, claim text,
+  textual relevance and basic context guards. Reject unsafe/non-HTTPS links
+  and obvious date/place mismatches.
+Safety: Publisher ratings are third-party descriptions, not VeriLoop final
+  verdicts; live matches NEVER auto-populate approved SQLite reviews or
+  channel-history records. Missing/failed API lookup is not evidence a claim
+  is false. No API key committed. English metadata only; no audio analysis.
+Validation: 17/17 newly added offline mock regression tests passed in
+  Python 3.13.5 environment. No real authenticated Fact Check API response
+  or hosted Streamlit result was observed in this development session.
+Limits: Google's fact-check index is not all internet news. Search may return
+  no claims, quota errors or imperfect context relevance; approval still
+  requires independent human review. Free Cloud SQLite is ephemeral.
+Next: Owner live-test an unseen public YouTube news URL with descriptive
+  English metadata and inspect source, no-result or technical-error status.
+```
+
+---
+
 ## 16. Decision Log, Unresolved Issues, and Change Control
 
 ### Agreed decisions
@@ -821,6 +857,8 @@ Next: Check public mobile/desktop flow on hosted Streamlit after deployment.
 | DEC-15 | Local evidence search is mandatory; Google Fact Check Tools lookup is optional | Keep minimum acceptance reproducible even without external fact-check search |
 
 | DEC-16 | Free Streamlit Community Cloud is the primary university demo deployment, with optional local fallback | Owner requires zero-cost hosting; cloud SQLite is ephemeral and must not be trusted for durable human reviews |
+
+| DEC-17 | Owner-approved early implementation of optional Google Fact Check Tools API fallback for previously unseen public YouTube metadata claims; P0 contract unchanged | Professor may provide an arbitrary supported public video; early optional retrieval increases chance of related fact-check articles without promising internet-wide validation; errors and unknowns remain explicit |
 
 ### Open questions (not permissions to invent defaults)
 

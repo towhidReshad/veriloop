@@ -3,7 +3,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from veriloop.config import get_youtube_api_key
+from veriloop.config import get_youtube_api_key, get_factcheck_api_key
+from veriloop.factcheck import run_live_fallback
 from veriloop.db import connect_db, init_db, list_evidence, seed_evidence
 from veriloop.matching import assess_metadata
 from veriloop.presentation import friendly_explanation, friendly_status, summarize
@@ -53,11 +54,14 @@ if submitted:
         except Exception:
             st.error("We got the video details, but the evidence service is temporarily unavailable. No assessment was made.")
         else:
-            st.session_state["vl_current_result"] = (video, analyses)
+            with st.spinner("Looking for related published fact-checks..."):
+                online = run_live_fallback(analyses, get_factcheck_api_key())
+            st.session_state["vl_current_result"] = (video, analyses, online)
 
 result = st.session_state.get("vl_current_result")
 if result:
-    video, analyses = result
+    video, analyses = result[:2]
+    online = result[2] if len(result) > 2 else {}
     st.markdown('''<div class="vl-section-label">01 / Video overview</div>''', unsafe_allow_html=True)
     with st.container(border=True):
         left, right = st.columns([1, 1.2], gap="medium")
@@ -81,14 +85,20 @@ if result:
 
     st.markdown('''<div class="vl-section-label">02 / Preliminary findings</div>''', unsafe_allow_html=True)
     summary = summarize(analyses)
+    live_found = sum(1 for x in online.values() if x.status == "FOUND")
+    fully_unmatched = sum(1 for i, a in enumerate(analyses)
+                          if not a.matches and online.get(i) and online[i].status == "NO_RESULTS")
     a, b, c = st.columns(3)
     a.metric("Statements found", summary.candidates)
-    b.metric("Related references", summary.related)
-    c.metric("No close match", summary.unmatched)
+    b.metric("Related references", summary.related + live_found)
+    c.metric("No close match", fully_unmatched)
     st.info(
-        "These numbers count matching results in our small evidence library. "
-        "They are **not** truth scores, accuracy ratings or a verdict about the video."
+        "We compare statements with 13 curated references and, where no local match exists, "
+        "search Google's indexed fact-check publications. Counts mean **related sources**, "
+        "not true/false findings or accuracy scores."
     )
+    if any(x.status in ("ERROR", "UNAVAILABLE") for x in online.values()):
+        st.warning("Some live fact-check searches could not run. Those statements remain unresolved; this is not evidence that they are false.")
     if not analyses:
         st.warning(
             "We couldn't identify a clear factual statement in the available English title or description. "
@@ -99,9 +109,20 @@ if result:
         with st.container(border=True):
             st.caption(f"STATEMENT {index:02d} · From the published {assessment.candidate.source_field}")
             st.write(assessment.candidate.text)
-            label = friendly_status(assessment.preliminary_state)
-            st.markdown(f"**{label}**")
-            st.write(friendly_explanation(assessment))
+            live = online.get(index - 1)
+            if live and live.status == "FOUND":
+                st.markdown("**Related published fact-checks found**")
+                st.write(
+                    "No matching record was found in our local library, but Google's Fact Check "
+                    "index returned potentially related articles. Check the exact statement, "
+                    "date and context; we have **not** verified this video."
+                )
+            elif live and live.status in ("ERROR", "UNAVAILABLE"):
+                st.markdown("**Evidence check incomplete**")
+                st.write("Local reference matching was inconclusive and the live lookup could not finish.")
+            else:
+                st.markdown(f"**{friendly_status(assessment.preliminary_state)}**")
+                st.write(friendly_explanation(assessment))
             if assessment.matches:
                 st.caption("RELATED PUBLISHED SOURCES · NOT A VERIFIED CLAIM VERDICT")
                 for match in assessment.matches:
@@ -111,6 +132,21 @@ if result:
                     st.caption("Source published: " + (match.published_date or "Date not confirmed"))
             else:
                 st.caption("No closely related record was found in the current curated library.")
+
+            if live and live.status == "FOUND":
+                st.caption("LIVE FACT-CHECK SEARCH · GOOGLE'S INDEX OF PUBLISHED FACT-CHECKS")
+                for check in live.articles:
+                    st.write("**" + check.publisher + "**")
+                    st.write("Claim examined by publisher:", check.checked_claim)
+                    if check.article_title:
+                        st.caption(check.article_title)
+                    st.link_button("Read published fact-check", check.article_url)
+                    st.caption("Fact-check reviewed: " + (check.review_date or "Date not supplied"))
+                    st.caption("Text relevance and limited event checks only; publisher's rating is not a verdict about this video.")
+            elif live and live.status == "NO_RESULTS":
+                st.caption("Live search checked Google's fact-check index; no sufficiently related article was identified. This does **not** establish the claim is false.")
+            elif live and live.status in ("ERROR", "UNAVAILABLE"):
+                st.warning(live.note)
 
             with st.expander("Research details · how this result was found"):
                 st.write("**Preliminary state:**", assessment.preliminary_state)
@@ -124,6 +160,14 @@ if result:
                     st.write("**TF-IDF similarity (retrieval only):**", f"{match.similarity:.2f}")
                     st.write("**External source's classification of its own claim:**", match.external_reference_classification)
                     st.caption("Similarity is not a probability of misinformation. Source verdicts are not transferred to this video.")
+                if live:
+                    st.write("**Live fact-check lookup status:**", live.status)
+                    for check in live.articles:
+                        st.write("**Publisher and its original rating:**", check.publisher, "·", check.publisher_rating or "Not supplied")
+                        st.write("**Text retrieval relevance (not truth probability):**", f"{check.relevance:.2f}")
+                        st.write("**Limited context status:**", check.context_status)
+                        st.caption(check.context_note)
+                        st.caption("These live publications are NOT inserted into the approved evidence/reviewer database.")
             st.caption("Want an independent check of this exact statement?")
             if st.button("Request human review", key=f"review_{video.video_id}_{index}"):
                 try:
