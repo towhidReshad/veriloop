@@ -91,12 +91,19 @@ if result:
     a, b, c = st.columns(3)
     a.metric("Statements found", summary.candidates)
     b.metric("Related references", summary.related + live_found)
-    c.metric("No close match", fully_unmatched)
+    c.metric("No source match", fully_unmatched)
     st.info(
         "We compare statements with 13 curated references and, where no local match exists, "
         "search Google's indexed fact-check publications. Counts mean **related sources**, "
         "not true/false findings or accuracy scores."
     )
+    if summary.candidates and fully_unmatched == summary.candidates:
+        st.info(
+            "**Your video was processed successfully.** No sufficiently related published "
+            "fact-check was identified for these candidate statements. Discussions, "
+            "interviews and emerging topics may have no indexed fact-check articles. "
+            "This is **not** a failed video lookup and **not** evidence that the statements are false."
+        )
     if any(x.status in ("ERROR", "UNAVAILABLE") for x in online.values()):
         st.warning("Some live fact-check searches could not run. Those statements remain unresolved; this is not evidence that they are false.")
     if not analyses:

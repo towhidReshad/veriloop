@@ -72,3 +72,8 @@ Configuration: add `FACTCHECK_API_KEY = "YOUR_PRIVATE_RESTRICTED_KEY"` under Str
 **Important:** Fact-check search results are publisher-authored references. An article's original rating is visible only as research detail and must not be presented as VeriLoop's finding about a submitted video, uploader, or channel. Live matches are **not added automatically** to the human-approved SQLite evidence/review history and cannot be automatically approved. Same-event identity, stance, event date and context must still be independently checked. Live result relevance is text matching, **not** a probability of truth. Google’s indexed fact-check publications are not the whole internet.
 
 Regression: **17/17 offline mocked API/fallback tests passed** (missing key, authorization/quota errors, unsafe URLs, incompatible years, local-first behavior, 5-query cap). A real hosted API request has **not yet been verified**.
+
+
+## Unseen-video no-match regression (2026-11-21)
+
+Owner screenshot confirms an unseen BBC World Service interview fetched successfully, but neither the 13 curated references nor Google's indexed fact-check search returned related records for the metadata statements. This is a valid uncertainty outcome, not rejection of the link or a verdict about the video. Fixed a false-positive question title carrying a programme suffix after `?`, and clarified the all-no-match status in the general-user UI. Regression tests were added; the updated hosted UI still requires verification. Google's claim-review index is not an internet-wide evidence crawler, and dialogue/interviews may contain opinions rather than independently checkable propositions.

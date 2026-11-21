@@ -607,11 +607,11 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-21  
-**Overall status:** DAY 3 AND NEW PUBLIC UI VERIFIED ONLINE IN OWNER SCREENSHOTS; DAY 4 REQUEST AND REVIEWER ACCESS VERIFIED ONLINE; OPTIONAL LIVE FACT-CHECK FALLBACK IMPLEMENTED WITH MOCKED TESTS, HOSTED API CALL NOT YET VERIFIED. Existing local 13-reference matching and approved-only review boundary preserved. Human approval and durable review storage not yet verified.  
+**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOT CONFIRMS UNSEEN BBC VIDEO METADATA PROCESSED AND LIVE FACT-CHECK SEARCH RETURNS NO RELATED RESULTS (NOT A VERDICT). DAY 4 REQUEST/REVIEWER LOGIN VERIFIED ONLINE. Targeted correction for question-title false positive prepared, hosted recheck pending. Approved human decisions and durable storage remain unverified.  
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Test a previously unseen public English-metadata YouTube video on Streamlit; confirm local evidence fallback displays a live fact-check article OR explicit no-results/API error. Confirm quota/key restrictions privately; then resume frozen P0 corrections, review and professor A/B/C demonstrations.
+**Next immediate milestone:** Recheck BBC video after question-title regression fix; then test a separately documented, indexed fact-check claim with actual live search evidence. Continue original P0 approved-review/correction workflow and durable storage before professor A/B/C demo.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -830,6 +830,31 @@ Limits: Google's fact-check index is not all internet news. Search may return
   requires independent human review. Free Cloud SQLite is ephemeral.
 Next: Owner live-test an unseen public YouTube news URL with descriptive
   English metadata and inspect source, no-result or technical-error status.
+```
+
+---
+
+### Unseen-video live follow-up — 2026-11-21
+
+```text
+Owner screenshot: Previously unseen public BBC World Service AI interview
+  fetched successfully and displayed title, channel, thumbnail and publication
+  metadata. Five tentative metadata statements and zero matching records
+  displayed; each had a Google fact-check index no-match response.
+Important finding: no indexed published fact-check is expected for many
+  interviews or new science discussions; a no-match is neither a technical
+  failure nor evidence the claim is false.
+Known bug: title "What do tech pioneers think about the AI revolution?
+  - The Engineers, BBC World Service" was incorrectly counted as factual,
+  because the metadata field ended with a show name rather than "?".
+Code fix: question-leading title filter added to veriloop/claims.py,
+  no-match explanation added to Verify News page, with new regression tests.
+Scope/safety: No new truth score, API capability, or automatic accusation.
+  The Google Fact Check API searches indexed fact-check publications, not
+  all the web. Speech/audio and video frames remain out of scope.
+Validation: owner screenshot confirms earlier version no-result path and
+  hosted API integration behavior; this new regression fix awaits hosted
+  recheck. No claim that independent fact-check match has yet been seen live.
 ```
 
 ---

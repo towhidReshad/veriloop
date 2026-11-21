@@ -47,6 +47,12 @@ _SENTENCES = re.compile(r"(?:\r?\n)+|(?<=[.!?])\s+(?=[A-Z0-9\"“(])")
 _URL = re.compile(r"https?://\S+|www\.\S+", re.IGNORECASE)
 _WORD = re.compile(r"[A-Za-z]+")
 _WATCH_AS = re.compile(r"^(?:watch live with us|watch|join us to watch) as (.+)$", re.IGNORECASE)
+# A question is not a factual assertion even when a YouTube title adds a show name
+# after its question mark (e.g., "What do experts think? - BBC World Service").
+_LEADING_QUESTION = re.compile(
+    r"^(?:what|which|who|whom|whose|where|when|why|how|is|are|was|were|do|does|did|can|could|should|would|will|has|have|had)\b[^?]{0,220}\?",
+    re.IGNORECASE,
+)
 _NON_LATIN = re.compile(r"[\u0600-\u06ff\u0900-\u0dff\u1100-\u11ff\u3000-\u9fff\uac00-\ud7af]")
 
 
@@ -83,7 +89,7 @@ def _plausible(sentence: str) -> bool:
         return False
     if _IGNORE.search(sentence) or _PROMO.search(sentence) or _CALL_TO_ACTION.search(sentence):
         return False
-    if sentence.rstrip().endswith("?"):
+    if sentence.rstrip().endswith("?") or _LEADING_QUESTION.search(sentence):
         return False
     stripped = _URL.sub("", sentence).strip()
     if len(_WORD.findall(stripped)) < 3 or not _VERBS.search(stripped):
