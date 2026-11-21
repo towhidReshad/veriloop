@@ -81,3 +81,13 @@ def test_additive_schema_migration(conn):
     assert {"drafted_by","editorial_reviewer","editorial_note","last_updated_at"} <= {
         x["name"] for x in conn.execute("PRAGMA table_info(corrections)")
     }
+
+
+def test_editorial_approver_must_differ_from_draft_author(conn):
+    rid=setup_review(conn)
+    cid=create_or_edit_draft(conn,rid,"Verifiable draft",editor_id="EditorA")
+    submit_for_approval(conn,cid)
+    with pytest.raises(CorrectionPolicyError,match="distinct from the drafter"):
+        editorial_decision(conn,cid,approve=True,editor_id="editora",
+            rationale="I independently reviewed this claim and linked original evidence.")
+    assert list_corrections(conn)[0]["approval_status"]=="PENDING_APPROVAL"

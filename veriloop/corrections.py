@@ -116,6 +116,10 @@ def editorial_decision(conn: sqlite3.Connection, correction_id: int, *,
     if r["approval_status"] != "PENDING_APPROVAL":
         raise CorrectionPolicyError("Separate editorial approval requires a submitted draft")
     editor = _text(editor_id, "editor_id", 80)
+    if not r["drafted_by"] or editor.casefold() == r["drafted_by"].casefold():
+        raise CorrectionPolicyError(
+            "Editorial approval requires an independently identified editor distinct from the drafter"
+        )
     note = _text(rationale, "editorial_rationale", 1000)
     if len(note) < 25:
         raise CorrectionPolicyError("Editorial decision needs at least 25 characters of rationale")

@@ -127,3 +127,6 @@ Corrections are no longer just a SQLite placeholder. An audited, linked human-ap
 The Research Dashboard shows counts from the separately annotated `research/news_dataset.csv`. At present that CSV has **zero** observation rows. It displays honest zero counts rather than made-up study outcomes or prevalence. The technical report draft explicitly states pilot study limitations.
 
 Code added and regression tests written; full CI and hosted verification are pending.
+
+
+**First combined CI:** [197/197 tests passed](https://github.com/towhidReshad/veriloop/actions/runs/44901926635); an additional independent-drafter/editor check awaits the final CI run. Separate editor identifiers are not strong production authentication, so public publication remains disabled.
