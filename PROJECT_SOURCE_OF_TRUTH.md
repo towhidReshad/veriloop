@@ -1202,7 +1202,9 @@ Limitation: Since the frozen video schema stores one row per YouTube
   require an owner-approved schema change.
 Validation: Regression tests added for changed metadata title,
   description, publish timestamp, source field and channel identity.
-  Full GitHub CI pending at time of coding.
+  GitHub Actions run 44914590673 (commit 945a628) completed
+  successfully: 244/244 pytest tests and Python compileall passed.
+  No hosted changed-metadata interaction has been observed.
 ```
 
 ---

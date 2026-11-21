@@ -189,3 +189,6 @@ A new deterministic end-to-end test covers review request, explicit human-approv
 ## F-07/F-09: Changed-video metadata review safety (2026-11-21)
 
 Review requests are now scoped to the **original retrieved video metadata** (title, description and published timestamp) as well as exact claim text, stance and metadata field. Re-submitting an identical source context stays idempotent. If the publisher has changed the metadata for a video that already has a stored review request, the pilot refuses to silently reuse that old review. The eight-table frozen schema keeps one video record per YouTube ID, so a separate reviewed snapshot after publisher edits would require explicit versioned schema design; the current pilot transparently refuses the changed-context review rather than passing the original review off as new. Reviewed findings remain subject to the existing exact-context lookup and approval restrictions. Automated tests cover changed contexts; CI results must be checked separately.
+
+
+**F-07/F-09 verification:** [GitHub Actions run 44914590673](https://github.com/towhidReshad/veriloop/actions/runs/44914590673) completed successfully with **244/244 tests** and Python compileall. Hosted live metadata-change acceptance remains unverified.
