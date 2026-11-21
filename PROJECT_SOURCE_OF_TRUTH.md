@@ -1120,7 +1120,10 @@ Safety: Reject arbitrary hosts, playlists, invalid IDs and nested
 Surface: Public video input help updated; normal evidence result
   flow remains unchanged. This is F-01 maintenance, not new scope.
 Tests: Deterministic allowed/disallowed input tests added.
-CI: Pending verification at time of implementation.
+CI: GitHub Actions run 44907528142 (commit d1a7b14) PASSED
+  222/222 pytest tests and Python compileall. Live YouTube availability
+  remains dependent on the official API; no professor-selected video
+  was falsely claimed as verified.
 ```
 
 ---

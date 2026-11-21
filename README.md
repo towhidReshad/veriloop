@@ -165,3 +165,6 @@ The public Streamlit app is a **general-user product**. It must not expose profe
 ## F-01 URL compatibility maintenance (2026-11-21)
 
 Public Verify News accepts validated YouTube watch (`youtube.com/watch?v=`), Shorts (`/shorts/ID`), live (`/live/ID`), embed (`/embed/ID` and `youtube-nocookie.com/embed/ID`), legacy `/v/ID`, `music.youtube.com/watch?v=`, and short `youtu.be/ID` links. All extract an exact 11-character video identifier and use the **same official YouTube Data API**. Allowing a URL structure does not guarantee a video is public, contains factual claims, or has matching published fact-checks. Arbitrary hosts, channel/playlist pages, nested paths, and malformed IDs are rejected.
+
+
+**URL compatibility verification:** [GitHub Actions run 44907528142](https://github.com/towhidReshad/veriloop/actions/runs/44907528142) passed Python compileall and **222/222 tests**. Valid URL parsing does not imply live public-video availability or fact-check coverage.
