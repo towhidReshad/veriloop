@@ -121,3 +121,19 @@ def test_reviewer_login_wrong_password_cannot_open_workspace(
     assert not at.exception
     assert "Incorrect reviewer password" in _text(at.error)
     assert not at.selectbox
+
+
+def test_valid_reviewer_password_unlocks_empty_queue(isolated_cloud, monkeypatch):
+    """Known test-only password exposes the restricted queue, no approvals made."""
+    password = "Test-only reviewer passphrase 2026"
+    monkeypatch.setenv("REVIEWER_PASSWORD", password)
+    at = AppTest.from_file(
+        str(ROOT / "pages" / "3_Review_Dashboard.py"), default_timeout=20
+    ).run()
+    assert not at.exception
+    at.text_input[0].set_value(password)
+    at.button[0].click().run()
+    assert not at.exception
+    assert at.session_state["vl_review_authenticated"] is True
+    assert "No requests have been submitted yet" in _text(at.info)
+    assert any(button.label == "Lock workspace" for button in at.button)
