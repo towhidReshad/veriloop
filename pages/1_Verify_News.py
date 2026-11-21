@@ -146,7 +146,6 @@ if result:
                 st.link_button(
                     "See the original evidence for this reviewed finding",
                     previous_review["source_url"],
-                    key=f"previously_reviewed_{video.video_id}_{index}",
                 )
                 st.caption(
                     "This historical finding is only reused for identical claim text, "

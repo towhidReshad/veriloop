@@ -130,3 +130,6 @@ Code added and regression tests written; full CI and hosted verification are pen
 
 
 **First combined CI:** [197/197 tests passed](https://github.com/towhidReshad/veriloop/actions/runs/44901926635); an additional independent-drafter/editor check awaits the final CI run. Separate editor identifiers are not strong production authentication, so public publication remains disabled.
+
+
+**Consolidated F-10/F-11 verification:** GitHub Actions [run 44902043884](https://github.com/towhidReshad/veriloop/actions/runs/44902043884) passed 198/198 tests and compileall. Final UI compatibility patch is included in the next commit and must pass CI separately. Hosted usage and manual reviewer decisions have not been verified by these tests.

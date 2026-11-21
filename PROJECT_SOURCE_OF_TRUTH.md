@@ -607,7 +607,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-21  
-**Overall status:** Live owner screenshots demonstrate BBC/Seeker metadata verification, topic-aware ranking and WHO negation/source-classification safeguards. Existing F-07 code passed 187/187 offline CI cases (run 44901360529), but real human-approved reuse has not been demonstrated. F-10 independent correction approval/manual export and F-11 observational dashboard implemented; first combined build passed GitHub Actions 197/197 tests (run 44901926635). An additional independent-drafter/editor separation guard is being validated in final CI; hosted verification still pending. The observational sample has zero rows, and no survey/participant or prevalence results may be inferred. Google API real positive match, permanent review storage, complete A/B/C demonstration remain unverified.
+**Overall status:** Live owner screenshots demonstrate BBC/Seeker metadata verification, topic-aware ranking and WHO negation/source-classification safeguards. Existing F-07 code passed 187/187 offline CI cases (run 44901360529), but real human-approved reuse has not been demonstrated. F-10 independent correction approval/manual export and F-11 observational dashboard implemented; first combined build passed GitHub Actions 197/197 tests (run 44901926635). Independent-drafter/editor guard passed GitHub Actions 198/198 tests and compileall on commit `32de5dc` (run 44902043884). A final Streamlit link-button compatibility fix and static regression are staged; its CI remains pending, and hosted UI is not yet verified. The observational sample has zero rows, and no survey/participant or prevalence results may be inferred. Google API real positive match, permanent review storage, complete A/B/C demonstration remain unverified.
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
@@ -1002,7 +1002,8 @@ F-11: Separate research/news_dataset.csv (currently header only) is parsed
   clearly labeled technical status document, not invented pilot findings.
 Tests: F-10/F-11 regression files; first combined GitHub Actions
   run 44901926635 passed 197/197 pytest tests plus Python compileall.
-  Further independent editor guard and test await final CI.
+  The independent-editor rule passed run 44902043884 with 198/198
+  pytest tests plus Python compileall. Final UI compatibility fix is staged.
 No claim of durable cloud storage, automatic editorial posting, real
   positive Google API match, representative misinformation prevalence,
   or actual human-edited/approved correction is made.
@@ -1017,7 +1018,7 @@ Independent editorial approval must be performed by an editor identifier
 different from the correction draft author (case-insensitive comparison).
 Same-person approval is rejected before any export. This is a pilot
 accountability guard rather than production identity verification.
-The final CI run for this guard is pending.
+The independent-editor rule passed 198/198 tests on CI run 44902043884. A Streamlit link-button compatibility correction is included for the final release.
 ```
 
 ---
