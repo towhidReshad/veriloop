@@ -77,3 +77,10 @@ Regression: **17/17 offline mocked API/fallback tests passed** (missing key, aut
 ## Unseen-video no-match regression (2026-11-21)
 
 Owner screenshot confirms an unseen BBC World Service interview fetched successfully, but neither the 13 curated references nor Google's indexed fact-check search returned related records for the metadata statements. This is a valid uncertainty outcome, not rejection of the link or a verdict about the video. Fixed a false-positive question title carrying a programme suffix after `?`, and clarified the all-no-match status in the general-user UI. Regression tests were added; the updated hosted UI still requires verification. Google's claim-review index is not an internet-wide evidence crawler, and dialogue/interviews may contain opinions rather than independently checkable propositions.
+
+
+## WHO reference and negation safeguards (2026-11-21)
+
+Owner supplied a live Seeker video screenshot with two WHO-topic local matches. EV-010 stores the **checked reference proposition** `Childhood vaccines cause autism.` and the **WHO reference classification** `CONTRADICTED`; this does not mean that the video's opposite wording has been contradicted. The UI now shows the reference's own classification alongside its checked proposition, and explicitly flags a simple negation mismatch as a **related topic, not confirmed support**. When such a mismatch exists the optional external fact-check search also runs instead of treating the local topic match as a sufficient comparison. This is a conservative lexical warning, not reliable semantic entailment or a verified verdict. Human review remains necessary.
+
+Targeted regression tests added for vaccine/autism wording, no automatic verdict, and external-search fall-through. New hosted UI not yet confirmed and full project test suite not rerun as part of this patch.

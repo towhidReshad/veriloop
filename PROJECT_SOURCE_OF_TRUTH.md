@@ -607,11 +607,11 @@ These are **planned commands** until actual code is written and tested. Do not c
 ## 15. Live Project Status — Update This Section After Every Work Session
 
 **Status date:** 2026-11-21  
-**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOT CONFIRMS UNSEEN BBC VIDEO METADATA PROCESSED AND LIVE FACT-CHECK SEARCH RETURNS NO RELATED RESULTS (NOT A VERDICT). DAY 4 REQUEST/REVIEWER LOGIN VERIFIED ONLINE. Targeted correction for question-title false positive prepared, hosted recheck pending. Approved human decisions and durable storage remain unverified.  
+**Overall status:** DAY 3 AND PUBLIC UI VERIFIED ONLINE; OWNER SCREENSHOTS CONFIRM BBC UNSEEN VIDEO QUESTION-TITLE FIX AND LIVE FACT-CHECK NO-MATCH, AND A SECOND SEEEKER VIDEO WITH TWO TOPICAL WHO REFERENCE MATCHES. SAFETY FIX STAGED FOR EXPLICIT SOURCE CLASSIFICATION AND NEGATION CONFLICT; live recheck pending. DAY 4 REVIEW REQUEST/LOGIN VERIFIED; HUMAN APPROVAL AND DURABLE STORAGE NOT YET VERIFIED.  
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Recheck BBC video after question-title regression fix; then test a separately documented, indexed fact-check claim with actual live search evidence. Continue original P0 approved-review/correction workflow and durable storage before professor A/B/C demo.
+**Next immediate milestone:** Recheck Seeker vaccines/autism video after negation and source-classification UI fix; separately test a live fact-check positive retrieval. Continue original P0 reviewer/correction workflow and persistent storage safeguards.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -855,6 +855,30 @@ Scope/safety: No new truth score, API capability, or automatic accusation.
 Validation: owner screenshot confirms earlier version no-result path and
   hosted API integration behavior; this new regression fix awaits hosted
   recheck. No claim that independent fact-check match has yet been seen live.
+```
+
+---
+
+### Unseen-video WHO reference polarity safeguard — 2026-11-21
+
+```text
+Owner screenshot: A second previously unseen video (Seeker: Vaccines Do
+  NOT Cause Autism! What Does?) processed successfully, 5 candidate
+  metadata statements, 2 topical WHO matches, 3 no-source outcomes.
+Finding: EV-010 stores checked proposition "Childhood vaccines cause
+  autism." with external source classification CONTRADICTED. The Seeker
+  video metadata says vaccines do not cause autism. These are not
+  equivalent claims; lexical retrieval must not be mistaken for support.
+Fix: Keep source provenance visible with explicit original publisher
+  reference classification; flag polarity/negation differences as
+  related topic with unconfirmed support; do not skip optional live
+  fact-check lookup solely because a conflicting local reference matched.
+  Added targeted regression tests for these display/retrieval safeguards.
+Boundaries: No automatic video/channel verdict, no transfer of WHO
+  classification into review approval, no edited seed conclusions,
+  no claim of positive live fact-check retrieval.
+Validation: Owner's screenshot confirms old topical retrieval behaviour;
+  the new patch awaits hosted screenshot and full offline regression.
 ```
 
 ---

@@ -14,7 +14,7 @@ import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from .matching import compare_context
+from .matching import compare_context, has_polarity_conflict
 
 API_ENDPOINT = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
 MAX_SEARCHES_PER_VIDEO = 5
@@ -159,7 +159,13 @@ def run_live_fallback(assessments: list, api_key: str | None, *, lookup=lookup_f
     outcomes: dict[int, LiveLookup] = {}
     pending: list[tuple[int, str]] = []
     for index, assessment in enumerate(assessments):
-        if assessment.matches:
+        # A same-topic local reference with opposite negation is NOT enough
+        # to suppress live search. Treat it as a topical lead, not proof.
+        if assessment.matches and not any(
+            isinstance(getattr(match, "reference_claim", None), str)
+            and has_polarity_conflict(assessment.candidate.text, match.reference_claim)
+            for match in assessment.matches
+        ):
             continue
         if not api_key:
             outcomes[index] = LiveLookup("UNAVAILABLE", note="Live fact-check API key is not configured.")

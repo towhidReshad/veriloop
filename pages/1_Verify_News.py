@@ -7,7 +7,7 @@ from veriloop.config import get_youtube_api_key, get_factcheck_api_key
 from veriloop.factcheck import run_live_fallback
 from veriloop.db import connect_db, init_db, list_evidence, seed_evidence
 from veriloop.matching import assess_metadata
-from veriloop.presentation import friendly_explanation, friendly_status, summarize
+from veriloop.presentation import friendly_explanation, friendly_status, summarize, has_conflicting_wording
 from veriloop.review import ReviewPolicyError, request_review
 from veriloop.ui import apply_theme, hero
 from veriloop.youtube import (
@@ -117,6 +117,13 @@ if result:
             st.caption(f"STATEMENT {index:02d} · From the published {assessment.candidate.source_field}")
             st.write(assessment.candidate.text)
             live = online.get(index - 1)
+            polarity_conflict = has_conflicting_wording(assessment)
+            if polarity_conflict:
+                st.warning(
+                    "**Related topic — different wording or negation.** "
+                    "The reference is about a similar topic, but it does not necessarily "
+                    "make the same assertion as this video. Check what the publisher concluded."
+                )
             if live and live.status == "FOUND":
                 st.markdown("**Related published fact-checks found**")
                 st.write(
@@ -128,14 +135,28 @@ if result:
                 st.markdown("**Evidence check incomplete**")
                 st.write("Local reference matching was inconclusive and the live lookup could not finish.")
             else:
-                st.markdown(f"**{friendly_status(assessment.preliminary_state)}**")
+                st.markdown(
+                    "**Related topic, not confirmed support**"
+                    if polarity_conflict
+                    else f"**{friendly_status(assessment.preliminary_state)}**"
+                )
                 st.write(friendly_explanation(assessment))
             if assessment.matches:
-                st.caption("RELATED PUBLISHED SOURCES · NOT A VERIFIED CLAIM VERDICT")
+                st.caption("TOPICALLY RELATED REFERENCE · NOT A VERIFIED CLAIM VERDICT")
                 for match in assessment.matches:
                     st.write("**" + match.source_name + "**")
-                    st.write(match.reference_claim)
-                    st.link_button("Read the original source", match.source_url)
+                    st.write("**Reference claim being checked:**", match.reference_claim)
+                    st.write(
+                        "**The source classifies that reference claim as:**",
+                        match.external_reference_classification,
+                    )
+                    st.caption(
+                        "CONTRADICTED means the source rejects its *reference claim*, "
+                        "not that this video was found false."
+                        if match.external_reference_classification == "CONTRADICTED"
+                        else "This classification belongs to the original source's reference claim, not the video."
+                    )
+                    st.link_button("Read original publication and its conclusion", match.source_url)
                     st.caption("Source published: " + (match.published_date or "Date not confirmed"))
             else:
                 st.caption("No closely related record was found in the current curated library.")

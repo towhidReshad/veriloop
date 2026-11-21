@@ -26,6 +26,16 @@ def summarize(assessments: Sequence) -> ResultSummary:
     )
 
 
+def has_conflicting_wording(assessment) -> bool:
+    """Surface differences in negation even when references share keywords."""
+    from .matching import has_polarity_conflict
+
+    return any(
+        has_polarity_conflict(assessment.candidate.text, match.reference_claim)
+        for match in assessment.matches
+    )
+
+
 def friendly_status(state: str) -> str:
     return {
         "POSSIBLE_EVIDENCE_MATCH": "Related sources found",
@@ -40,6 +50,13 @@ def friendly_explanation(assessment) -> str:
     state = assessment.preliminary_state
     stance = assessment.candidate.stance
     if state == "POSSIBLE_EVIDENCE_MATCH":
+        if has_conflicting_wording(assessment):
+            return (
+                "A stored source discusses the same topic, but negation differs "
+                "between the reference claim and the video statement. This is "
+                "not supporting evidence or a verdict; examine what the "
+                "publisher actually concluded."
+            )
         if stance in ("DEBUNKS", "QUOTES", "UNCLEAR"):
             return (
                 "Published sources discuss a similar claim, but this video may "

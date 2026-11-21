@@ -56,6 +56,14 @@ def _place_groups(text: str) -> set[str]:
     return found
 
 
+def has_polarity_conflict(candidate: str, reference: str) -> bool:
+    """Conservative lexical cue: one sentence negates a claim, the other does not.
+
+    This is an ambiguity warning, not a full natural-language contradiction test.
+    """
+    return bool(_NEGATION.search(candidate)) != bool(_NEGATION.search(reference))
+
+
 def compare_context(candidate: str, reference: str) -> tuple[str, str]:
     """Exclude only explicit conflicting years/regions; otherwise abstain.
 
@@ -77,8 +85,7 @@ def compare_context(candidate: str, reference: str) -> tuple[str, str]:
         notes.append("Year cue overlaps")
     if a_region and b_region and a_region.intersection(b_region):
         notes.append("Geographic cue overlaps")
-    neg_a, neg_b = bool(_NEGATION.search(candidate)), bool(_NEGATION.search(reference))
-    if neg_a != neg_b:
+    if has_polarity_conflict(candidate, reference):
         return "UNCONFIRMED", "Different negation/polarity wording; never transfer external reference verdict automatically."
     if notes:
         return "ALIGNED", "; ".join(notes) + ". Exact event/stance still requires review."
