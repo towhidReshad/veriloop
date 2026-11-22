@@ -12,6 +12,8 @@ from threading import Lock
 from time import monotonic
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -138,3 +140,18 @@ def verify(body: VerificationInput, request: Request):
             "Review decisions and corrections require the restricted human-review workspace.",
         ],
     }
+
+# Optional single-origin release: after `cd web && npm run build`, the Python
+# server can serve the generated React site and /api endpoints on one domain.
+DIST = Path(__file__).resolve().parent / "web" / "dist"
+if DIST.is_dir() and (DIST / "index.html").is_file():
+    assets = DIST / "assets"
+    if assets.is_dir():
+        app.mount("/assets", StaticFiles(directory=assets), name="web-assets")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    def react_spa(full_path: str):
+        requested = (DIST / full_path).resolve()
+        if requested.is_file() and requested.is_relative_to(DIST.resolve()):
+            return FileResponse(requested)
+        return FileResponse(DIST / "index.html")
