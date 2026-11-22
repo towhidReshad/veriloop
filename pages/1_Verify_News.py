@@ -19,7 +19,7 @@ st.set_page_config(page_title="Check a video | VeriLoop", page_icon="🔎", layo
 apply_theme()
 hero(
     "VeriLoop · News evidence explorer",
-    "Understand the claim. Explore the evidence.",
+    "Check a video. Understand what we found.",
     "Paste a public YouTube news link. We will look for factual statements in its published "
     "title and description and show any related sources we can find.",
 )
@@ -29,7 +29,7 @@ with st.form("metadata_lookup"):
         "YouTube video link", placeholder="https://www.youtube.com/watch?v=...",
         help="Supports YouTube watch, Shorts, live, youtu.be and embed links for publicly accessible videos. We do not inspect narration, frames or audio.",
     )
-    submitted = st.form_submit_button("Find related evidence", type="primary", use_container_width=True)
+    submitted = st.form_submit_button("Check this video", type="primary", use_container_width=True)
 st.caption("No account required for a preliminary check · Results are not automatic true/false verdicts")
 
 if submitted:
@@ -91,45 +91,73 @@ if result:
             st.text(video.description or "(No description provided)")
             st.caption("Title, description and thumbnail are supplied by YouTube; they have not been independently verified.")
 
-    st.markdown('''<div class="vl-section-label">02 / Preliminary findings</div>''', unsafe_allow_html=True)
+    st.markdown('''<div class="vl-section-label">02 / Your result at a glance</div>''', unsafe_allow_html=True)
     summary = summarize(analyses)
     statements_with_sources = sum(
         1 for i, item in enumerate(analyses)
         if item.matches or (online.get(i) and online[i].status == "FOUND")
     )
     without_sources = summary.candidates - statements_with_sources
-    a, b, c = st.columns(3)
-    a.metric("Statements examined", summary.candidates)
-    b.metric("With related sources", statements_with_sources)
-    c.metric("Without source match", without_sources)
-    st.info(
-        "VeriLoop checks up to five metadata statements chosen for topic relevance "
-        "to this video's title and checkable details, not their likelihood of being true. "
-        "It searches a small curated reference library first, then Google's index "
-        "of published fact-checks when local context is uncertain or unmatched. "
-        "These counts measure **retrieval coverage only**, not accuracy or video truth."
-    )
-    if summary.candidates and without_sources == summary.candidates:
-        st.info(
-            "**Your video was processed successfully.** No sufficiently related published "
-            "fact-check was identified for these candidate statements. Discussions, "
-            "interviews and emerging topics may have no indexed fact-check articles. "
-            "This is **not** a failed video lookup and **not** evidence that the statements are false."
-        )
-    if any(x.status in ("ERROR", "UNAVAILABLE") for x in online.values()):
-        st.warning("Some live fact-check searches could not run. Those statements remain unresolved; this is not evidence that they are false.")
+    # Simple, honest retrieval summary. Do not infer truth from a source match.
     if not analyses:
+        st.warning("No clear checkable statement was found in the published English metadata. We did not inspect spoken audio or video footage.")
+    else:
+        st.markdown("### Is this video misleading?")
         st.warning(
-            "We couldn't identify a clear factual statement in the available English title or description. "
-            "That doesn't mean the video is accurate or claim-free: its audio and footage have not been checked."
+            "**Not determined yet.** This is a preliminary search, not a verified "
+            "judgment about the entire video. We must check each factual claim and "
+            "whether the uploader asserts, quotes or debunks it."
         )
+        a, b, d = st.columns(3)
+        a.metric("Statements found", summary.candidates)
+        b.metric("With related sources", statements_with_sources)
+        d.metric("Without a match", without_sources)
+        if without_sources == summary.candidates:
+            st.info(
+                "**Why no evidence?** We processed the video successfully, but none "
+                "of its candidate statements closely matched sources in our small "
+                "reference library or the available published fact-check search. "
+                "Interviews and newer topics may not have indexed checks. "
+                "**No match does not mean false.**"
+            )
+        else:
+            st.info(
+                "**What did we find?** Related publications are shown below, with "
+                "their original links and the specific claims they checked. "
+                "A topic match alone is neither support nor contradiction."
+            )
+        if any(x.status in ("ERROR", "UNAVAILABLE") for x in online.values()):
+            st.caption("Some online fact-check searches were unavailable. Their results remain unresolved.")
+
+    with st.expander("What sources are checked? What is not checked?"):
+        st.write(
+            "**Sources:** A small library of 13 curated external references is "
+            "searched first. Where configured and needed, VeriLoop also queries "
+            "Google's index of published fact-checks. Neither covers all news."
+        )
+        st.write(
+            "**Video content:** The published title and description only, not "
+            "the video's speech, audio or footage. We compare candidate statements "
+            "and obvious date/location cues. Similarity is not a truth score."
+        )
+
+    st.markdown("### Evidence for each statement")
+    st.caption("Each card answers: what was found, what source was compared, and why we cannot yet decide.")
 
     for index, assessment in enumerate(analyses, 1):
         with st.container(border=True):
-            st.caption(f"STATEMENT {index:02d} · From the published {assessment.candidate.source_field}")
-            st.write(assessment.candidate.text)
+            st.caption(f"STATEMENT {index:02d} · Published {assessment.candidate.source_field}")
+            st.markdown("#### " + assessment.candidate.text)
             live = online.get(index - 1)
             previous_review = reviewed.get(index - 1)
+            has_source = bool(assessment.matches or (live and live.status == "FOUND"))
+            if previous_review:
+                st.success("**Previously human-reviewed claim.** Read the specific verdict and original evidence below.")
+            elif has_source:
+                st.info("**Related source found — not yet verified.** The publication may support, contradict or discuss a different context; compare its actual claim below.")
+            else:
+                st.warning("**Not enough evidence to decide.** No sufficiently related source was found for this statement.")
+            st.caption("**Is this misleading?** Not determined from this preliminary search.")
             if previous_review:
                 st.success(
                     "**Previously reviewed exact context** — This specific claim was "
@@ -179,12 +207,12 @@ if result:
                 )
                 st.write(friendly_explanation(assessment))
             if assessment.matches:
-                st.caption("TOPICALLY RELATED REFERENCE · NOT A VERIFIED CLAIM VERDICT")
+                st.caption("ORIGINAL SOURCE COMPARISON · NOT A VIDEO VERDICT")
                 for match in assessment.matches:
                     st.write("**" + match.source_name + "**")
                     st.write("**Reference claim being checked:**", match.reference_claim)
                     st.write(
-                        "**The source classifies that reference claim as:**",
+                        "**Source conclusion about its own checked claim:**",
                         match.external_reference_classification,
                     )
                     st.caption(
@@ -196,13 +224,14 @@ if result:
                     st.link_button("Read original publication and its conclusion", match.source_url)
                     st.caption("Source published: " + (match.published_date or "Date not confirmed"))
             else:
-                st.caption("No closely related record was found in the current curated library.")
+                st.caption("Local source library: no sufficiently related record. This does not make the statement false.")
 
             if live and live.status == "FOUND":
-                st.caption("LIVE FACT-CHECK SEARCH · GOOGLE'S INDEX OF PUBLISHED FACT-CHECKS")
+                st.caption("RELATED PUBLISHED FACT-CHECKS · ORIGINAL LINKS")
                 for check in live.articles:
                     st.write("**" + check.publisher + "**")
-                    st.write("Claim examined by publisher:", check.checked_claim)
+                    st.write("Claim checked by this publisher:", check.checked_claim)
+                    st.write("Publisher rating of that claim (not the video):", check.publisher_rating or "Not provided")
                     if check.article_title:
                         st.caption(check.article_title)
                     st.link_button("Read published fact-check", check.article_url)
@@ -269,7 +298,7 @@ if result:
                         "Free cloud storage can reset, so this is not permanent archival storage."
                     )
 
-    st.markdown('''<div class="vl-section-label">03 / What this means</div>''', unsafe_allow_html=True)
+    st.markdown('''<div class="vl-section-label">04 / What this means</div>''', unsafe_allow_html=True)
     st.warning(
         "VeriLoop has **not** judged this whole video or its channel true, false or misleading. "
         "A related source may concern a quote, a correction or a different event. "
