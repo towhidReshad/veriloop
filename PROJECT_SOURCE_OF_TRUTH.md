@@ -606,7 +606,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 
 ## 15. Live Project Status — Update This Section After Every Work Session
 
-**2026-11-22 hosted-health probe planned and staged:** This assistant's own container cannot resolve the public Streamlit site (DNS/network failure), which is not proof the app is down. A public, no-secret, bounded read-only Streamlit health endpoint probe is now included in CI as an informational step. This reports HEALTHY_ENDPOINT only on HTTP 200 body 'ok'; other statuses remain NOT_CONFIRMED/UNREACHABLE. A healthy endpoint alone does not verify any application feature or reviewer workflow. CI result for this change was pending when staged.
+**2026-11-22 hosted-health probe planned and staged:** This assistant's own container cannot resolve the public Streamlit site (DNS/network failure), which is not proof the app is down. A public, no-secret, bounded read-only Streamlit health endpoint probe is now included in CI as an informational step. This reports HEALTHY_ENDPOINT only on HTTP 200 body 'ok'; other statuses remain NOT_CONFIRMED/UNREACHABLE. A healthy endpoint alone does not verify any application feature or reviewer workflow. GitHub Actions run 45011309492 (commit 4a3dcb0) passed 272/272 pytest and compileall; its hosted health probe returned HTTP 303, classified NOT_CONFIRMED, not healthy.
 
 
 **2026-11-22 F-09 public review status fix staged:** On repeated human-review requests, the public confirmation now reads the stored workflow status (PENDING, APPROVED, REJECTED, or NEEDS_MORE_EVIDENCE), rather than always displaying PENDING. No reviewer credentials or private notes are exposed; this is workflow status, not a claim verdict. Added regression tests for idempotent re-requests at all final statuses. CI: first run 45010691591 failed due to a syntax typo in the new test-only assertion (not the app); fixed in 796783e. GitHub Actions run 45010806326 PASSED 267/267 pytest and compileall. No actual hosted human approval performed.
@@ -1346,7 +1346,10 @@ Tests: Probe unit cases for valid health, HTML shell, redirect, errors,
 Boundary: No browser-based review, real API result, human approval,
   backup/restore, data durability or functional app acceptance
   is claimed from endpoint health. No academic UI or extra paid service.
-CI status: Pending at staging.
+CI status: GitHub Actions run 45011309492 PASSED 272/272
+  pytest + Python compileall. Public health result: NOT_CONFIRMED,
+  HTTP 303 redirect; no real site availability or functionality
+  confirmation inferred.
 ```
 
 ---
