@@ -3,15 +3,16 @@ import streamlit as st
 
 from veriloop.db import connect_db, init_db, seed_evidence
 from veriloop.source_history import get_reviewed_history
-from veriloop.ui import apply_theme, hero
+from veriloop.ui import apply_theme, site_navigation, page_intro
 
-st.set_page_config(page_title="Reviewed claim history | VeriLoop", page_icon="📚", layout="centered")
+st.set_page_config(page_title="Reviewed claim history | VeriLoop", page_icon="📚", layout="wide", initial_sidebar_state="collapsed")
 apply_theme()
-hero(
-    "VeriLoop · Reviewed claims",
-    "See what a human reviewer actually checked.",
-    "Only claim-specific decisions approved by a reviewer, with published evidence, "
-    "can appear here. An empty history is not a rating of a channel.",
+site_navigation()
+page_intro(
+    "VeriLoop · Reviewed evidence",
+    "Reviewed claim history",
+    "Explore only claim-specific evidence decisions approved by a human reviewer. "
+    "An empty history is not a rating or judgment of any channel.",
 )
 
 stored = st.session_state.get("vl_current_result")
