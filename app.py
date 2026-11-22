@@ -51,7 +51,7 @@ h1,h2,h3 {font-family:'Manrope','DM Sans',sans-serif;letter-spacing:-.045em;colo
 .vl-hero h1 em{font-style:normal;color:#37e3c9;}
 .vl-hero p{font-size:1.07rem;line-height:1.75;color:#def5f5;max-width:640px;margin:0 0 26px;}
 .vl-hero-cta{display:inline-flex;gap:10px;align-items:center;color:#053d4a;background:#37e6ca;
- font-weight:800;border-radius:12px;padding:13px 20px;}
+ font-weight:800;border-radius:12px;padding:13px 20px;text-decoration:none!important;}
 /* The illustration is entirely decorative, not fake analysis output. */
 .vl-showcase{position:relative;padding:23px 4px 23px 28px;}
 .vl-laptop{border:10px solid #142937;background:#e8f3f7;border-radius:18px 18px 7px 7px;
@@ -138,7 +138,7 @@ st.markdown("""
     <h1>Check YouTube News Videos.<br>Find Evidence. <em>Stay Informed.</em></h1>
     <p>Explore claims in a video's published title and description, compare related
     original sources, and understand what remains uncertain. Evidence first, not invented verdicts.</p>
-    <div class="vl-hero-cta">▶ &nbsp; Start with a YouTube link ↓</div>
+    <a class="vl-hero-cta" href="#try-video">▶ &nbsp; Start with a YouTube link ↓</a>
   </div>
   <div class="vl-showcase" aria-label="Illustrative interface preview; no real video verdicts">
     <div class="vl-float a">▤ &nbsp; Extract key claims</div>
@@ -170,7 +170,7 @@ st.markdown("""
   <article class="vl-step"><span class="vl-step-index">2</span><b>Extract Candidate Claims</b><p>Find up to five statements from the published title and description.</p></article>
   <article class="vl-step"><span class="vl-step-index">3</span><b>Compare Original Sources</b><p>Review related references and understand what is still unverified.</p></article>
 </section>
-<div class="vl-try-wrap"><h3>Try It Yourself</h3>
+<div class="vl-try-wrap" id="try-video"><h3>Try It Yourself</h3>
 <p>Paste a public YouTube link below to start your preliminary evidence check.</p></div>
 """, unsafe_allow_html=True)
 
