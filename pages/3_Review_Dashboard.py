@@ -10,6 +10,7 @@ import secrets
 import streamlit as st
 
 from veriloop.db import connect_db, init_db, seed_evidence
+from veriloop.ui import apply_theme, site_navigation, page_intro
 from veriloop.archive import (
     ArchiveError, create_encrypted_backup, restore_encrypted_backup,
 )
@@ -20,9 +21,15 @@ from veriloop.corrections import (
     record_export, list_corrections,
 )
 
-st.set_page_config(page_title="Reviewer Workspace | VeriLoop", page_icon="🔒")
-st.title("Restricted human-review workspace")
-st.caption("Review access is limited to an owner-configured password. No decision is automatic.")
+st.set_page_config(page_title="Reviewer Workspace | VeriLoop", page_icon="🔒", layout="wide", initial_sidebar_state="collapsed")
+apply_theme()
+site_navigation()
+page_intro(
+    "Private · Authorized reviewers only",
+    "Human-review workspace",
+    "Restricted editorial decisions and encrypted owner backups. "
+    "Reviews never approve claims automatically.",
+)
 
 try:
     password = st.secrets.get("REVIEWER_PASSWORD", os.getenv("REVIEWER_PASSWORD", ""))
