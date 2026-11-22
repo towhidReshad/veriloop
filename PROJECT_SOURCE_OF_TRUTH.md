@@ -606,7 +606,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 
 ## 15. Live Project Status — Update This Section After Every Work Session
 
-**2026-11-22 F-09 public review status fix staged:** On repeated human-review requests, the public confirmation now reads the stored workflow status (PENDING, APPROVED, REJECTED, or NEEDS_MORE_EVIDENCE), rather than always displaying PENDING. No reviewer credentials or private notes are exposed; this is workflow status, not a claim verdict. Added regression tests for idempotent re-requests at all final statuses. CI is pending at the time of this change; no actual hosted human approval has been performed.
+**2026-11-22 F-09 public review status fix staged:** On repeated human-review requests, the public confirmation now reads the stored workflow status (PENDING, APPROVED, REJECTED, or NEEDS_MORE_EVIDENCE), rather than always displaying PENDING. No reviewer credentials or private notes are exposed; this is workflow status, not a claim verdict. Added regression tests for idempotent re-requests at all final statuses. CI: first run 45010691591 failed due to a syntax typo in the new test-only assertion (not the app); fixed in 796783e. GitHub Actions run 45010806326 PASSED 267/267 pytest and compileall. No actual hosted human approval performed.
 
 
 **2026-11-22 public channel audit verification:** Existing F-08 approved-only history gate hardened to enforce saved reviewer identity, substantial rationale, timestamp agreement and cited HTTPS evidence provenance. GitHub Actions run `44932958938` (commit `b2439d9`) passed **262/262 tests** + Python compileall. No actual hosted human review or correction publication has been performed in this session.
@@ -1316,7 +1316,9 @@ Tests: Prior PENDING, all three completed states, missing review ID,
   and public message regression. Zero schema/API changes.
 Security: No private reviewer identities/notes shown, no automatic
   approval, unchanged frozen F-09 scope and public UI layout.
-CI: pending when code staged. Hosted human acceptance remains open.
+CI: Initial run 45010691591 failed test-file syntax; fixed in
+  commit 796783e. Run 45010806326 PASSED 267/267 pytest tests
+  and Python compileall. Hosted human acceptance remains open.
 ```
 
 ---

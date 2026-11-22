@@ -218,3 +218,6 @@ Public previously-reviewed channel history now checks the saved claim decision a
 ## F-09 Review-request status accuracy (2026-11-22)
 
 Repeat requests for the same video/claim/context are idempotent. Previously the public message always said `PENDING`, even after a reviewer marked the request `APPROVED`, `REJECTED`, or `NEEDS_MORE_EVIDENCE`. The public page now reads and displays the **actual stored workflow status**, without exposing private reviewer details and without treating it as a new claim verdict. Source-level regression tests cover the pending and completed statuses. Hosted end-to-end review has not been demonstrated; check CI for code-level validation.
+
+
+**Verified review-status fix:** [GitHub Actions run 45010806326](https://github.com/towhidReshad/veriloop/actions/runs/45010806326) passed **267/267 tests** and Python compileall on commit `796783e`. An initial run failed because of a test-file syntax typo and was corrected; actual hosted review acceptance is still pending.
