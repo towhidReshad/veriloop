@@ -88,7 +88,13 @@ if result:
         with st.expander("Original YouTube title, description and IDs"):
             st.write("Video ID:", video.video_id)
             st.write("Channel ID:", video.channel_id or "Unknown")
-            st.write("Original description:", video.description or "No description provided")
+            st.text_area(
+                "Original description (scroll to read)",
+                value=video.description or "No description provided",
+                height=190,
+                disabled=True,
+                key=f"vl_video_description_{video.video_id}",
+            )
             st.caption("These are YouTube metadata, not verified video/audio or imagery.")
 
     sources_count = sum(
@@ -154,15 +160,16 @@ if result:
                 )
                 icon = "✓" if prior else "◉" if found else "?"
                 selected = i == st.session_state["vl_selected_claim"]
+                label = f"{'▸ ' if selected else ''}{i + 1}. {assessment.candidate.text}"
                 if st.button(
-                    f"{'▸ ' if selected else ''}{i + 1}. {assessment.candidate.text}\n\n"
-                    f"{icon}  {status}",
+                    label,
                     key=f"vl_claim_select_{video.video_id}_{i}",
                     use_container_width=True,
                     type="primary" if selected else "secondary",
                 ):
                     st.session_state["vl_selected_claim"] = i
                     st.rerun()
+                st.caption(f"{icon} {status}")
         with details_col:
             i = st.session_state["vl_selected_claim"]
             assessment = analyses[i]
