@@ -56,7 +56,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-nav_left, nav_a, nav_b, nav_c = st.columns([3.4, 1, 1.2, 1.1], vertical_alignment="center")
+nav_left, nav_a, nav_b, nav_c = st.columns([3.4, 1, 1.2, 1.1])
 with nav_left:
     st.markdown("### 🛡️ VeriLoop")
     st.caption("News Evidence Explorer")
