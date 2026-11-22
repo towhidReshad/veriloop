@@ -93,6 +93,28 @@ _STYLES = """
     background: #086a78; border-color: #086a78;
     white-space: pre-line;
   }
+  /* Wrap complete claim labels, including long words; avoid ellipsis and clipping. */
+  .stButton > button,
+  .stButton > button[kind="primary"] {
+    height: auto; min-height: 54px; padding: 12px 15px;
+  }
+  .stButton > button p {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    text-overflow: clip;
+    text-align: left;
+    line-height: 1.45;
+    margin: 0;
+  }
+  [data-testid="stTextArea"] textarea {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.6;
+  }
+  .stMarkdown p, .stCaption, [data-testid="stCaptionContainer"] {
+    overflow-wrap: anywhere;
+  }
   @media (max-width: 650px) {
     .block-container {padding-top: .75rem;}
     .vl-hero {padding: 24px 22px; border-radius: 17px;}
