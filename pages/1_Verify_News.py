@@ -8,7 +8,7 @@ from veriloop.factcheck import run_live_fallback, focused_search_query
 from veriloop.db import connect_db, init_db, list_evidence, seed_evidence
 from veriloop.matching import assess_metadata
 from veriloop.presentation import friendly_explanation, friendly_status, summarize, has_conflicting_wording
-from veriloop.review import ReviewPolicyError, request_review, find_reviewed_exact_context
+from veriloop.review import ReviewPolicyError, request_review, find_reviewed_exact_context, get_review_request_status
 from veriloop.ui import apply_theme, hero
 from veriloop.youtube import (
     InvalidYouTubeURL, MissingAPIKey, VideoUnavailableError, YouTubeAPIError,
@@ -255,13 +255,16 @@ if result:
                         init_db(conn)
                         seed_evidence(conn)
                         request_id, new = request_review(conn, video, assessment)
+                        stored_status = get_review_request_status(conn, request_id)
                 except ReviewPolicyError as exc:
                     st.warning(f"Couldn't create this request: {exc}")
                 except Exception:
                     st.error("Technical issue: your review request was not saved.")
                 else:
                     st.success(
-                        f"Review request #{request_id} {'submitted' if new else 'already exists'} · PENDING. "
+                        f"Review request #{request_id} {'submitted' if new else 'already exists'} "
+                        f"· {stored_status}. "
+                        "This is the current request workflow status, not a new claim verdict. "
                         "Your preliminary results are unchanged. "
                         "Free cloud storage can reset, so this is not permanent archival storage."
                     )

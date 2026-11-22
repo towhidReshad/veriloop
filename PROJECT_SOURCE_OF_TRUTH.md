@@ -606,6 +606,9 @@ These are **planned commands** until actual code is written and tested. Do not c
 
 ## 15. Live Project Status — Update This Section After Every Work Session
 
+**2026-11-22 F-09 public review status fix staged:** On repeated human-review requests, the public confirmation now reads the stored workflow status (PENDING, APPROVED, REJECTED, or NEEDS_MORE_EVIDENCE), rather than always displaying PENDING. No reviewer credentials or private notes are exposed; this is workflow status, not a claim verdict. Added regression tests for idempotent re-requests at all final statuses. CI is pending at the time of this change; no actual hosted human approval has been performed.
+
+
 **2026-11-22 public channel audit verification:** Existing F-08 approved-only history gate hardened to enforce saved reviewer identity, substantial rationale, timestamp agreement and cited HTTPS evidence provenance. GitHub Actions run `44932958938` (commit `b2439d9`) passed **262/262 tests** + Python compileall. No actual hosted human review or correction publication has been performed in this session.
 
 
@@ -623,7 +626,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Verify public approved-history audit guards in CI. Actual hosted owner-controlled reviewer/correction/backup acceptance, genuine positive Google fact-check retrieval and durable storage remain unverified. No academic UI is permitted.
+**Next immediate milestone:** Verify public repeat-review workflow status accuracy in GitHub CI. Genuine deployed human-review/correction/backup acceptance, positive external fact-check retrieval and durable storage remain unverified. No academic UI is permitted.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -1296,6 +1299,24 @@ Scope: No new user-facing pages, database schema, APIs or costs.
 Validation: GitHub Actions run 44932958938 (commit b2439d9) PASSED
   262/262 pytest cases and Python compileall. Hosted real reviewer
   record was not created or observed.
+```
+
+---
+
+### Public review-request status accuracy — 2026-11-22
+
+```text
+Bug: Repeating a request on an already APPROVED, REJECTED or
+  NEEDS_MORE_EVIDENCE claim returned the old review ID but
+  displayed a hard-coded PENDING message in public Verify News.
+Fix: Read reviews.review_status by ID in the same SQLite transaction,
+  then display the actual current request workflow state. Explicitly
+  describe it as workflow status, not a claim verdict.
+Tests: Prior PENDING, all three completed states, missing review ID,
+  and public message regression. Zero schema/API changes.
+Security: No private reviewer identities/notes shown, no automatic
+  approval, unchanged frozen F-09 scope and public UI layout.
+CI: pending when code staged. Hosted human acceptance remains open.
 ```
 
 ---

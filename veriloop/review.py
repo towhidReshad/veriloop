@@ -108,6 +108,20 @@ def request_review(conn: sqlite3.Connection, video, assessment) -> tuple[int, bo
         return rid, True
 
 
+def get_review_request_status(conn: sqlite3.Connection, review_id: int) -> str:
+    """Read the CURRENT stored workflow status for a user's own request.
+
+    Do not expose private reviewer notes, identity or claim verdicts.
+    Never infer PENDING merely from an idempotent existing request.
+    """
+    row = conn.execute(
+        "SELECT review_status FROM reviews WHERE id=?", (review_id,)
+    ).fetchone()
+    if row is None or row["review_status"] not in STATES:
+        raise ReviewPolicyError("Review request is no longer available")
+    return row["review_status"]
+
+
 def list_review_queue(conn: sqlite3.Connection) -> list[dict]:
     """Sensitive queue; caller MUST first verify reviewer authentication."""
     return [dict(r) for r in conn.execute("""SELECT r.id AS review_id, r.review_status,
