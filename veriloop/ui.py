@@ -36,6 +36,26 @@ _STYLES = """
   .stButton > button[kind="primary"]:hover, .stFormSubmitButton > button[kind="primary"]:hover {
      background-color: #0f6560; border-color: #0f6560;
   }
+  /* Clearer public-facing evidence cards and responsive reading hierarchy */
+  .block-container {max-width: 1080px;}
+  [data-testid="stMetric"] {
+    background: rgba(20, 123, 117, .055);
+    border: 1px solid rgba(20, 123, 117, .15);
+    border-radius: 15px;
+    padding: 14px 17px;
+    min-height: 115px;
+  }
+  [data-testid="stMetricLabel"] {font-size: .85rem; font-weight: 650;}
+  [data-testid="stMetricValue"] {font-weight: 760; letter-spacing: -.04em;}
+  [data-testid="stVerticalBlockBorderWrapper"] {
+    border-color: rgba(94, 126, 136, .24);
+    box-shadow: 0 4px 18px rgba(20, 48, 61, .035);
+  }
+  div[data-testid="stAlert"] {border-radius: 13px;}
+  [data-testid="stExpander"] {border-radius: 12px; overflow: hidden;}
+  [data-testid="stLinkButton"] a {border-radius: 10px;}
+  .stMarkdown h3 {letter-spacing: -.025em; margin-top: .8rem;}
+  .stMarkdown h4 {line-height: 1.35; font-size: 1.13rem;}
   @media (max-width: 650px) {
     .block-container {padding-top: .75rem;}
     .vl-hero {padding: 24px 22px; border-radius: 17px;}
