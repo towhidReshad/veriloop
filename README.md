@@ -221,3 +221,8 @@ Repeat requests for the same video/claim/context are idempotent. Previously the 
 
 
 **Verified review-status fix:** [GitHub Actions run 45010806326](https://github.com/towhidReshad/veriloop/actions/runs/45010806326) passed **267/267 tests** and Python compileall on commit `796783e`. An initial run failed because of a test-file syntax typo and was corrected; actual hosted review acceptance is still pending.
+
+
+## Informational deployment health check (2026-11-22)
+
+The GitHub regression workflow now includes a **read-only public Streamlit health probe**, after offline tests pass. It requests only the known public `/_stcore/health` endpoint with a 15-second timeout, does not follow redirects and sends no API keys, cookies or reviewer passwords. `HEALTHY_ENDPOINT` means HTTP 200 plus expected `ok` text; `NOT_CONFIRMED` and `UNREACHABLE` do not diagnose why the service might be asleep, blocked or down. The result is printed to logs and the Actions job summary. This is intentionally **informational** rather than a blocking deployment test, because free-host wake-up behavior is outside the project's code. A healthy endpoint does not prove verification, reviews, backups or real API behavior. The creator's local container currently cannot resolve the host and therefore cannot independently assert live availability.

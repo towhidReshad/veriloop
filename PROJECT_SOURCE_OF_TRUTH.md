@@ -606,6 +606,9 @@ These are **planned commands** until actual code is written and tested. Do not c
 
 ## 15. Live Project Status — Update This Section After Every Work Session
 
+**2026-11-22 hosted-health probe planned and staged:** This assistant's own container cannot resolve the public Streamlit site (DNS/network failure), which is not proof the app is down. A public, no-secret, bounded read-only Streamlit health endpoint probe is now included in CI as an informational step. This reports HEALTHY_ENDPOINT only on HTTP 200 body 'ok'; other statuses remain NOT_CONFIRMED/UNREACHABLE. A healthy endpoint alone does not verify any application feature or reviewer workflow. CI result for this change was pending when staged.
+
+
 **2026-11-22 F-09 public review status fix staged:** On repeated human-review requests, the public confirmation now reads the stored workflow status (PENDING, APPROVED, REJECTED, or NEEDS_MORE_EVIDENCE), rather than always displaying PENDING. No reviewer credentials or private notes are exposed; this is workflow status, not a claim verdict. Added regression tests for idempotent re-requests at all final statuses. CI: first run 45010691591 failed due to a syntax typo in the new test-only assertion (not the app); fixed in 796783e. GitHub Actions run 45010806326 PASSED 267/267 pytest and compileall. No actual hosted human approval performed.
 
 
@@ -626,7 +629,7 @@ These are **planned commands** until actual code is written and tested. Do not c
 **Deadline start date:** TBD  
 **Deadline due date:** TBD  
 **Latest demonstrated working build:** Owner-supplied live Streamlit screenshots confirm YouTube API metadata for NASA eclipse video `2MJY_ptQW1o`. Day 2 source tested locally on Python 3.13.5: 54/54 pytest passed, SQLite seed 13 entries and second run zero duplicates. GitHub update is being committed separately; cloud behavior requires verification.  
-**Next immediate milestone:** Verify public repeat-review workflow status accuracy in GitHub CI. Genuine deployed human-review/correction/backup acceptance, positive external fact-check retrieval and durable storage remain unverified. No academic UI is permitted.
+**Next immediate milestone:** Interpret the no-secret hosted-health probe from GitHub runner; if the endpoint reports healthy, that still does not verify the public verifier or restricted reviewer workflow. Genuine hosted end-to-end acceptance, API positive retrieval and durable storage remain pending.
 
 | Task ID | Task | Status | Owner | Evidence / blocker |
 |---|---|---|---|---|
@@ -1319,6 +1322,31 @@ Security: No private reviewer identities/notes shown, no automatic
 CI: Initial run 45010691591 failed test-file syntax; fixed in
   commit 796783e. Run 45010806326 PASSED 267/267 pytest tests
   and Python compileall. Hosted human acceptance remains open.
+```
+
+---
+
+### Informational public Streamlit deployment health probe — 2026-11-22
+
+```text
+Motivation: Prior GitHub CI is green but does not prove public hosted uptime.
+  The current assistant container cannot resolve the Streamlit domain,
+  so it cannot assert up/down from its own network failure.
+Implement: scripts/smoke_deployment.py only GETs pinned public
+  https://veriloop-research.streamlit.app/_stcore/health with a
+  15-second timeout and no cookies, credentials, app submission or
+  redirected requests. An exact HTTP 200 and body 'ok' confirms only
+  endpoint health; others report NOT_CONFIRMED or UNREACHABLE.
+CI: After successful offline regression tests, runner executes a
+  single informational probe and writes its interpretation to the
+  GitHub Actions job summary. Host sleep/outages never fail a valid
+  local code build; the probe does not conceal the result in logs.
+Tests: Probe unit cases for valid health, HTML shell, redirect, errors,
+  invalid target, timeout and credential-free request.
+Boundary: No browser-based review, real API result, human approval,
+  backup/restore, data durability or functional app acceptance
+  is claimed from endpoint health. No academic UI or extra paid service.
+CI status: Pending at staging.
 ```
 
 ---
