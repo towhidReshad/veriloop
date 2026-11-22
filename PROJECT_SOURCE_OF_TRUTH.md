@@ -1473,3 +1473,22 @@ CI status: GitHub Actions run 45011309492 PASSED 272/272
 - Actual approved public publishing through official APIs after authentication and editorial review.
 
 **End of Source of Truth — Any tool or team member must maintain this file as the project evolves.**
+
+
+---
+
+## 2026-11-22 — Final owner-observed live acceptance (status addendum)
+
+**Scope remains frozen. No new software features are authorized by this update.** The original 2026-11-20 header and planning statements describe their historical state; the observations below supersede stale implementation-status claims only.
+
+- Live public Streamlit site rendered and returned BBC World Service YouTube metadata (title, thumbnail, channel, publication date) from a submitted URL.
+- Five candidate metadata statements were shown. No sufficiently related sources were found for these five. The app communicated insufficient evidence and did not infer that claims or channel were false. This demonstrates safe no-match behavior, **not** verification precision or a positive fact-check match.
+- Owner reached the password-restricted reviewer workspace, submitted one request, saved a `NEEDS_MORE_EVIDENCE` human decision with rationale and no evidence-based approval, then confirmed status persisted after a page reload. This does not establish durability across hosted restarts.
+- Owner explicitly reported **encrypted backup downloaded successfully**. Decrypt/restore was **not** tested.
+- No genuine evidence-aligned approved claim was present; therefore separate-editor correction approval and Markdown export remain **not live tested**. The blocked state is proper behavior, not a release claim of complete editorial validation.
+- Prior recorded automated CI result: 272/272 regression tests passed on GitHub Actions run 45011309492 at code commit 4a3dcb0; this is an existing recorded result and not a new CI run.
+- Research/participant observations, cross-country inference and positive evidence retrieval effectiveness are **not established**. Research material belongs outside the public application.
+
+**Final acceptance classification:** VeriLoop 1.0 is a **demo-ready technical MVP with owner-observed core live workflows**. Technical feasibility reporting and research-method documentation are submission-ready as such, not a completed empirical study. Free Streamlit Cloud SQLite is ephemeral; manually retain private encrypted archives. Stop additional feature/test loops without a demonstrable critical fault.
+
+Detailed evidence and remaining limitations: [FINAL_MVP_HANDOFF.md](FINAL_MVP_HANDOFF.md).
