@@ -1492,3 +1492,20 @@ CI status: GitHub Actions run 45011309492 PASSED 272/272
 **Final acceptance classification:** VeriLoop 1.0 is a **demo-ready technical MVP with owner-observed core live workflows**. Technical feasibility reporting and research-method documentation are submission-ready as such, not a completed empirical study. Free Streamlit Cloud SQLite is ephemeral; manually retain private encrypted archives. Stop additional feature/test loops without a demonstrable critical fault.
 
 Detailed evidence and remaining limitations: [FINAL_MVP_HANDOFF.md](FINAL_MVP_HANDOFF.md).
+
+
+---
+
+## 2026-11-22 — Owner-approved professional website UI track
+
+**Owner approval:** The owner selected the professional VeriLoop homepage reference mockup and the earlier modern claim/evidence results design, and explicitly requested a proper frontend rather than further default Streamlit styling. This is an authorized presentation-layer change, not permission to alter evidence decisions or invent results.
+
+**Implemented in repository, NOT YET DEPLOYED/ACCEPTED:**
+- `web/`: standalone responsive React + Vite website with public homepage, hero illustration, primary navigation, video URL entry, feature/workflow/source sections, video-result summary, selectable claim list and source-detail panel.
+- `api_server.py`: public read-only FastAPI endpoints for health, curated publisher names and real YouTube metadata-based claim checks, using the preexisting conservative engine, optional published fact-check search and server-side credentials.
+- Build integration: compiled `web/dist` can be served on the same origin by FastAPI; `requirements-api.txt`, `web/README.md` and CI workflow are provided.
+- Existing Streamlit website and password-restricted human review/correction/backup workflow **are retained**, not silently replaced. The new React page links out to the existing reviewer site.
+
+**Boundaries:** The laptop display on the homepage is an explicitly illustrative UI diagram, not evidence of a successful check. No fabricated positive matches, supported/contradicted claim verdicts or overall misleading scores are populated into the results API. No YouTube audio or video frames are analyzed. Published source ratings belong to the published fact-checks, not the submitted video.
+
+**Pending before any new public website is called DONE:** successful React production build, Python tests, a configured zero-cost-compatible deployment with private keys, live browser inspection at desktop/mobile widths, successful real YouTube submission and explicit owner acceptance. Existing hosted Streamlit MVP remains the working fallback.
