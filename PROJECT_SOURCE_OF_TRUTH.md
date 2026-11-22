@@ -606,6 +606,9 @@ These are **planned commands** until actual code is written and tested. Do not c
 
 ## 15. Live Project Status — Update This Section After Every Work Session
 
+**2026-11-22 MVP release handoff and stop-the-loop decision:** User explicitly prioritizes earliest possible project completion and rejects repeated minor patch/test cycles. Discretionary feature changes are frozen. Current software and research limitations are consolidated in `FINAL_MVP_HANDOFF.md`; the report `research/research_report.md` is now an honest technical-feasibility report (not fabricated observational or human-participant findings). Existing code-level proof is 272/272 tests (run 45011309492); hosting probe remained NOT_CONFIRMED (HTTP 303). Research sample has zero observations. A single real hosted acceptance remains necessary for live-complete claims. No new feature or test added in this packaging change.
+
+
 **2026-11-22 hosted-health probe planned and staged:** This assistant's own container cannot resolve the public Streamlit site (DNS/network failure), which is not proof the app is down. A public, no-secret, bounded read-only Streamlit health endpoint probe is now included in CI as an informational step. This reports HEALTHY_ENDPOINT only on HTTP 200 body 'ok'; other statuses remain NOT_CONFIRMED/UNREACHABLE. A healthy endpoint alone does not verify any application feature or reviewer workflow. GitHub Actions run 45011309492 (commit 4a3dcb0) passed 272/272 pytest and compileall; its hosted health probe returned HTTP 303, classified NOT_CONFIRMED, not healthy.
 
 

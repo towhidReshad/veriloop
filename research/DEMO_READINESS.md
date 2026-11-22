@@ -51,11 +51,8 @@
 No new human-review approval, publication, or field-research result is implied by this checklist.
 
 
-## New no-fabrication presentation route
+## Offline-only preparation (not in the public app)
 
-Open `/Professor_Demo` in the Streamlit multipage app or select **Professor demo · documented case guide** from the homepage. It shows A/B/C referenced publication links and video candidates without asserting successful YouTube API retrieval for A/C, any approved review, or any software verdict. This remains usable for discussing source research even when a YouTube video is removed or private, but it is NOT a substitute for the required live A/B/C acceptance demonstrations.
-
-Participant research is documented as a proposed, **unconducted** exercise in `research/USER_PILOT_PROTOCOL.md`; literature gap-planning notes are in `research/LITERATURE_GAP_MATRIX.md`.
-
+The A/B/C source-linked references in this document and `data/demo_cases.json` are **offline preparation**, not a Streamlit professor-demo page, cached metadata or a reviewed video verdict. Use the actual public Verify News form for live behavior. The participant protocol and literature planning matrix remain academic documentation outside the software UI.
 
 **Public UI correction (2026-11-21):** The professor guide is **not a public Streamlit page** anymore. Use this documentation or `data/demo_cases.json` outside the software. The separately runnable research dashboard lives at `research/research_dashboard_app.py` and must not be linked from the general-user app. The live Verify News page remains the only way to show real submitted-video metadata results.

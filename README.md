@@ -1,3 +1,16 @@
+# VeriLoop — YouTube Claim Evidence Explorer (MVP)
+
+**Public demo:** https://veriloop-research.streamlit.app
+**Repository:** https://github.com/towhidReshad/veriloop
+
+**Delivery status (2026-11-22):** The YouTube-metadata-first MVP is implemented and passed 272 offline regression tests on GitHub Actions run 45011309492. Hosted app health was **NOT_CONFIRMED** (HTTP 303); actual live reviewer/correction/backup acceptance and a genuine positive Google Fact Check result are still unverified. Free cloud SQLite is ephemeral. No observation or participant results have been collected. See **FINAL_MVP_HANDOFF.md** for exactly what is finished, blocked, and ready to submit. The authoritative feature scope is **PROJECT_SOURCE_OF_TRUTH.md**.
+
+**Start locally:** `python -m pip install -r requirements.txt` then `streamlit run app.py`. For live YouTube metadata set `YOUTUBE_API_KEY` privately; `FACTCHECK_API_KEY` is optional; restricted human review needs a private `REVIEWER_PASSWORD` of at least 16 characters. Never commit secrets.
+
+---
+
+## Archived development log
+
 # VeriLoop — Day 2 evidence library build
 
 A **YouTube metadata + curated evidence library** research pilot. The authoritative frozen feature contract and latest verified status are in PROJECT_SOURCE_OF_TRUTH.md.
