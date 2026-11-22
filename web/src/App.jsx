@@ -130,7 +130,7 @@ function Home({ go, onVerify, busy, sources }) {
       <div><span className="eyebrow">EXTERNAL REFERENCES</span><h2>Our evidence sources</h2><p>Selected original publications for claim retrieval, not partnerships, endorsements or automatic verdicts.</p></div>
       <div className="source-logos">{(sources?.publishers?.length ? sources.publishers : ['NASA','WHO','USGS','NOAA','AFP Fact Check']).slice(0,8).map(name => <span key={name}>{name}</span>)}</div>
     </section>
-    <section className="about-strip"><div><span className="eyebrow">ABOUT THE PROJECT</span>
+    <section className="about-strip" id="about"><div><span className="eyebrow">ABOUT THE PROJECT</span>
       <h2>Evidence before verdicts.</h2><p>VeriLoop is a university research prototype. The public checker compares metadata claims with a small evidence library and available published fact-checks. It does not inspect full video or audio and never treats a topical match as proof.</p></div>
       <button className="btn btn-outline-dark" onClick={() => go('about')}>Learn more <ArrowRight size={18}/></button>
     </section>
