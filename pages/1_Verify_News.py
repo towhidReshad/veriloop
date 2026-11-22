@@ -27,6 +27,7 @@ hero(
 with st.form("metadata_lookup"):
     url = st.text_input(
         "YouTube video link", placeholder="https://www.youtube.com/watch?v=...",
+        value=st.session_state.pop("vl_prefill_url", ""),
         help="Supports YouTube watch, Shorts, live, youtu.be and embed links for publicly accessible videos. We do not inspect narration, frames or audio.",
     )
     submitted = st.form_submit_button("Check this video", type="primary", use_container_width=True)
