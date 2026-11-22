@@ -9,19 +9,21 @@ from veriloop.db import connect_db, init_db, list_evidence, seed_evidence
 from veriloop.matching import assess_metadata
 from veriloop.presentation import friendly_explanation, friendly_status, summarize, has_conflicting_wording
 from veriloop.review import ReviewPolicyError, request_review, find_reviewed_exact_context, get_review_request_status
-from veriloop.ui import apply_theme, hero
+from veriloop.ui import apply_theme, site_navigation, page_intro
 from veriloop.youtube import (
     InvalidYouTubeURL, MissingAPIKey, VideoUnavailableError, YouTubeAPIError,
     fetch_video_metadata,
 )
 
-st.set_page_config(page_title="Check a video | VeriLoop", page_icon="🔎", layout="wide")
+st.set_page_config(page_title="Check a video | VeriLoop", page_icon="🔎", layout="wide", initial_sidebar_state="collapsed")
 apply_theme()
-hero(
+site_navigation()
+page_intro(
     "VeriLoop · News evidence explorer",
     "Check a YouTube video. See what we found.",
-    "Paste a public YouTube news link. We will look for factual statements in its published "
-    "title and description and show any related sources we can find.",
+    "Paste a public YouTube news link. We look for candidate factual statements "
+    "in the published title and description, then show related original sources "
+    "and explain what remains unverified.",
 )
 
 with st.form("metadata_lookup"):
