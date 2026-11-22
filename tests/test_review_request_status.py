@@ -74,5 +74,5 @@ def test_public_confirmation_uses_stored_status():
     page = (Path(__file__).resolve().parents[1] /
             "pages" / "1_Verify_News.py").read_text(encoding="utf-8")
     assert "stored_status = get_review_request_status(conn, request_id)" in page
-    assert "f\\"· {stored_status}. \\"" in page
+    assert "f\"· {stored_status}. \"" in page
     assert "already exists'} · PENDING" not in page
