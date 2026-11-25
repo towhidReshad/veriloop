@@ -126,3 +126,17 @@ def test_fuzzy_fallback_rejects_nonidentical_named_event():
     )
     ids = [m.evidence_id for m in retrieve_matches(candidate, REFERENCES)]
     assert "EV-001" not in ids
+
+
+def test_overlapping_capitalized_name_anchor():
+    # A greedy non-overlapping two-word regex used to consume
+    # "Barrister Murtaza" and miss "Murtaza Wahab" in live metadata.
+    from veriloop.matching import _shared_named_anchor
+    assert _shared_named_anchor(
+        "Mayor Karachi Barrister Murtaza Wahab fell near Gujjar Naala.",
+        "The clip shows Karachi mayor Murtaza Wahab falling into Gujjar Nala."
+    )
+    assert not _shared_named_anchor(
+        "Mayor Karachi Barrister Someone Else fell near Gujjar Naala.",
+        "The clip shows Karachi mayor Murtaza Wahab falling into Gujjar Nala."
+    )
