@@ -66,6 +66,7 @@ will would can could may might did does do no not never
 after before when where why how what which who whose into during while
 about says said say saying report reports reported video footage clip
 shows showing watch live official english news france channel episode
+cause causes caused
 weren\x27t wasnt weren isn\x27t aren\x27t didn\x27t doesn\x27t
 """.split())
 _INDEX_WORD = re.compile(r"[A-Za-z][A-Za-z'-]*|\\d{4}")
