@@ -100,3 +100,29 @@ def test_multiple_years_and_locations_abstain():
     assert a == "UNCONFIRMED"
     a,b = compare_context("The video mentions Karachi and India.", "The clip shows an incident in Karachi.")
     assert a == "UNCONFIRMED"
+
+
+def test_live_karachi_video_spelling_variation_finds_afp_as_unconfirmed_lead():
+    # Real YouTube description observed in owner browser, November 2026.
+    # 'Naala' versus curated source 'Nala' and different wording previously
+    # fell below the strict word TF-IDF retrieval threshold (0/1 matches).
+    candidate = claim(
+        "A funny but dangerous incident occurred when self proclaimed non "
+        "constitutional and rigged mayor Karachi Barrister Murtaza Wahab "
+        "had to taste their own medicine during a survey of Gujjar Naala."
+    )
+    results = retrieve_matches(candidate, REFERENCES)
+    assert results
+    assert results[0].evidence_id == "EV-001"
+    assert results[0].source_name == "AFP Fact Check"
+    assert results[0].context_status == "UNCONFIRMED"
+    assert "spelling/wording lead" in results[0].context_note
+
+
+def test_fuzzy_fallback_rejects_nonidentical_named_event():
+    candidate = claim(
+        "A funny but dangerous incident occurred during a survey in Karachi "
+        "when a different mayor slipped near Gujjar Naala."
+    )
+    ids = [m.evidence_id for m in retrieve_matches(candidate, REFERENCES)]
+    assert "EV-001" not in ids
