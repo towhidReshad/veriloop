@@ -201,7 +201,7 @@ def lookup_factchecks(claim_text: str, api_key: str | None, *, http_get=None) ->
                 "rating": _clean_text(review.get("textualRating"), 100) or None,
             })
     if not entries:
-        return LiveLookup("NO_RESULTS", note="No indexed, source-linked fact-check articles were returned.")
+        return LiveLookup("NO_RESULTS", note="API returned no usable indexed fact-check articles with an original HTTPS link.")
     scores = _relevance_scores(claim_text, [e["checked"] for e in entries])
     found: list[PublishedFactCheck] = []
     seen: set[tuple[str, str]] = set()
@@ -227,7 +227,10 @@ def lookup_factchecks(claim_text: str, api_key: str | None, *, http_get=None) ->
     if found:
         return LiveLookup("FOUND", tuple(found),
                           "Potentially related published fact-checks; not a verdict about this video.")
-    return LiveLookup("NO_RESULTS", note="No sufficiently related indexed fact-checks with compatible basic context were found.")
+    return LiveLookup("NO_RESULTS", note=(
+        f"API returned {len(entries)} linked article candidate(s), but none passed "
+        "minimum textual relevance and basic date/location context checks."
+    ))
 
 
 def run_live_fallback(assessments: list, api_key: str | None, *, lookup=lookup_factchecks) -> dict[int, LiveLookup]:
