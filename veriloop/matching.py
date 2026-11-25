@@ -17,7 +17,7 @@ from .claims import CandidateClaim, extract_claims
 
 MIN_SIMILARITY = 0.18  # candidate retrieval heuristic, not empirically calibrated
 CHAR_FALLBACK_SIMILARITY = 0.22  # spelling fallback; never truth confidence
-_SHARED_ANCHOR = re.compile(r"\b[A-Z][a-z]+\s+[A-Z][a-z]+\b")
+_SHARED_ANCHOR = re.compile(r"(?=\b([A-Z][a-z]+\s+[A-Z][a-z]+)\b)")
 _YEAR = re.compile(r"\b(?:19|20)\d{2}\b")
 _NEGATION = re.compile(r"\b(?:not|no|never|cannot|false|fake|misleading|isn't|aren't|doesn't|didn't)\b", re.IGNORECASE)
 _REGION_TERMS = {
@@ -141,8 +141,8 @@ def compare_context(candidate: str, reference: str) -> tuple[str, str]:
 
 def _shared_named_anchor(candidate: str, reference: str) -> bool:
     """Only fuzzy-match references with the same distinctive two-word name."""
-    a = {m.group().casefold() for m in _SHARED_ANCHOR.finditer(candidate)}
-    b = {m.group().casefold() for m in _SHARED_ANCHOR.finditer(reference)}
+    a = {m.group(1).casefold() for m in _SHARED_ANCHOR.finditer(candidate)}
+    b = {m.group(1).casefold() for m in _SHARED_ANCHOR.finditer(reference)}
     return bool(a & b)
 
 
