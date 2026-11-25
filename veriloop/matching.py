@@ -16,6 +16,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from .claims import CandidateClaim, extract_claims
 
 MIN_SIMILARITY = 0.18  # candidate retrieval heuristic, not empirically calibrated
+CHAR_FALLBACK_SIMILARITY = 0.22  # spelling fallback; never truth confidence
+_SHARED_ANCHOR = re.compile(r"\b[A-Z][a-z]+\s+[A-Z][a-z]+\b")
 _YEAR = re.compile(r"\b(?:19|20)\d{2}\b")
 _NEGATION = re.compile(r"\b(?:not|no|never|cannot|false|fake|misleading|isn't|aren't|doesn't|didn't)\b", re.IGNORECASE)
 _REGION_TERMS = {
@@ -137,6 +139,13 @@ def compare_context(candidate: str, reference: str) -> tuple[str, str]:
     return "UNCONFIRMED", "Event, date, and location are not established as identical by the available metadata."
 
 
+def _shared_named_anchor(candidate: str, reference: str) -> bool:
+    """Only fuzzy-match references with the same distinctive two-word name."""
+    a = {m.group().casefold() for m in _SHARED_ANCHOR.finditer(candidate)}
+    b = {m.group().casefold() for m in _SHARED_ANCHOR.finditer(reference)}
+    return bool(a & b)
+
+
 def retrieve_matches(
     candidate: CandidateClaim,
     evidence: Sequence[Mapping],
@@ -159,12 +168,29 @@ def retrieve_matches(
     except ValueError:
         return ()
     scores = cosine_similarity(vectors[0:1], vectors[1:]).ravel()
-    order = sorted(range(len(refs)), key=lambda i: (-float(scores[i]), str(refs[i]["id"])))
+    # Character n-grams help recover changed spellings and reworded claims.
+    # Fallback also requires a shared specific named anchor, never mere topic.
+    try:
+        fuzzy_vectors = TfidfVectorizer(
+            analyzer="char_wb", ngram_range=(3, 5), sublinear_tf=True
+        ).fit_transform(corpus)
+        fuzzy_scores = cosine_similarity(fuzzy_vectors[0:1], fuzzy_vectors[1:]).ravel()
+    except ValueError:
+        fuzzy_scores = [0.0] * len(refs)
+    ranking = []
+    for ix, record in enumerate(refs):
+        word_score = float(scores[ix])
+        fuzzy_score = float(fuzzy_scores[ix])
+        fallback = (
+            minimum_similarity <= MIN_SIMILARITY
+            and fuzzy_score >= CHAR_FALLBACK_SIMILARITY
+            and _shared_named_anchor(candidate.text, str(record["claim_text"]))
+        )
+        if word_score >= minimum_similarity or fallback:
+            ranking.append((ix, max(word_score, fuzzy_score) if fallback else word_score))
+    ranking.sort(key=lambda item: (-item[1], str(refs[item[0]]["id"])))
     matches: list[EvidenceMatch] = []
-    for ix in order:
-        score = float(scores[ix])
-        if score < minimum_similarity:
-            break
+    for ix, score in ranking:
         record = refs[ix]
         status, note = compare_context(candidate.text, str(record["claim_text"]))
         if status == "INCOMPATIBLE":
