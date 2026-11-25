@@ -66,6 +66,7 @@ will would can could may might did does do no not never
 after before when where why how what which who whose into during while
 about says said say saying report reports reported video footage clip
 shows showing watch live official english news france channel episode
+weren\x27t wasnt weren isn\x27t aren\x27t didn\x27t doesn\x27t
 """.split())
 _INDEX_WORD = re.compile(r"[A-Za-z][A-Za-z'-]*|\\d{4}")
 
@@ -77,7 +78,7 @@ def index_search_query(claim_text: str) -> str:
     words in original order. Omitting negation is permitted for broad source
     *retrieval*, never when assessing original claim polarity or stance.
     """
-    source = focused_search_query(claim_text)
+    source = focused_search_query(claim_text).replace("’", "'")
     source = re.split(r"\\s*(?:[|•])\\s*", source, maxsplit=1)[0]
     tokens = [
         word for word in _INDEX_WORD.findall(source)
