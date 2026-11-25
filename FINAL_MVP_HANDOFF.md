@@ -75,3 +75,8 @@ No user needs to send the same screenshot repeatedly. Do not commit credentials 
 **Not ready to claim:** Approved hosted editorial export, validated positive fact-check retrieval, backup restore, genuine observational/participant study, country comparison, validated truth-detector performance or permanent cloud database.
 
 **Stop condition:** Do not spend another cycle adding tests unless an actual critical release failure is observed. Finish by conducting the single acceptance session or transparently disclosing blocked dependencies.
+
+
+## Final UI status (2026-11-26)
+
+Owner confirmed live navigation flash is fixed. Public homepage and shared navigation were updated. Prior verified browser paths: YouTube metadata retrieval, five candidate statements, insufficient-evidence handling, reviewer decision saved and reloaded, and owner-reported encrypted backup download. Current GitHub CI conclusion and mobile layout have not been independently confirmed. Correction export, backup restoration, positive matching accuracy and permanent cloud data durability remain unverified. The React frontend is source-only and not deployed. Freeze new features and use the live Streamlit app for the technical MVP demonstration.
