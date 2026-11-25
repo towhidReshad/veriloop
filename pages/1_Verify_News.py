@@ -230,7 +230,9 @@ if result:
                             st.link_button("Read published fact-check ↗", check.article_url)
                     st.caption("These are external articles about similar claims, not VeriLoop verdicts on this video.")
                 elif live and live.status == "NO_RESULTS":
-                    st.caption("Google's published fact-check index was checked, but no sufficiently relevant article was found.")
+                    st.caption("Google Fact Check API: NO_RESULTS — no accepted related article.")
+                    st.caption("Details: " + live.note)
+                    st.caption("API discovery query: " + index_search_query(assessment.candidate.text))
                 elif live and live.status in ("ERROR", "UNAVAILABLE"):
                     st.caption("Online fact-check search unavailable: " + live.note)
 
