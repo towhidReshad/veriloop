@@ -140,3 +140,28 @@ def test_invalid_api_payload_is_a_technical_error():
         http_get=get_api(FakeResponse([1])),
     )
     assert result.status == "ERROR"
+
+
+def test_dubai_floods_uses_concise_index_query_without_changing_claim():
+    from veriloop.factcheck import index_search_query
+    original = "No, the Dubai floods weren’t caused by cloud seeding • FRANCE 24 English"
+    assert index_search_query(original) == "Dubai floods caused cloud seeding"
+    requested = []
+
+    def fake_get(url, **kwargs):
+        requested.append(kwargs["params"]["query"])
+        return FakeResponse({"claims": [{
+            "text": "Cloud seeding caused the severe Dubai floods.",
+            "claimReview": [{
+                "publisher": {"name": "AFP Fact Check"},
+                "url": "https://factcheck.afp.com/doc.afp.com.34R96AM",
+                "textualRating": "False"
+            }]
+        }]})
+
+    result = lookup_factchecks(original, "PRIVATE-KEY", http_get=fake_get)
+    assert requested == ["Dubai floods caused cloud seeding"]
+    assert result.status == "FOUND"
+    assert result.articles[0].publisher == "AFP Fact Check"
+    # Opposite polarity in video vs source requires manual review.
+    assert result.articles[0].context_status == "UNCONFIRMED"
