@@ -56,6 +56,39 @@ def focused_search_query(claim_text: str) -> str:
     return result[:220]
 
 
+# Search index wording is often much shorter than a video's complete
+# declarative sentence. These are retrieval-only stopwords; the full
+# unmodified candidate is still used for contextual verification.
+_INDEX_STOPWORDS = frozenset("""
+a an the and or but with without in on at of to from for by as this that
+these those it its their there here has have had is are was were be been being
+will would can could may might did does do no not never
+after before when where why how what which who whose into during while
+about says said say saying report reports reported video footage clip
+shows showing watch live official english news france channel episode
+""".split())
+_INDEX_WORD = re.compile(r"[A-Za-z][A-Za-z'-]*|\\d{4}")
+
+
+def index_search_query(claim_text: str) -> str:
+    """Concise, auditable discovery query. Never used as a claim verdict.
+
+    Strip broadcaster/title trailers and generic prose, preserving topical
+    words in original order. Omitting negation is permitted for broad source
+    *retrieval*, never when assessing original claim polarity or stance.
+    """
+    source = focused_search_query(claim_text)
+    source = re.split(r"\\s*(?:[|•])\\s*", source, maxsplit=1)[0]
+    tokens = [
+        word for word in _INDEX_WORD.findall(source)
+        if word.casefold().strip("'") not in _INDEX_STOPWORDS
+        and len(word) > 2
+    ]
+    if len(tokens) < 3:
+        return source[:150]
+    return " ".join(tokens[:9])[:150]
+
+
 
 @dataclass(frozen=True)
 class PublishedFactCheck:
@@ -118,7 +151,7 @@ def lookup_factchecks(claim_text: str, api_key: str | None, *, http_get=None) ->
     """
     if not isinstance(api_key, str) or not api_key.strip():
         return LiveLookup("UNAVAILABLE", note="The optional live fact-check service is not configured.")
-    query = focused_search_query(claim_text)
+    query = index_search_query(claim_text)
     if len(query) < 12:
         return LiveLookup("NO_RESULTS", note="Not enough claim text for live fact-check search.")
     getter = http_get or requests.get
@@ -167,7 +200,7 @@ def lookup_factchecks(claim_text: str, api_key: str | None, *, http_get=None) ->
             })
     if not entries:
         return LiveLookup("NO_RESULTS", note="No indexed, source-linked fact-check articles were returned.")
-    scores = _relevance_scores(query, [e["checked"] for e in entries])
+    scores = _relevance_scores(claim_text, [e["checked"] for e in entries])
     found: list[PublishedFactCheck] = []
     seen: set[tuple[str, str]] = set()
     for ix in sorted(range(len(entries)), key=lambda i: -scores[i]):
