@@ -165,3 +165,58 @@ def test_dubai_floods_uses_concise_index_query_without_changing_claim():
     assert result.articles[0].publisher == "AFP Fact Check"
     # Opposite polarity in video vs source requires manual review.
     assert result.articles[0].context_status == "UNCONFIRMED"
+
+
+def test_live_api_accepts_same_topic_with_different_claim_wording():
+    """Topic-heavy video prose must not hide a genuinely related Google result."""
+    request_queries = []
+    def fake_get(url, **kwargs):
+        request_queries.append(kwargs["params"]["query"])
+        return FakeResponse({"claims": [{
+            "text": "Artificial cloud seeding was responsible for the massive floods in Dubai.",
+            "claimReview": [{
+                "publisher": {"name": "Independent Fact Checker"},
+                "url": "https://example.org/dubai-cloud-seeding-factcheck",
+                "title": "Dubai flooding not caused by cloud seeding",
+                "textualRating": "False"
+            }]
+        }]})
+    original = "No, the Dubai floods weren’t caused by cloud seeding • FRANCE 24 English"
+    output = lookup_factchecks(original, "PRIVATE-KEY", http_get=fake_get)
+    assert request_queries == ["Dubai floods cloud seeding"]
+    assert output.status == "FOUND"
+    assert output.articles[0].article_url.endswith("dubai-cloud-seeding-factcheck")
+    assert output.articles[0].context_status == "UNCONFIRMED"
+
+
+def test_google_result_from_different_topic_is_not_promoted_to_evidence():
+    def fake_get(url, **kwargs):
+        return FakeResponse({"claims": [{
+            "text": "A tropical cyclone flooded another country after heavy rainfall.",
+            "claimReview": [{
+                "publisher": {"name": "Example fact check"},
+                "url": "https://example.org/other-country-flooding",
+                "title": "Tropical cyclone floods",
+                "textualRating": "False"
+            }]
+        }]})
+    original = "No, the Dubai floods weren’t caused by cloud seeding • FRANCE 24 English"
+    result = lookup_factchecks(original, "PRIVATE-KEY", http_get=fake_get)
+    assert result.status == "NO_RESULTS"
+    assert not result.articles
+
+
+def test_google_result_with_explicit_conflicting_year_stays_excluded():
+    def fake_get(url, **kwargs):
+        return FakeResponse({"claims": [{
+            "text": "Dubai floods in 2026 were caused by cloud seeding.",
+            "claimReview": [{
+                "publisher": {"name": "Example fact check"},
+                "url": "https://example.org/dubai-flood-2026",
+                "title": "Dubai cloud seeding flood claim",
+                "textualRating": "False"
+            }]
+        }]})
+    claim = "Dubai floods in 2024 were caused by cloud seeding."
+    result = lookup_factchecks(claim, "PRIVATE-KEY", http_get=fake_get)
+    assert result.status == "NO_RESULTS"
