@@ -195,6 +195,11 @@ def retrieve_matches(
         status, note = compare_context(candidate.text, str(record["claim_text"]))
         if status == "INCOMPATIBLE":
             continue
+        # Fuzzy-only similarity is a possible lead, NOT validated same-event
+        # context, even when broad geographic cues overlap.
+        if float(scores[ix]) < minimum_similarity:
+            status = "UNCONFIRMED"
+            note = "Named-entity spelling/wording lead only; verify exact event and video stance independently. " + note
         matches.append(EvidenceMatch(
             evidence_id=str(record["id"]),
             reference_claim=str(record["claim_text"]),
