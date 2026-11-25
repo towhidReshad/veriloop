@@ -56,3 +56,18 @@ No new human-review approval, publication, or field-research result is implied b
 The A/B/C source-linked references in this document and `data/demo_cases.json` are **offline preparation**, not a Streamlit professor-demo page, cached metadata or a reviewed video verdict. Use the actual public Verify News form for live behavior. The participant protocol and literature planning matrix remain academic documentation outside the software UI.
 
 **Public UI correction (2026-11-21):** The professor guide is **not a public Streamlit page** anymore. Use this documentation or `data/demo_cases.json` outside the software. The separately runnable research dashboard lives at `research/research_dashboard_app.py` and must not be linked from the general-user app. The live Verify News page remains the only way to show real submitted-video metadata results.
+
+
+## Owner-observed successful live matching — 2026-11-26 (evidence screenshots)
+
+Two genuine, distinct retrieval paths were demonstrated in the deployed Streamlit app:
+
+| Path | Exact YouTube URL | Extracted statements | Statements with related sources | Provenance displayed | Classification boundary |
+|---|---|---:|---:|---|---|
+| Curated local evidence | https://www.youtube.com/watch?v=GEG-K7TbKt0 | 1 | 1 | Local EV-001, AFP Fact Check, source URL | Source labeled MISLEADING_CONTEXT; VeriLoop returned unconfirmed related evidence, not an approved video verdict |
+| Google Fact Check API | https://www.youtube.com/watch?v=anHwQIaZlZ0 | 4 | 1 | Four linked Google-indexed reviews: Fact Crescendo (1), AFP Fact Check (2), AAP (1) | External article ratings shown separately; claim context UNCONFIRMED; overall video assessment NOT DETERMINED |
+| No-match behavior, same Dubai video | same as above | 3 of 4 | 0 for those three | Explicit insufficient-evidence descriptions | No false/unverified accusations |
+
+**Evidence type:** Owner-supplied live browser screenshots, not an independent benchmark or editorial approval. Google API returned actual articles after v5 topical reranking; this establishes a successful positive API retrieval in the observed session, but does not independently verify all four fact-check articles' full texts, general accuracy, geographic reliability, or claimed video stance. Do not replace these results with illustrative statistics.
+
+**Release policy:** Both local and live-index retrieval have been demonstrated. Freeze retrieval functionality except a reproducible critical defect. Professor demonstration order: local Karachi → Google API Dubai → three Dubai unmatched claims. No new research sample/participants are implied. Source links should be opened live only when needed.
