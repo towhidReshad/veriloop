@@ -80,3 +80,13 @@ No user needs to send the same screenshot repeatedly. Do not commit credentials 
 ## Final UI status (2026-11-26)
 
 Owner confirmed live navigation flash is fixed. Public homepage and shared navigation were updated. Prior verified browser paths: YouTube metadata retrieval, five candidate statements, insufficient-evidence handling, reviewer decision saved and reloaded, and owner-reported encrypted backup download. Current GitHub CI conclusion and mobile layout have not been independently confirmed. Correction export, backup restoration, positive matching accuracy and permanent cloud data durability remain unverified. The React frontend is source-only and not deployed. Freeze new features and use the live Streamlit app for the technical MVP demonstration.
+
+
+## Positive evidence retrieval acceptance — 2026-11-26
+
+Owner supplied actual Streamlit browser screenshots, demonstrating:
+- **Local:** Karachi/Gujjar Nala video `GEG-K7TbKt0` -> 1 claim, 1 related source, AFP curated reference EV-001, unconfirmed context.
+- **Live external API:** France 24 Dubai cloud seeding video `anHwQIaZlZ0` -> 4 candidate claims, 1 with related Google-indexed fact-checks, 3 unmatched; four published fact-check records attributed to Fact Crescendo, AFP (two), AAP. The UI correctly kept overall verdict NOT DETERMINED and source ratings separate.
+- These results close the previous **no positive API retrieval observed** gap **for this owner-observed case only**, not for independent accuracy, editorial review, or production reliability. Preserve source and API provenance. Detailed acceptance: `research/DEMO_READINESS.md`.
+
+**Demo-ready proof:** Owner-observed local positive, Google API positive, and abstention on unmatched claims. No additional matching development required absent a critical reproduced failure.
