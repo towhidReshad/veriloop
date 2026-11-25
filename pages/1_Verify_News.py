@@ -4,7 +4,7 @@ from __future__ import annotations
 import streamlit as st
 
 from veriloop.config import get_youtube_api_key, get_factcheck_api_key
-from veriloop.factcheck import run_live_fallback, focused_search_query
+from veriloop.factcheck import run_live_fallback, focused_search_query, index_search_query
 from veriloop.db import connect_db, init_db, list_evidence, seed_evidence
 from veriloop.matching import assess_metadata
 from veriloop.presentation import friendly_explanation, friendly_status, summarize, has_conflicting_wording
@@ -18,7 +18,7 @@ from veriloop.youtube import (
 st.set_page_config(page_title="Check a video | VeriLoop", page_icon="🔎", layout="wide", initial_sidebar_state="collapsed")
 # Invalidate earlier session results when retrieval logic changes; otherwise
 # Streamlit can keep showing a previous 0-match analysis after redeployment.
-MATCH_ENGINE_VERSION = "2026-11-26-overlapping-anchor-v3"
+MATCH_ENGINE_VERSION = "2026-11-26-google-query-v4"
 if st.session_state.get("vl_result_engine_version") != MATCH_ENGINE_VERSION:
     st.session_state.pop("vl_current_result", None)
     st.session_state.pop("vl_selected_claim", None)
@@ -40,7 +40,7 @@ with st.form("metadata_lookup"):
         help="Supports YouTube watch, Shorts, live, youtu.be and embed links for publicly accessible videos. We do not inspect narration, frames or audio.",
     )
     submitted = st.form_submit_button("Check this video", type="primary", use_container_width=True)
-st.caption("No account required for a preliminary check · Results are not automatic true/false verdicts · Evidence matcher v3")
+st.caption("No account required for a preliminary check · Results are not automatic true/false verdicts · Evidence matcher v4")
 
 if submitted:
     st.session_state.pop("vl_current_result", None)
@@ -243,7 +243,8 @@ if result:
                         st.write("TF-IDF text similarity (not truth probability):", f"{match.similarity:.2f}")
                     if live:
                         st.write("Fact-check lookup status:", live.status)
-                        st.write("Search query:", focused_search_query(assessment.candidate.text))
+                        st.write("Google index query:", index_search_query(assessment.candidate.text))
+                        st.caption("Shortened for source discovery only; original claim wording is preserved for context checks.")
                         for check in live.articles:
                             st.write("Indexed-source relevance (not truth probability):", f"{check.relevance:.2f}")
                 if st.button("Request human review", key=f"review_{video.video_id}_{i}"):
