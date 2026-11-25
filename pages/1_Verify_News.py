@@ -16,6 +16,13 @@ from veriloop.youtube import (
 )
 
 st.set_page_config(page_title="Check a video | VeriLoop", page_icon="🔎", layout="wide", initial_sidebar_state="collapsed")
+# Invalidate earlier session results when retrieval logic changes; otherwise
+# Streamlit can keep showing a previous 0-match analysis after redeployment.
+MATCH_ENGINE_VERSION = "2026-11-26-char-anchor-v2"
+if st.session_state.get("vl_result_engine_version") != MATCH_ENGINE_VERSION:
+    st.session_state.pop("vl_current_result", None)
+    st.session_state.pop("vl_selected_claim", None)
+    st.session_state["vl_result_engine_version"] = MATCH_ENGINE_VERSION
 apply_theme()
 site_navigation()
 page_intro(
@@ -33,7 +40,7 @@ with st.form("metadata_lookup"):
         help="Supports YouTube watch, Shorts, live, youtu.be and embed links for publicly accessible videos. We do not inspect narration, frames or audio.",
     )
     submitted = st.form_submit_button("Check this video", type="primary", use_container_width=True)
-st.caption("No account required for a preliminary check · Results are not automatic true/false verdicts")
+st.caption("No account required for a preliminary check · Results are not automatic true/false verdicts · Evidence matcher v2")
 
 if submitted:
     st.session_state.pop("vl_current_result", None)
@@ -68,6 +75,7 @@ if submitted:
             with st.spinner("Looking for related published fact-checks..."):
                 online = run_live_fallback(analyses, get_factcheck_api_key())
             st.session_state["vl_current_result"] = (video, analyses, online, reviewed)
+            st.session_state["vl_result_engine_version"] = MATCH_ENGINE_VERSION
 
 result = st.session_state.get("vl_current_result")
 if result:
