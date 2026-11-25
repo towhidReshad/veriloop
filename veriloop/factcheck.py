@@ -202,7 +202,26 @@ def lookup_factchecks(claim_text: str, api_key: str | None, *, http_get=None) ->
             })
     if not entries:
         return LiveLookup("NO_RESULTS", note="API returned no usable indexed fact-check articles with an original HTTPS link.")
-    scores = _relevance_scores(claim_text, [e["checked"] for e in entries])
+    # Compare source claims to both the complete statement and its core topic.
+    # Long publisher prose and video-title trailers can swamp lexical cosine.
+    # Require specific topic-token overlap so short topical retrieval does not
+    # accidentally admit an unrelated claim returned by the external index.
+    full_scores = _relevance_scores(claim_text, [e["checked"] for e in entries])
+    topic_scores = _relevance_scores(query, [
+        e["checked"] + " " + e["title"] for e in entries
+    ])
+    topic_words = {
+        t.casefold() for t in _INDEX_WORD.findall(query)
+        if len(t) >= 4 and t.casefold() not in _INDEX_STOPWORDS
+    }
+    scores = [
+        max(full_scores[i], topic_scores[i])
+        if len(topic_words & {
+            t.casefold() for t in _INDEX_WORD.findall(entries[i]["checked"] + " " + entries[i]["title"])
+        }) >= 2
+        else 0.0
+        for i in range(len(entries))
+    ]
     found: list[PublishedFactCheck] = []
     seen: set[tuple[str, str]] = set()
     for ix in sorted(range(len(entries)), key=lambda i: -scores[i]):
