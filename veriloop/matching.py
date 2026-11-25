@@ -19,7 +19,7 @@ MIN_SIMILARITY = 0.18  # candidate retrieval heuristic, not empirically calibrat
 CHAR_FALLBACK_SIMILARITY = 0.22  # spelling fallback; never truth confidence
 _SHARED_ANCHOR = re.compile(r"(?=\b([A-Z][a-z]+\s+[A-Z][a-z]+)\b)")
 _YEAR = re.compile(r"\b(?:19|20)\d{2}\b")
-_NEGATION = re.compile(r"\b(?:not|no|never|cannot|false|fake|misleading|isn't|aren't|doesn't|didn't)\b", re.IGNORECASE)
+_NEGATION = re.compile(r"\b(?:not|no|never|cannot|false|fake|misleading|isn't|aren't|wasn't|weren't|doesn't|didn't)\b", re.IGNORECASE)
 _REGION_TERMS = {
     "karachi": "pakistan", "gujjar nala": "pakistan", "pakistan": "pakistan",
     "panaji": "india", "goa": "india", "india": "india",
