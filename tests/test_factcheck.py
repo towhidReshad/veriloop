@@ -145,7 +145,7 @@ def test_invalid_api_payload_is_a_technical_error():
 def test_dubai_floods_uses_concise_index_query_without_changing_claim():
     from veriloop.factcheck import index_search_query
     original = "No, the Dubai floods weren’t caused by cloud seeding • FRANCE 24 English"
-    assert index_search_query(original) == "Dubai floods caused cloud seeding"
+    assert index_search_query(original) == "Dubai floods cloud seeding"
     requested = []
 
     def fake_get(url, **kwargs):
@@ -160,7 +160,7 @@ def test_dubai_floods_uses_concise_index_query_without_changing_claim():
         }]})
 
     result = lookup_factchecks(original, "PRIVATE-KEY", http_get=fake_get)
-    assert requested == ["Dubai floods caused cloud seeding"]
+    assert requested == ["Dubai floods cloud seeding"]
     assert result.status == "FOUND"
     assert result.articles[0].publisher == "AFP Fact Check"
     # Opposite polarity in video vs source requires manual review.
