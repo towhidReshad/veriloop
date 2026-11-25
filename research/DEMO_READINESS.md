@@ -71,3 +71,27 @@ Two genuine, distinct retrieval paths were demonstrated in the deployed Streamli
 **Evidence type:** Owner-supplied live browser screenshots, not an independent benchmark or editorial approval. Google API returned actual articles after v5 topical reranking; this establishes a successful positive API retrieval in the observed session, but does not independently verify all four fact-check articles' full texts, general accuracy, geographic reliability, or claimed video stance. Do not replace these results with illustrative statistics.
 
 **Release policy:** Both local and live-index retrieval have been demonstrated. Freeze retrieval functionality except a reproducible critical defect. Professor demonstration order: local Karachi → Google API Dubai → three Dubai unmatched claims. No new research sample/participants are implied. Source links should be opened live only when needed.
+
+
+## Owner-observed additional six-video browser checks — 2026-11-26
+
+The following were supplied as **screenshots of deployed VeriLoop results**. The numbers below are extracted from screenshots, not independent replication or quality/accuracy measurements. A source match is a retrieval lead and **not** a video truth verdict.
+
+| YouTube video | ID | Candidate statements | Statements with related sources | Without match | Observed origin or notable limitation |
+|---|---|---:|---:|---:|---|
+| Pope Francis puffer jacket (Inside Edition) | `BCjhg994fIU` | 5 | 2 | 3 | Google-indexed reviews: Lead Stories, Snopes, Full Fact visible for selected claim; actual article counts are different from matched-claim count |
+| Dubai cloud seeding (Sky News) | `KdcVDdCR0Q0` | 5 | 0 | 5 | Google API NO_RESULTS for selected claim; no usable linked article returned, despite related France24 case succeeding |
+| Buzz Aldrin moon landing video | `0tEgfxmVGUc` | 5 | 0 | 5 | Google API NO_RESULTS for selected claim; no usable linked article shown |
+| NASA UAP Independent Study | `TQcqOW39ksk` | 5 | 1 | 4 | Local NASA UAP reference matched **title**, but title is a topic label rather than a clear factual assertion; candidate extraction warrants review |
+| UNDRR earthquake prediction | `KRI1JKIQ4RQ` | 2 | 0 | 2 | Potential retrieval false-negative: USGS curated EV-005 discusses inability to predict exact date/location/magnitude; inspected claim concerns exact date only. Human context check needed; no forced match |
+| 2024 eclipse (Space Affairs replay) | `vcdDOE7Gwrg` | 5 | 3 | 2 | Curated NASA EV-002 shown for selected claim; uploader is **Space Affairs**, not NASA, despite NASA material in title/image |
+
+**Observed caution:** Screenshots suggest claim extraction sometimes treats a topical heading/title as a claim (NASA UAP title), and an unrelated social/media description item may be selected as a candidate (Sky News and Buzz Aldrin description lists). These are quality limitations, not fabricated results. Overall assessment remained NOT DETERMINED in all six screenshots.
+
+**Demonstration shortlist:** 
+- Local positive: Karachi Mayor -> AFP EV-001 (previously demonstrated); eclipse replay -> NASA evidence.
+- Google index positive: France 24 Dubai -> 4 indexed articles (previously demonstrated); Pope puffer jacket -> 2 matched claims with linked publisher articles.
+- No match: Sky News Dubai (0/5); Buzz Aldrin clip (0/5); UNDRR earthquake (0/2, note missed local reference).
+- UAP: contextual uncertainty example, not a claim about extraterrestrial origin.
+
+**Freeze status:** Treat these as observed test cases. Do not use the matched numbers as precision/recall. Do not mark unreviewed YouTube uploads as true or misleading.
